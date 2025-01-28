@@ -15,6 +15,7 @@ import CompaniesPages from "./pages/company/index";
 import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
 import NotAuthorizationPage from "./pages/NotAuthorizationPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const AppContent = () => {
   const location = useLocation();
@@ -62,6 +63,7 @@ const AppContent = () => {
             </Route>
           </Route>
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
