@@ -1,0 +1,40 @@
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAuth } from "@/context/AuthContext";
+import { Menu, Search } from "lucide-react";
+import SidebarRoutesCompany from "../SidebarRoutesCompany";
+
+const NavbarCompany = () => {
+  const { user } = useAuth();
+
+  return (
+    <nav className="flex items-center px-1 gap-x-4 md:px-6 justify-between w-full bg-background border-b h-20">
+      <div className="block xl:hidden">
+        <Sheet>
+          <SheetTrigger className="flex items-center">
+            <Menu strokeWidth={2} className="w-6 h-6" />
+          </SheetTrigger>
+          <SheetContent side="left">
+            <SidebarRoutesCompany />
+          </SheetContent>
+        </Sheet>
+      </div>
+      <div className="relative w-[300px]">
+        <Input placeholder="Search..." className="rounded-lg" />
+        <Search strokeWidth={1} className="absolute top-2 right-2 w-5 h-5" />
+      </div>
+      <div className="hidden md:flex items-center gap-x-2">
+        <p className="text-base font-medium">
+          {user.user_metadata.company_name}
+        </p>
+        <img
+          src="https://static.wixstatic.com/media/9e7c89_a67c6c22857547b49315013c429fe272~mv2.png"
+          alt="profile"
+          className="w-8 h-8 rounded-full"
+        />
+      </div>
+    </nav>
+  );
+};
+
+export default NavbarCompany;
