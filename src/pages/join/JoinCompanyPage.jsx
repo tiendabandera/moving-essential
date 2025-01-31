@@ -1,7 +1,7 @@
 import curve from "../../assets/img/curve.png";
 import Button from "@/components/Button";
 import Section from "@/components/Section";
-import CardBenefit from "@/components/desing/CardBenefit";
+import CardBenefit from "@/components/design/CardBenefit";
 import {
   Building2,
   HeartHandshakeIcon,
@@ -9,7 +9,7 @@ import {
   Stars,
   UserRoundSearch,
 } from "lucide-react";
-import CustomIcon from "@/components/desing/CustomIcon";
+import CustomIcon from "@/components/design/CustomIcon";
 import FormJoinCompany from "@/components/forms/FormJoinCompany";
 
 const JoinCompanyPage = () => {

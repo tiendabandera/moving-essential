@@ -1,4 +1,4 @@
-import Logo from "./desing/Logo";
+import Logo from "./design/Logo";
 import SidebarRoutesCompany from "./SidebarRoutesCompany";
 
 const SidebarCompany = () => {

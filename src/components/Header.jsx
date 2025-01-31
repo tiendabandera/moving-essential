@@ -4,7 +4,7 @@ import Button from "./Button";
 import { navigation, roles } from "../constants";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { HamburgerMenu } from "./desing/Header";
+import { HamburgerMenu } from "./design/Header";
 import MenuSvg from "../assets/svg/MenuSvg";
 import { useAuth } from "../context/AuthContext";
 

@@ -1,5 +1,5 @@
-import CustomToolTips from "../CustomToolTips.jsx";
-import CustomIcon from "./CustomIcon.jsx";
+import CustomToolTips from "../../components/CustomTooltips";
+import CustomIcon from "./CustomIcon";
 
 const CardSummary = ({ icon, total, avarage, title, tooltipText }) => {
   return (

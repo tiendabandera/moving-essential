@@ -1,4 +1,4 @@
-import NavbarCompany from "@/components/desing/NavbarCompany";
+import NavbarCompany from "@/components/design/NavbarCompany";
 import SidebarCompany from "@/components/SidebarCompany";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";

@@ -1,4 +1,4 @@
-import CardSummary from "../../components/desing/CardSummary";
+import CardSummary from "../../components/design/CardSummary";
 
 import {
   User,
@@ -9,7 +9,7 @@ import {
   Image,
 } from "lucide-react";
 
-import CustomIcon from "@/components/desing/CustomIcon";
+import CustomIcon from "@/components/design/CustomIcon";
 import FormCompany from "@/components/forms/FormCompany";
 import { useOutletContext } from "react-router-dom";
 
