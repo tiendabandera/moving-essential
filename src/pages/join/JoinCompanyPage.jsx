@@ -84,6 +84,9 @@ const JoinCompanyPage = () => {
         </div>
       </Section>
       <Section>
+        <h1 className="h3 font-bold text-center">
+          How Moving Essential Works for You
+        </h1>
         <div className="grid grid-cols-1 mt-10 gap-y-10 xl:grid-cols-3 md:gap-x-10">
           <div className="col-span-2">
             <div className="shadow-sm bg-background rounded-lg p-5">

@@ -6,7 +6,6 @@ import { PageTitleManager } from "./components/PageTitle";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import ProfilePage from "./pages/ProfilePage";
 import JoinCompanyPage from "./pages/join/JoinCompanyPage";
 import UserPages from "./pages/user/index";
 import CompaniesPages from "./pages/company/index";
@@ -34,9 +33,6 @@ const AppContent = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/join" element={<JoinCompanyPage />} />
         <Route path="/authorization" element={<NotAuthorizationPage />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/profile" element={<ProfilePage />} />
-        </Route>
         <Route element={<ProtectedRoute roles={[roles.admin, roles.user]} />}>
           <Route path="/user/dashboard" element={<UserPages.DashboardPage />} />
         </Route>

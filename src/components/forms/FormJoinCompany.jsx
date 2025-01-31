@@ -1,22 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Input from "../Input";
 import Select from "../Select";
 import { useForm } from "react-hook-form";
 import Button from "../Button";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-const FormJoinCompany = () => {
-  //const [submitForm, setSubmitForm] = useState(false);
-  //const [errorsForm, setErrorsForm] = useState([]);
+import {
+  fedTaxClass,
+  rateTypes,
+  states,
+} from "@/constants/sidebar.routes.company.data";
+import SelectWithSearch from "../SelectWithSearch";
+import TextArea from "../TextArea";
 
+const FormJoinCompany = () => {
   const {
     isAuthenticated,
     user,
     signupCompany,
     errors: registerErrors,
+    getZipcodes,
   } = useAuth();
 
   const {
+    control,
     register,
     handleSubmit,
     //reset,
@@ -28,16 +35,67 @@ const FormJoinCompany = () => {
       company: {
         company_name: "",
         phone: "",
-        business_type_id: "",
+        business_type_id: 1,
+        zipcode: "",
+        city_id: "",
+        state: "",
+        address: "",
+      },
+      service: {
+        fed_tax_class: "",
+        slogan: "",
+        rate_type_id: "",
+        long_description: "",
       },
     },
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [zipcodes, setZipcodes] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) navigate(`/${user.user_metadata.role}/dashboard`);
   }, [isAuthenticated, user, navigate]);
+
+  const searchZipcode = async (input) => {
+    try {
+      const zipcode = input.target.value;
+
+      if (zipcode.length < 3 || zipcode.length > 5) {
+        setZipcodes([]);
+        return;
+      }
+
+      const zipcodes = await getZipcodes(zipcode);
+
+      if (zipcodes.length === 0) {
+        setZipcodes([]);
+        return;
+      }
+
+      const formattedZipcodes = zipcodes.map((zipcode) => ({
+        value: zipcode.id,
+        label: zipcode.name,
+        //label: `${zipcode.zipcodes[0]} - ${zipcode.name}, ${zipcode.state_id}`, Utilizar para la busqueda en el home
+      }));
+
+      setZipcodes(formattedZipcodes);
+    } catch (error) {
+      console.error("Error al cargar los códigos postales:", error);
+    }
+  };
+
+  const onSubmit = handleSubmit(async (values) => {
+    setIsSubmitting(true); // Deshabilitar el botón
+    try {
+      await signupCompany(values);
+    } catch (error) {
+      console.error("Error signing up company:", error);
+    } finally {
+      setIsSubmitting(false); // Rehabilitar el botón
+    }
+  });
 
   const inputsUser = [
     {
@@ -49,6 +107,7 @@ const FormJoinCompany = () => {
       isInput: true,
       isRequired: true,
       isReadOnly: false,
+      validations: {},
     },
     {
       id: "email",
@@ -59,6 +118,7 @@ const FormJoinCompany = () => {
       isInput: true,
       isRequired: true,
       isReadOnly: false,
+      validations: {},
     },
     {
       id: "password",
@@ -69,6 +129,7 @@ const FormJoinCompany = () => {
       isInput: true,
       isRequired: true,
       isReadOnly: false,
+      validations: {},
     },
   ];
 
@@ -94,29 +155,93 @@ const FormJoinCompany = () => {
       isReadOnly: false,
     },
     {
-      id: "business_type_id",
-      name: "company.business_type_id",
-      placeholder: "Enter your business type",
-      label: "Business type",
+      id: "state",
+      name: "company.state",
+      type: "text",
+      placeholder: "Enter your state",
+      label: "State",
+      isInput: false,
+      withSearch: true,
+      isRequired: true,
+      isReadOnly: false,
+      options: states,
+    },
+    {
+      id: "zipcode",
+      name: "company.zipcode",
+      type: "number",
+      placeholder: "Enter your zipcode",
+      label: "Zipcode",
+      isInput: true,
+      isRequired: true,
+      isReadOnly: false,
+      onChange: searchZipcode,
+      validations: {
+        pattern: {
+          value: /^[0-9]{5}$/, // Expresión regular para validar exactamente 5 dígitos
+          message: "Zipcode must be exactly 5 digits",
+        },
+      },
+    },
+    {
+      id: "city_id",
+      name: "company.city_id",
+      type: "text",
+      placeholder: "Select a city",
+      label: "City",
       isInput: false,
       isRequired: true,
       isReadOnly: false,
-      options: [
-        { value: 1, label: "Residential/Local Moving" },
-        { value: 2, label: "Real Estate" },
-      ],
+      options: zipcodes,
+    },
+    {
+      id: "address",
+      name: "company.address",
+      type: "text",
+      placeholder: "Enter your address",
+      label: "Address",
+      isInput: true,
+      isRequired: true,
+      isReadOnly: false,
+    },
+    {
+      id: "fed_tax_class",
+      name: "service.fed_tax_class",
+      type: "text",
+      placeholder: "Select fed. tax classification",
+      label: "Federal tax classification",
+      isInput: false,
+      isRequired: true,
+      isReadOnly: false,
+      options: fedTaxClass,
+    },
+    {
+      id: "slogan",
+      name: "service.slogan",
+      type: "text",
+      placeholder: "Enter your slogan",
+      label: "Slogan",
+      isInput: true,
+      isRequired: true,
+      isReadOnly: false,
+    },
+    {
+      id: "rate_type_id",
+      name: "service.rate_type_id",
+      type: "text",
+      placeholder: "How do you charge?",
+      label: "How do you charge?",
+      isInput: false,
+      isRequired: true,
+      isReadOnly: false,
+      options: rateTypes,
     },
   ];
-
-  const onSubmit = handleSubmit(async (values) => {
-    signupCompany(values);
-    return;
-  });
 
   return (
     <div className="">
       <form onSubmit={onSubmit}>
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 lg:grid-cols-2">
           {inputsUser.map((input) => {
             if (input.isInput) {
               return (
@@ -136,11 +261,6 @@ const FormJoinCompany = () => {
                     required={input.isRequired}
                     errors={errors}
                   />
-                  {errors?.[input.name] && (
-                    <span className="text-red-500 text-xs font-semibold">
-                      {input.label} is required
-                    </span>
-                  )}
                 </div>
               );
             }
@@ -164,34 +284,62 @@ const FormJoinCompany = () => {
                     register={register}
                     required={input.isRequired}
                     errors={errors}
+                    onChange={input.onChange}
+                    validations={input.validations}
+                  />
+                ) : input.withSearch ? (
+                  <SelectWithSearch
+                    id={input.id}
+                    label={input.label}
+                    name={input.name}
+                    readOnly={input.isReadOnly}
+                    options={input.options}
+                    required={input.isRequired}
+                    placeholder={input.placeholder}
+                    control={control}
                   />
                 ) : (
                   <Select
                     id={input.id}
+                    label={input.label}
                     name={input.name}
                     readOnly={input.isReadOnly}
                     options={input.options}
-                    register={register}
                     required={input.isRequired}
                     placeholder={input.placeholder}
+                    control={control}
                   />
-                )}
-                {errors.company?.[input.name.split(".")[1]] && (
-                  <span className="text-red-500 text-xs font-semibold">
-                    {input.label} is required
-                  </span>
                 )}
               </div>
             );
           })}
+          <div className="xl:col-span-2 lg:col-span-2">
+            <label
+              htmlFor="service.long_description"
+              className="text-sm font-medium"
+            >
+              Long description *
+            </label>
+            <TextArea
+              id="service.long_description"
+              label="Long description"
+              name="service.long_description"
+              placeholder="Enter your long description"
+              readOnly={false}
+              register={register}
+              required={true}
+              errors={errors}
+            />
+          </div>
         </div>
         <div className="mt-7">
           <Button
             orange
             type="submit"
             className={"w-full 2xl:w-1/5 xl:w-1/4 lg:w-1/6"}
+            disabled={isSubmitting}
           >
-            Sign up
+            {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </div>
         <div className="text-center 2xl:text-left lg:text-left">

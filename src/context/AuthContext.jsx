@@ -53,7 +53,8 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    await user.login();
+    const resAuth = await user.login();
+    setUser(resAuth.data.user);
     setIsAuthenticated(true);
   };
 
@@ -101,7 +102,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signupCompany = async (data) => {
-    const { name, email, password, company } = data;
+    const { name, email, password, company, service } = data;
 
     const userInstance = new User({
       name,
@@ -125,12 +126,19 @@ export const AuthProvider = ({ children }) => {
       user_id: resUser.id,
       email: email,
     });
+
     const resCompany = await companyInstance.create();
 
     if (!resCompany.data && resCompany.error) {
       setError([resCompany.error.message]);
       return;
     }
+
+    // CREATE SERVICE (LOCAL MOVING OR REALTOR)
+    await companyInstance.createService(company.business_type_id, {
+      ...service,
+      company_id: resCompany.data[0].id,
+    });
 
     // LOGIN
     login({ email, password });
@@ -146,9 +154,10 @@ export const AuthProvider = ({ children }) => {
       };
 
       if (user.user_metadata.role === "company") {
-        const { data } = await createCompanyInstance(user).getInfo();
-        if (data.length > 0) {
-          userInfo.company = data[0];
+        const data = await createCompanyInstance(user).getInfo();
+        if (data) {
+          userInfo.company = data.companyInfo;
+          userInfo.service = data.serviceInfo;
         }
       }
 
@@ -158,6 +167,15 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
       setUser(null);
     }
+  };
+
+  const getZipcodes = async (value) => {
+    const { data } = await supabase
+      .from("cities")
+      .select("*")
+      .or(`zipcodes.cs.{${value}}, zipcodes_text.ilike.${value}%`)
+      .limit(10);
+    return data;
   };
 
   /* HOOKS
@@ -220,6 +238,7 @@ export const AuthProvider = ({ children }) => {
         createUserInstance,
         optionActiveCompany,
         setOptionActiveCompany,
+        getZipcodes,
       }}
     >
       {children}

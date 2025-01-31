@@ -25,14 +25,14 @@ function Header() {
           }`}
         >
           <div className="flex items-center py-2 px-5 lg:px-7 ">
-            <a className="block w-[12rem] xl:mr-8" href="/">
+            <Link className="block w-[12rem] xl:mr-8" to="/">
               <img
                 src="https://static.wixstatic.com/media/6cac47_e1b2ef37b22241878a44a64fbf6962c4~mv2.png"
                 width={50}
                 height={50}
                 alt="Moving Essential"
               />
-            </a>
+            </Link>
             <nav
               className={`${
                 openNavigation ? "flex" : "hidden"
