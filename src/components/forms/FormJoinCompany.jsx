@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Input from "../Input";
 import Select from "../Select";
-import { useForm } from "react-hook-form";
-import Button from "../Button";
 import { useAuth } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import {
   fedTaxClass,
   rateTypes,
@@ -12,51 +9,13 @@ import {
 } from "@/constants/sidebar.routes.company.data";
 import SelectWithSearch from "../SelectWithSearch";
 import TextArea from "../TextArea";
+import CustomIcon from "../design/CustomIcon";
+import { Link } from "lucide-react";
 
-const FormJoinCompany = () => {
-  const {
-    isAuthenticated,
-    user,
-    signupCompany,
-    errors: registerErrors,
-    getZipcodes,
-  } = useAuth();
+const FormJoinCompany = ({ register, control, errors }) => {
+  const { getZipcodes } = useAuth();
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    //reset,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      company: {
-        company_name: "",
-        phone: "",
-        business_type_id: 1,
-        zipcode: "",
-        city_id: "",
-        state: "",
-        address: "",
-      },
-      service: {
-        fed_tax_class: "",
-        slogan: "",
-        rate_type_id: "",
-        long_description: "",
-      },
-    },
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [zipcodes, setZipcodes] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated) navigate(`/${user.user_metadata.role}/dashboard`);
-  }, [isAuthenticated, user, navigate]);
 
   const searchZipcode = async (input) => {
     try {
@@ -85,17 +44,6 @@ const FormJoinCompany = () => {
       console.error("Error al cargar los códigos postales:", error);
     }
   };
-
-  const onSubmit = handleSubmit(async (values) => {
-    setIsSubmitting(true); // Deshabilitar el botón
-    try {
-      await signupCompany(values);
-    } catch (error) {
-      console.error("Error signing up company:", error);
-    } finally {
-      setIsSubmitting(false); // Rehabilitar el botón
-    }
-  });
 
   const inputsUser = [
     {
@@ -147,7 +95,7 @@ const FormJoinCompany = () => {
     {
       id: "phone",
       name: "company.phone",
-      type: "text",
+      type: "number",
       placeholder: "Enter your phone",
       label: "Phone",
       isInput: true,
@@ -238,120 +186,187 @@ const FormJoinCompany = () => {
     },
   ];
 
+  const inputSocial = [
+    {
+      id: "facebook_link",
+      name: "company.facebook_link",
+      type: "text",
+      placeholder: "Enter your facebook link",
+      label: "Facebook",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "instagram_link",
+      name: "company.instagram_link",
+      type: "text",
+      placeholder: "Enter your instagram link",
+      label: "Instagram",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "twitter_link",
+      name: "company.twitter_link",
+      type: "text",
+      placeholder: "Enter your twitter link",
+      label: "Twitter",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "linkedin_link",
+      name: "company.linkedin_link",
+      type: "text",
+      placeholder: "Enter your linkedin link",
+      label: "Linkedin",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "youtube_link",
+      name: "company.youtube_link",
+      type: "text",
+      placeholder: "Enter your youtube link",
+      label: "Youtube",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "tiktok_link",
+      name: "company.tiktok_link",
+      type: "text",
+      placeholder: "Enter your tiktok link",
+      label: "TikTok",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+  ];
+
   return (
     <div className="">
-      <form onSubmit={onSubmit}>
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 lg:grid-cols-2">
-          {inputsUser.map((input) => {
-            if (input.isInput) {
-              return (
-                <div key={input.id}>
-                  <label htmlFor={input.id} className="text-sm font-medium">
-                    {input.label}
-                    {input.isRequired && " *"}
-                  </label>
-                  <Input
-                    id={input.id}
-                    label={input.label}
-                    name={input.name}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    readOnly={input.isReadOnly}
-                    register={register}
-                    required={input.isRequired}
-                    errors={errors}
-                  />
-                </div>
-              );
-            }
-            return null;
-          })}
-          {inputCompany.map((input) => {
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2">
+        {inputsUser.map((input) => {
+          if (input.isInput) {
             return (
               <div key={input.id}>
                 <label htmlFor={input.id} className="text-sm font-medium">
                   {input.label}
                   {input.isRequired && " *"}
                 </label>
-                {input.isInput ? (
-                  <Input
-                    id={input.id}
-                    label={input.label}
-                    name={input.name}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    readOnly={input.isReadOnly}
-                    register={register}
-                    required={input.isRequired}
-                    errors={errors}
-                    onChange={input.onChange}
-                    validations={input.validations}
-                  />
-                ) : input.withSearch ? (
-                  <SelectWithSearch
-                    id={input.id}
-                    label={input.label}
-                    name={input.name}
-                    readOnly={input.isReadOnly}
-                    options={input.options}
-                    required={input.isRequired}
-                    placeholder={input.placeholder}
-                    control={control}
-                  />
-                ) : (
-                  <Select
-                    id={input.id}
-                    label={input.label}
-                    name={input.name}
-                    readOnly={input.isReadOnly}
-                    options={input.options}
-                    required={input.isRequired}
-                    placeholder={input.placeholder}
-                    control={control}
-                  />
-                )}
+                <Input
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  readOnly={input.isReadOnly}
+                  register={register}
+                  required={input.isRequired}
+                  errors={errors}
+                />
               </div>
             );
-          })}
-          <div className="xl:col-span-2 lg:col-span-2">
-            <label
-              htmlFor="service.long_description"
-              className="text-sm font-medium"
-            >
-              Long description *
-            </label>
-            <TextArea
-              id="service.long_description"
-              label="Long description"
-              name="service.long_description"
-              placeholder="Enter your long description"
-              readOnly={false}
-              register={register}
-              required={true}
-              errors={errors}
-            />
-          </div>
-        </div>
-        <div className="mt-7">
-          <Button
-            orange
-            type="submit"
-            className={"w-full 2xl:w-1/5 xl:w-1/4 lg:w-1/6"}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </Button>
-        </div>
-        <div className="text-center 2xl:text-left lg:text-left">
-          {registerErrors.map((error, i) => (
-            <div key={i} className="first-letter:uppercase">
-              <span className="text-red-500 text-xs font-semibold">
-                {error}
-              </span>
+          }
+          return null;
+        })}
+        {inputCompany.map((input) => {
+          return (
+            <div key={input.id}>
+              <label htmlFor={input.id} className="text-sm font-medium">
+                {input.label}
+                {input.isRequired && " *"}
+              </label>
+              {input.isInput ? (
+                <Input
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  readOnly={input.isReadOnly}
+                  register={register}
+                  required={input.isRequired}
+                  errors={errors}
+                  onChange={input.onChange}
+                  validations={input.validations}
+                />
+              ) : input.withSearch ? (
+                <SelectWithSearch
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  readOnly={input.isReadOnly}
+                  options={input.options}
+                  required={input.isRequired}
+                  placeholder={input.placeholder}
+                  control={control}
+                />
+              ) : (
+                <Select
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  readOnly={input.isReadOnly}
+                  options={input.options}
+                  required={input.isRequired}
+                  placeholder={input.placeholder}
+                  control={control}
+                />
+              )}
             </div>
-          ))}
+          );
+        })}
+        <div className="xl:col-span-2 lg:col-span-2 md:col-span-2">
+          <label
+            htmlFor="service.long_description"
+            className="text-sm font-medium"
+          >
+            Long description *
+          </label>
+          <TextArea
+            id="service.long_description"
+            label="Long description"
+            name="service.long_description"
+            placeholder="Enter your long description"
+            readOnly={false}
+            register={register}
+            required={true}
+            errors={errors}
+          />
         </div>
-      </form>
+        <div className="mt-7 xl:col-span-2 md:col-span-2 flex gap-x-2 items-center">
+          <CustomIcon icon={Link} />
+          <h3 className="font-medium">Social networks</h3>
+        </div>
+        {inputSocial.map((input) => {
+          return (
+            <div key={input.id}>
+              <label htmlFor={input.id} className="text-sm font-medium">
+                {input.label}
+                {input.isRequired && " *"}
+              </label>
+              <Input
+                id={input.id}
+                label={input.label}
+                name={input.name}
+                type={input.type}
+                placeholder={input.placeholder}
+                readOnly={input.isReadOnly}
+                register={register}
+                required={input.isRequired}
+                errors={errors}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

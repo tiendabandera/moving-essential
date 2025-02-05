@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true); // Estado de carga
   const [userInfo, setUserInfo] = useState(null);
   const [optionActiveCompany, setOptionActiveCompany] = useState(false); // Opciones del nav de company
+  const [uploading, setUploading] = useState([]);
 
   /* INSTANCES
   _________________________________________ */
@@ -102,7 +103,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signupCompany = async (data) => {
-    const { name, email, password, company, service } = data;
+    const { name, email, password, company, service, images } = data;
 
     const userInstance = new User({
       name,
@@ -119,6 +120,25 @@ export const AuthProvider = ({ children }) => {
       setError([resUser.error]);
       return;
     }
+
+    // UPLOAD IMAGE
+    const countImages = company.business_type_id === 1 ? 6 : 7;
+    const resImages = [];
+
+    for (let i = 1; i <= countImages; i++) {
+      if (!images[`img_${i}`]) continue;
+
+      const image = images[`img_${i}`];
+      const res = await uploadImages(
+        `${resUser.id}/img_${i}`,
+        image,
+        "company_images"
+      );
+
+      if (res) resImages.push(res);
+    }
+
+    if (resImages.length > 0) company[`images`] = resImages;
 
     // CREATE COMPANY
     const companyInstance = new Company({
@@ -176,6 +196,30 @@ export const AuthProvider = ({ children }) => {
       .or(`zipcodes.cs.{${value}}, zipcodes_text.ilike.${value}%`)
       .limit(10);
     return data;
+  };
+
+  const uploadImages = async (fileName, fileData, bucketName) => {
+    setUploading((prev) => [...prev, fileData.id]);
+
+    const res = await supabase.storage
+      .from(bucketName)
+      .upload(fileName, fileData.file, {
+        upsert: true,
+        cacheControl: "3600",
+      });
+
+    if (res.error) {
+      setError([res.error.message]);
+      return false;
+    }
+
+    const { data } = supabase.storage
+      .from(bucketName)
+      .getPublicUrl(res.data.path);
+
+    setUploading((prev) => prev.filter((id) => id !== fileData.id));
+
+    return data.publicUrl;
   };
 
   /* HOOKS
@@ -239,6 +283,9 @@ export const AuthProvider = ({ children }) => {
         optionActiveCompany,
         setOptionActiveCompany,
         getZipcodes,
+        uploadImages,
+        uploading,
+        setUploading,
       }}
     >
       {children}

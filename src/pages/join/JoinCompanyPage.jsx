@@ -11,8 +11,62 @@ import {
 } from "lucide-react";
 import CustomIcon from "@/components/design/CustomIcon";
 import FormJoinCompany from "@/components/forms/FormJoinCompany";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import InputUploadImage from "@/components/InputUploadImage";
 
 const JoinCompanyPage = () => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  //const [previews, setPreviews] = useState([]);
+
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      company: {
+        company_name: "",
+        phone: "",
+        business_type_id: 1,
+        zipcode: "",
+        city_id: "",
+        state: "",
+        address: "",
+        facebook_link: "",
+        instagram_link: "",
+        twitter_link: "",
+        linkedin_link: "",
+        youtube_link: "",
+        tiktok_link: "",
+      },
+      service: {
+        fed_tax_class: "",
+        slogan: "",
+        rate_type_id: "",
+        long_description: "",
+      },
+      images: {
+        img_1: "",
+        img_2: "",
+        img_3: "",
+        img_4: "",
+        img_5: "",
+        img_6: "",
+        img_7: "",
+      },
+    },
+  });
+
   const benefits = [
     {
       icon: UserRoundSearch,
@@ -33,6 +87,36 @@ const JoinCompanyPage = () => {
         "We simplify your search for movers near you by providing a comprehensive list of reliable moving companies near you. Our curated directory helps you find the best moving companies in your area, ensuring your belongings are in trusted hands.",
     },
   ];
+
+  const {
+    isAuthenticated,
+    user,
+    signupCompany,
+    errors: registerErrors,
+  } = useAuth();
+
+  const onSubmit = handleSubmit(async (values) => {
+    setIsSubmitting(true); // Deshabilitar el botón
+    try {
+      await signupCompany(values);
+    } catch (error) {
+      console.error("Error signing up company:", error);
+    } finally {
+      setIsSubmitting(false); // Rehabilitar el botón
+    }
+  });
+
+  useEffect(() => {
+    if (isAuthenticated) navigate(`/${user.user_metadata.role}/dashboard`);
+
+    if (registerErrors.length > 0) {
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: registerErrors[0],
+        variant: "destructive",
+      });
+    }
+  }, [isAuthenticated, user, navigate, registerErrors, toast]);
 
   return (
     <div className="flex flex-col w-full h-screen gap-4">
@@ -87,27 +171,67 @@ const JoinCompanyPage = () => {
         <h1 className="h3 font-bold text-center">
           How Moving Essential Works for You
         </h1>
-        <div className="grid grid-cols-1 mt-10 gap-y-10 xl:grid-cols-3 md:gap-x-10">
-          <div className="col-span-2">
-            <div className="shadow-sm bg-background rounded-lg p-5">
-              <div className="flex gap-x-2 items-center">
-                <CustomIcon icon={Building2} />
-                <h3 className="font-medium">Company information</h3>
+        <form onSubmit={onSubmit}>
+          <div className="grid grid-cols-1 mt-10 gap-y-10 xl:grid-cols-3 md:gap-x-10">
+            <div className="col-span-2">
+              <div className="shadow-sm bg-background rounded-lg p-5">
+                <div className="flex gap-x-2 items-center">
+                  <CustomIcon icon={Building2} />
+                  <h3 className="font-medium">Company information</h3>
+                </div>
+                <div className="mt-4">
+                  <FormJoinCompany
+                    register={register}
+                    control={control}
+                    errors={errors}
+                    isSubmitting={isSubmitting}
+                  />
+                </div>
               </div>
-              <div className="mt-7">
-                <FormJoinCompany />
+            </div>
+            <div className="col-span-2 xl:col-span-1">
+              <div className="shadow-sm bg-background rounded-lg p-5">
+                <div className="flex gap-x-2 items-center">
+                  <CustomIcon icon={Image} />
+                  <h3 className="font-medium">Images</h3>
+                </div>
+                <div className="mt-4 w-full mx-auto">
+                  <div className="grid grid-cols-2 gap-2">
+                    <InputUploadImage
+                      id="images.img_1"
+                      name="images.img_1"
+                      placeholder="Upload logo"
+                      errors={errors}
+                      required={true}
+                      control={control}
+                    />
+                    {[2, 3, 4, 5, 6].map((index) => (
+                      <InputUploadImage
+                        key={index}
+                        id={`images.img_${index}`}
+                        name={`images.img_${index}`}
+                        placeholder={`Additional image`}
+                        errors={errors}
+                        required={false}
+                        control={control}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div>
-            <div className="shadow-sm bg-background rounded-lg p-5">
-              <div className="flex gap-x-2 items-center">
-                <CustomIcon icon={Image} />
-                <h3 className="font-medium">Images</h3>
-              </div>
-            </div>
+          <div className="mt-10 flex flex-col gap-4">
+            <Button
+              orange
+              type="submit"
+              className={"w-full 2xl:w-1/6 xl:w-1/6"}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </Button>
           </div>
-        </div>
+        </form>
       </Section>
     </div>
   );

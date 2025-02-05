@@ -1,50 +1,20 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { Link } from "lucide-react";
 import Input from "../Input";
 import Select from "../Select";
-import { useForm } from "react-hook-form";
-import Button from "../Button";
-import { useAuth } from "@/context/AuthContext";
+import SelectWithSearch from "../SelectWithSearch";
+import TextArea from "../TextArea";
+import CustomIcon from "../design/CustomIcon";
 import {
   fedTaxClass,
   rateTypes,
   states,
 } from "@/constants/sidebar.routes.company.data";
-import SelectWithSearch from "../SelectWithSearch";
-import TextArea from "../TextArea";
-const FormCompany = ({ userInfo }) => {
-  const [submitForm, setSubmitForm] = useState(false);
-  const [errorsForm, setErrorsForm] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+const FormCompany = ({ userInfo, register, errors, control, errorsForm }) => {
   const [zipcodes, setZipcodes] = useState([]);
-
-  const {
-    createCompanyInstance,
-    createUserInstance,
-    setUser,
-    setUserInfo,
-    getZipcodes,
-  } = useAuth();
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      company: {
-        company_name: "",
-        phone: "",
-        business_type_id: "",
-        zipcode: "",
-        city_id: "",
-        state: "",
-      },
-    },
-  });
+  const { getZipcodes } = useAuth();
 
   const searchZipcode = async (input) => {
     try {
@@ -89,29 +59,9 @@ const FormCompany = ({ userInfo }) => {
     };
 
     if (userInfo) {
-      reset({
-        name: userInfo.name || "",
-        email: userInfo.email || "",
-        company: {
-          company_name: userInfo.company?.company_name || "",
-          phone: userInfo.company?.phone || "",
-          business_type_id: userInfo.company?.business_type_id || "",
-          zipcode: userInfo.company?.zipcode || "",
-          city_id: userInfo.company?.city_id || "",
-          state: userInfo.company?.state || "",
-          address: userInfo.company?.address || "",
-        },
-        service: {
-          fed_tax_class: userInfo.service?.fed_tax_class || "",
-          slogan: userInfo.service?.slogan || "",
-          rate_type_id: userInfo.service?.rate_type_id || "",
-          long_description: userInfo.service?.long_description || "",
-        },
-      });
-
       getFirstZipcode(userInfo.company?.zipcode || "");
     }
-  }, [userInfo, reset, getZipcodes]);
+  }, [userInfo, getZipcodes]);
 
   const inputsUser = [
     {
@@ -254,135 +204,144 @@ const FormCompany = ({ userInfo }) => {
     },
   ];
 
-  const onSubmit = handleSubmit(async (values) => {
-    setIsSubmitting(true); // Deshabilitar el botón
-
-    const companyInstance = createCompanyInstance({
-      companyInfo: values.company,
-      serviceInfo: values.service,
-    });
-    const res = await companyInstance.update(userInfo.company.id);
-
-    if (res.error) {
-      setErrorsForm([res.error.message]);
-      setTimeout(() => {
-        setErrorsForm([]);
-      }, 5000);
-      return;
-    }
-
-    renderUserInfo(values); // Renderizar los datos actualizados
-
-    setSubmitForm(true);
-    setTimeout(() => {
-      setSubmitForm(false);
-    }, 3000);
-
-    setIsSubmitting(false);
-    return;
-  });
-
-  const renderUserInfo = async (values) => {
-    const userInstance = createUserInstance(values);
-    await userInstance.update();
-
-    setUser((prevUser) => ({
-      ...prevUser,
-      user_metadata: {
-        ...prevUser.user_metadata,
-        name: values.name,
-        company_name: values.company.company_name,
-      },
-    }));
-
-    setUserInfo((prevUserInfo) => ({
-      ...prevUserInfo,
-      name: values.name,
-      company: {
-        id: userInfo.company.id,
-        ...values.company,
-      },
-      service: {
-        ...values.service,
-      },
-    }));
-  };
+  const inputSocial = [
+    {
+      id: "facebook_link",
+      name: "company.facebook_link",
+      type: "text",
+      placeholder: "Enter your facebook link",
+      label: "Facebook",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "instagram_link",
+      name: "company.instagram_link",
+      type: "text",
+      placeholder: "Enter your instagram link",
+      label: "Instagram",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "twitter_link",
+      name: "company.twitter_link",
+      type: "text",
+      placeholder: "Enter your twitter link",
+      label: "Twitter",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "linkedin_link",
+      name: "company.linkedin_link",
+      type: "text",
+      placeholder: "Enter your linkedin link",
+      label: "Linkedin",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "youtube_link",
+      name: "company.youtube_link",
+      type: "text",
+      placeholder: "Enter your youtube link",
+      label: "Youtube",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "tiktok_link",
+      name: "company.tiktok_link",
+      type: "text",
+      placeholder: "Enter your tiktok link",
+      label: "TikTok",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+  ];
 
   return (
     <div className="">
-      <form onSubmit={onSubmit}>
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 lg:grid-cols-2">
-          {inputsUser.map((input) => {
-            if (input.isInput) {
-              return (
-                <div key={input.id}>
-                  <label htmlFor={input.id} className="text-sm font-medium">
-                    {input.label}
-                    {input.isRequired && " *"}
-                  </label>
-                  <Input
-                    id={input.id}
-                    label={input.label}
-                    name={input.name}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    readOnly={input.isReadOnly}
-                    register={register}
-                    required={input.isRequired}
-                    errors={errors}
-                  />
-                </div>
-              );
-            }
-          })}
-          {inputCompany.map((input) => {
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 lg:grid-cols-2">
+        {inputsUser.map((input) => {
+          if (input.isInput) {
             return (
               <div key={input.id}>
                 <label htmlFor={input.id} className="text-sm font-medium">
                   {input.label}
                   {input.isRequired && " *"}
                 </label>
-                {input.isInput ? (
-                  <Input
-                    id={input.id}
-                    label={input.label}
-                    name={input.name}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    readOnly={input.isReadOnly}
-                    register={register}
-                    required={input.isRequired}
-                    errors={errors}
-                    onChange={input.onChange}
-                    validations={input.validations}
-                  />
-                ) : input.withSearch ? (
-                  <SelectWithSearch
-                    id={input.id}
-                    label={input.label}
-                    name={input.name}
-                    readOnly={input.isReadOnly}
-                    options={input.options}
-                    required={input.isRequired}
-                    placeholder={input.placeholder}
-                    control={control}
-                  />
-                ) : (
-                  <Select
-                    id={input.id}
-                    label={input.label}
-                    name={input.name}
-                    readOnly={input.isReadOnly}
-                    options={input.options}
-                    required={input.isRequired}
-                    placeholder={input.placeholder}
-                    control={control}
-                  />
-                )}
+                <Input
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  readOnly={input.isReadOnly}
+                  register={register}
+                  required={input.isRequired}
+                  errors={errors}
+                />
               </div>
             );
-          })}
-          <div className="xl:col-span-2 lg:col-span-2">
+          }
+        })}
+        {inputCompany.map((input) => {
+          return (
+            <div key={input.id}>
+              <label htmlFor={input.id} className="text-sm font-medium">
+                {input.label}
+                {input.isRequired && " *"}
+              </label>
+              {input.isInput ? (
+                <Input
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  readOnly={input.isReadOnly}
+                  register={register}
+                  required={input.isRequired}
+                  errors={errors}
+                  onChange={input.onChange}
+                  validations={input.validations}
+                />
+              ) : input.withSearch ? (
+                <SelectWithSearch
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  readOnly={input.isReadOnly}
+                  options={input.options}
+                  required={input.isRequired}
+                  placeholder={input.placeholder}
+                  control={control}
+                />
+              ) : (
+                <Select
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  readOnly={input.isReadOnly}
+                  options={input.options}
+                  required={input.isRequired}
+                  placeholder={input.placeholder}
+                  control={control}
+                />
+              )}
+            </div>
+          );
+        })}
+        {
+          <div className="xl:col-span-2 lg:col-span-2 md:col-span-2">
             <label
               htmlFor="service.long_description"
               className="text-sm font-medium"
@@ -400,22 +359,35 @@ const FormCompany = ({ userInfo }) => {
               errors={errors}
             />
           </div>
+        }
+        <div className="mt-7 xl:col-span-2 md:col-span-2 flex gap-x-2 items-center">
+          <CustomIcon icon={Link} />
+          <h3 className="font-medium">Social networks</h3>
         </div>
-        <div className="mt-7">
-          <Button
-            orange
-            type="submit"
-            className={"w-full 2xl:w-1/5 xl:w-1/4 lg:w-1/6"}
-          >
-            {isSubmitting ? "Updating..." : "Update info"}
-          </Button>
-        </div>
+        {inputSocial.map((input) => {
+          return (
+            <div key={input.id}>
+              <label htmlFor={input.id} className="text-sm font-medium">
+                {input.label}
+                {input.isRequired && " *"}
+              </label>
+              <Input
+                id={input.id}
+                label={input.label}
+                name={input.name}
+                type={input.type}
+                placeholder={input.placeholder}
+                readOnly={input.isReadOnly}
+                register={register}
+                required={input.isRequired}
+                errors={errors}
+              />
+            </div>
+          );
+        })}
+      </div>
+      {
         <div className="text-center 2xl:text-left lg:text-left">
-          {submitForm && (
-            <span className="text-red-500 text-xs font-semibold">
-              Updated successfully
-            </span>
-          )}
           {errorsForm.map((error, i) => (
             <div key={i} className="first-letter:uppercase">
               <span className="text-red-500 text-xs font-semibold">
@@ -424,7 +396,7 @@ const FormCompany = ({ userInfo }) => {
             </div>
           ))}
         </div>
-      </form>
+      }
     </div>
   );
 };

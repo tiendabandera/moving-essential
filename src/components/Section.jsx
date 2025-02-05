@@ -3,7 +3,7 @@ const Section = ({ className, id, customPaddings, children }) => {
     <div
       id={id}
       className={`       
-      ${customPaddings || `px-14 py-10 xl:px-36 lg:py-18 xl:py-10`} 
+      ${customPaddings || `px-6 py-10 xl:px-36 lg:py-18 xl:py-10`} 
       ${className || ""}`}
     >
       {children}

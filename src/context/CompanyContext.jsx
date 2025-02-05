@@ -24,7 +24,33 @@ export class Company {
     };
   }
 
-  async update(companyId) {
+  async update(companyId, userId, uploadImages) {
+    const countImages = this.data.companyInfo.business_type_id === 1 ? 6 : 7;
+    const images = this.data.images;
+    const resImages = [];
+
+    for (let i = 1; i <= countImages; i++) {
+      if (!images[`img_${i}`]) continue;
+
+      const image = images[`img_${i}`];
+
+      // Validamos si no actualizo la imagen
+      if (!image || typeof image !== "object") {
+        resImages.push(image);
+        continue;
+      }
+
+      const res = await uploadImages(
+        `${userId}/img_${i}`,
+        image,
+        "company_images"
+      );
+
+      if (res) resImages.push(res);
+    }
+
+    if (resImages.length > 0) this.data.companyInfo[`images`] = resImages;
+
     await supabase
       .from("companies")
       .update(this.data.companyInfo)

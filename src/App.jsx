@@ -15,6 +15,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
 import NotAuthorizationPage from "./pages/NotAuthorizationPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { Toaster } from "./components/ui/toaster";
 
 const AppContent = () => {
   const location = useLocation();
@@ -70,6 +71,7 @@ export const App = () => {
     <AuthProvider>
       <BrowserRouter>
         <AppContent />
+        <Toaster />
       </BrowserRouter>
     </AuthProvider>
   );
