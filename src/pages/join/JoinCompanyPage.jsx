@@ -167,14 +167,14 @@ const JoinCompanyPage = () => {
           ))}
         </div>
       </Section>
-      <Section>
+      <Section className={`bg-[#f1f1f1]`}>
         <h1 className="h3 font-bold text-center">
           How Moving Essential Works for You
         </h1>
         <form onSubmit={onSubmit}>
           <div className="grid grid-cols-1 mt-10 gap-y-10 xl:grid-cols-3 md:gap-x-10">
             <div className="col-span-2">
-              <div className="shadow-sm bg-background rounded-lg p-5">
+              <div className="shadow-lg bg-background rounded-lg p-5">
                 <div className="flex gap-x-2 items-center">
                   <CustomIcon icon={Building2} />
                   <h3 className="font-medium">Company information</h3>

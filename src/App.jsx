@@ -9,7 +9,7 @@ import HomePage from "./pages/HomePage";
 import JoinCompanyPage from "./pages/join/JoinCompanyPage";
 import UserPages from "./pages/user/index";
 import CompaniesPages from "./pages/company/index";
-//import CompaniesPages from "./pages/company";
+import LocalMovingPages from "./pages/local_moving/index";
 
 import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
@@ -59,6 +59,12 @@ const AppContent = () => {
               <Route path="my-leads" element={<CompaniesPages.MyLeadsPage />} />
             </Route>
           </Route>
+        </Route>
+        <Route>
+          <Route
+            path="/local-moving/:id"
+            element={<LocalMovingPages.InternalPage />}
+          />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

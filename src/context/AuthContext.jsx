@@ -198,6 +198,15 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
+  const getZipcodesByCity = async (value) => {
+    const { data } = await supabase
+      .from("cities")
+      .select("*")
+      .ilike("name", `${value}%`)
+      .limit(10);
+    return data;
+  };
+
   const uploadImages = async (fileName, fileData, bucketName) => {
     setUploading((prev) => [...prev, fileData.id]);
 
@@ -283,6 +292,7 @@ export const AuthProvider = ({ children }) => {
         optionActiveCompany,
         setOptionActiveCompany,
         getZipcodes,
+        getZipcodesByCity,
         uploadImages,
         uploading,
         setUploading,

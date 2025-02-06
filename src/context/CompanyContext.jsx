@@ -78,4 +78,21 @@ export class Company {
       return await supabase.from("local_moving").insert(data);
     }
   }
+
+  async getAll(offset) {
+    const pageSize = 8;
+
+    return await supabase
+      .from("companies")
+      .select(`*, local_moving(*), cities(name)`)
+      .range(offset, offset + pageSize - 1);
+  }
+
+  async getById() {
+    return await supabase
+      .from("companies")
+      .select(`*, local_moving(*), cities(name)`)
+      .eq("id", this.data.id)
+      .single();
+  }
 }

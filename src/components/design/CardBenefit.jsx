@@ -12,7 +12,7 @@ const CardBenefit = ({ title, description, className, icon: Icon }) => {
         <h5 className="text-lg font-semibold mb-4">{title}</h5>
         <p className="mb-4">{description}</p>
         <div className="flex m-auto items-center justify-between w-full">
-          <div className="p-3 bg-black rounded-lg ">
+          <div className="p-3 bg-black rounded-lg">
             <Icon strokeWidth={2} color="#ffffff" className="w-5 h-5" />
           </div>
           <div>

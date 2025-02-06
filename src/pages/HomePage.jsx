@@ -1,59 +1,112 @@
-import Section from "../components/Section";
+import SearchCompanies from "@/components/SearchCompanies";
 import curve from "../assets/img/curve.png";
-import Button from "../components/Button";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { ChevronRight } from "lucide-react";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import RepeaterCompanies from "@/components/RepeaterCompanies";
 
 const HomePage = () => {
   return (
-    <Section
-      className="pt-[12rem] -mt-[5.25rem]"
-      //crosses
-      //crossesOffset="lg:translate-y-[5.25rem]"
-      customPaddings
-      id="compare"
-    >
-      <div className="container relative">
-        <div className="relative z-1 max-w-[62rem] mx-auto text-center mb-[4rem] md:mb-20 lg:mb-[6.25rem]">
-          <h1 className="font-extrabold h1 mb-6">
-            Compare Moving services near you{" "}
-            <span className="inline-block relative">
-              Today!{" "}
+    <div className="relative overflow-hidden">
+      <section className="max-container padding-container flex flex-col gap-20 py-10 pb-20 md:gap-28 lg:py-20 xl:flex-row">
+        <div className="hero-map" />
+        <div className="relative z-20 flex flex-1 flex-col xl:w-1/2">
+          <div>
+            <h1 className="bold-52 lg:bold-88">Compare Moving Services Near</h1>
+            <span className="bold-52 lg:bold-88 inline-block relative">
+              You Today!
               <img
                 src={curve}
-                className="absolute top-full left-0 w-full xl:-mt-2"
+                className="absolute top-full left-0 w-full"
                 width={624}
                 height={28}
                 alt="Curve"
               />
             </span>
-          </h1>
-          <p className="body-1 font-normal max-w-3xl mx-auto mb-6 text-n-5 lg:mb-8">
+          </div>
+          <p className="regular-16 mt-11 text-gray-50 xl:max-w-[520px]">
             Find reputable realtors and movers near you to ease the burden. Just
             let us know about your move to get NO-COST moving quotations.
             Compare costs and get in touch with movers or realtors near your
             area.
           </p>
-          <Button href="https://www.movingessential.com/services" orange>
-            Explore evething we have for you
-          </Button>
+          <div className="my-11 flex items-center flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <img
+                src={`/src/assets/img/person-1.png`}
+                alt="Person-1"
+                className="w-10 h-10 rounded-full border-2 border-gray-10"
+              />
+              <img
+                src={`/src/assets/img/person-2.png`}
+                alt="Person-2"
+                className="w-10 h-10 rounded-full border-2 border-gray-10 ml-[-1.2rem]"
+              />
+              <img
+                src={`/src/assets/img/person-3.png`}
+                alt="Person-3"
+                className="w-10 h-10 rounded-full border-2 border-gray-10 ml-[-1.2rem]"
+              />
+              <img
+                src={`/src/assets/img/person-4.png`}
+                alt="Person-3"
+                className="w-10 h-10 rounded-full border-2 border-gray-10 ml-[-1.2rem]"
+              />
+            </div>
+            <span className="font-semibold">Come and join us</span>
+          </div>
+          <div className="flex flex-col w-full gap-3 sm:flex-row">
+            <Button className="bg-color-1 h-12 border border-color-1 rounded-full hover:bg-transparent hover:text-color-1">
+              Explore everything we have for you <ChevronRight />
+            </Button>
+          </div>
         </div>
-        <div className="relative max-w-[23rem] mx-auto md:max-w-5xl xl:mb-24">
-          <div className="relative z-1 p-0.5 rounded-2xl bg-conic-gradient">
-            <div className="relative bg-n-8 rounded-[1rem]">
-              <div className="h-[1.4rem] bg-n-10 rounded-t-[0.9rem]" />
-              <div className="aspect-[33/40] rounded-b-[0.9rem] overflow-hidden md:aspect-[688/300] lg:aspect-[1024/490]">
+        <div className="relative flex flex-1 items-start">
+          <div className="relative z-20 flex w-[268px] flex-col gap-8 rounded-3xl bg-color-1 px-7 py-8">
+            <div className="flex flex-col">
+              <div className="flexBetween">
+                <p className="font-normal">Location</p>
                 <img
-                  src="https://static.wixstatic.com/media/9e7c89_01e67f88a71446f1876c00770369e514~mv2.jpg"
-                  className="w-full scale-[1.7] translate-y-[8%] md:scale-[1] md:-translate-y-[10%] lg:-translate-y-[23%]"
-                  width={1024}
-                  height={490}
-                  alt="Moving Essential"
+                  src="/src/assets/svg/close.svg"
+                  alt="close"
+                  width={24}
+                  height={24}
                 />
+              </div>
+              <p className="bold-20 text-white">5489 NW 27th St, Margate</p>
+            </div>
+
+            <div className="flexBetween">
+              <div className="flex flex-col">
+                <p className="block font-normal">State</p>
+                <p className="bold-20 text-white">Florida</p>
+              </div>
+              <div className="flex flex-col">
+                <p className="block font-normal">Zipcode</p>
+                <p className="bold-20 text-white">33063</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </Section>
+      </section>
+      <section className="max-container padding-container flex flex-col items-center gap-10 mb-14">
+        <Separator className="" />
+        <SearchCompanies />
+        <Tabs defaultValue="local-moving" className="w-full">
+          <TabsList className="grid grid-cols-2 mb-10">
+            <TabsTrigger value="local-moving">Local Moving</TabsTrigger>
+            <TabsTrigger value="realors">Realtors</TabsTrigger>
+          </TabsList>
+          <TabsContent value="local-moving">
+            <RepeaterCompanies />
+          </TabsContent>
+          <TabsContent value="realors"></TabsContent>
+        </Tabs>
+      </section>
+      <section className="max-container padding-container h-28"></section>
+    </div>
   );
 };
 
