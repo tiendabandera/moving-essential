@@ -35,22 +35,22 @@ const HomePage = () => {
           <div className="my-11 flex items-center flex-wrap gap-2">
             <div className="flex items-center gap-2">
               <img
-                src={`./src/assets/img/person-1.png`}
+                src={`/assets/img/person-1.png`}
                 alt="Person-1"
                 className="w-10 h-10 rounded-full border-2 border-gray-10"
               />
               <img
-                src={`./src/assets/img/person-2.png`}
+                src={`/assets/img/person-2.png`}
                 alt="Person-2"
                 className="w-10 h-10 rounded-full border-2 border-gray-10 ml-[-1.2rem]"
               />
               <img
-                src={`./src/assets/img/person-3.png`}
+                src={`/assets/img/person-3.png`}
                 alt="Person-3"
                 className="w-10 h-10 rounded-full border-2 border-gray-10 ml-[-1.2rem]"
               />
               <img
-                src={`./src/assets/img/person-4.png`}
+                src={`/assets/img/person-4.png`}
                 alt="Person-3"
                 className="w-10 h-10 rounded-full border-2 border-gray-10 ml-[-1.2rem]"
               />
@@ -69,7 +69,7 @@ const HomePage = () => {
               <div className="flexBetween">
                 <p className="font-normal">Location</p>
                 <img
-                  src="./src/assets/svg/close.svg"
+                  src="/assets/svg/close.svg"
                   alt="close"
                   width={24}
                   height={24}
