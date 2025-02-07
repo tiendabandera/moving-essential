@@ -26,7 +26,11 @@ const RepeaterCompanies = () => {
     setRecords((prev) => [...prev, ...data]);
 
     // Si la cantidad de datos obtenidos es menor al pageSize, no hay más registros
-    if (data.length < pageSize) setHasMore(false);
+    if (data.length < pageSize) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
+    }
   };
 
   useEffect(() => {
@@ -65,7 +69,7 @@ const RepeaterCompanies = () => {
                 color="#ea6020"
               />
             </div>
-            <div className="flex flex-col items-center justify-center gap-1">
+            <div className="flex flex-col items-center justify-center gap-1 text-center">
               <h3 className="text-xl font-semibold">{record.company_name}</h3>
               <p className="text-base">{record.local_moving.slogan}</p>
               <p className="text-base">

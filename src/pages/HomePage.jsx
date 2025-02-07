@@ -91,7 +91,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <section className="max-container padding-container flex flex-col items-center gap-10 mb-14">
+      <section className="max-container padding-container flex flex-col items-center gap-10 mb-40">
         <Separator className="" />
         <SearchCompanies />
         <Tabs defaultValue="local-moving" className="w-full">
@@ -105,7 +105,33 @@ const HomePage = () => {
           <TabsContent value="realors"></TabsContent>
         </Tabs>
       </section>
-      <section className="max-container padding-container h-28"></section>
+      <section className="flexCenter w-full flex-col pb-[100px]">
+        <div className="get-app">
+          <div className="z-20 flex w-full flex-1 flex-col items-start justify-center gap-12">
+            <h2 className="bold-40 lg:bold-64 xl:max-w-[420px]">
+              Why Choose Moving Essential?
+            </h2>
+            <p className="text-base xl:max-w-[480px]">
+              Our online business directory is the choice for all your moving
+              needs. Here is what sets us apart from the competition:
+            </p>
+            <div className="flex w-full flex-col gap-3 whitespace-nowrap xl:flex-row">
+              <Button className="bg-white text-color-1 h-12 border border-white rounded-2xl hover:bg-transparent hover:text-white">
+                Explore everything we have for you <ChevronRight />
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex flex-1 items-center justify-end">
+            {/* <img
+              src="/assets/img/phones.png"
+              alt="phones"
+              width={550}
+              height={870}
+            /> */}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

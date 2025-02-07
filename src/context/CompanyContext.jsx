@@ -85,7 +85,8 @@ export class Company {
     return await supabase
       .from("companies")
       .select(`*, local_moving(*), cities(name)`)
-      .range(offset, offset + pageSize - 1);
+      .range(offset, offset + pageSize - 1)
+      .order("created_at", { ascending: false });
   }
 
   async getById() {
