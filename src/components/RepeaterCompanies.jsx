@@ -24,7 +24,6 @@ const RepeaterCompanies = () => {
     }
 
     setRecords((prev) => [...prev, ...data]);
-    console.log(data);
 
     // Si la cantidad de datos obtenidos es menor al pageSize, no hay más registros
     if (data.length < pageSize) setHasMore(false);
@@ -52,7 +51,7 @@ const RepeaterCompanies = () => {
         {records.map((record, index) => (
           <div
             key={index}
-            className="flex flex-col gap-3 items-center justify-center p-6 shadow-sm shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
+            className="flex flex-col gap-3 items-center justify-center p-6 shadow-sm border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
           >
             <div className="relative w-full">
               <img
