@@ -281,6 +281,6 @@ body {
 
   /* Get App */
   .get-app {
-    @apply max-container relative flex w-full  flex-col justify-between gap-32 overflow-hidden bg-green-90 bg-pattern bg-cover bg-center bg-no-repeat px-6 py-12 text-black sm:flex-row sm:gap-12 sm:py-24 lg:px-20 xl:max-h-[598px] xl:rounded-3xl;
+    @apply max-container relative flex w-full flex-col justify-between gap-15 overflow-hidden bg-green-90 bg-pattern bg-cover bg-center bg-no-repeat px-6 py-12 text-black lg:flex-row sm:gap-12 sm:py-24 lg:px-20 xl:max-h-[698px] xl:rounded-3xl;
   }
 }

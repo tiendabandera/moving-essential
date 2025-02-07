@@ -2,12 +2,45 @@ import SearchCompanies from "@/components/SearchCompanies";
 import curve from "../assets/img/curve.png";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ChevronRight } from "lucide-react";
+import {
+  ChartNoAxesCombined,
+  ChevronRight,
+  Handshake,
+  Headset,
+  Search,
+} from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RepeaterCompanies from "@/components/RepeaterCompanies";
 
 const HomePage = () => {
+  const FeatureItem = [
+    {
+      icon: ChartNoAxesCombined,
+      title: "Convenience",
+      description:
+        "By providing all the necessary services under one platform, we make it easier for you to find the right company for your needs. No more searching through numerous websites or making endless phone calls.",
+    },
+    {
+      icon: Search,
+      title: "Transparency",
+      description:
+        "We provide no-cost quotations from different moving and real estate companies, allowing you to compare costs and choose a company that fits your budget. This ensures transparency in the pricing process.",
+    },
+    {
+      icon: Handshake,
+      title: "Reputable Companies",
+      description:
+        "We only work with reputable and licensed companies, ensuring the safety and security of the process. You can rest assured that professionals will handle your needs.",
+    },
+    {
+      icon: Headset,
+      title: "Customer Service",
+      description:
+        "Our team can always answer any questions or concerns. We strive to provide a seamless and stress-free experience for our customers.",
+    },
+  ];
+
   return (
     <div className="relative overflow-hidden">
       <section className="max-container padding-container flex flex-col gap-20 py-10 pb-20 md:gap-28 lg:py-20 xl:flex-row">
@@ -121,14 +154,23 @@ const HomePage = () => {
               </Button>
             </div>
           </div>
-
-          <div className="flex flex-1 items-center justify-end">
-            {/* <img
-              src="/assets/img/phones.png"
-              alt="phones"
-              width={550}
-              height={870}
-            /> */}
+          <div className="flex flex-1 items-center">
+            <ul className="grid gap-8 md:grid-cols-2 lg:gap-5 bg-white p-5 rounded-xl">
+              {FeatureItem.map((item) => (
+                <li
+                  key={item.title}
+                  className="flex w-full flex-1 flex-col items-start"
+                >
+                  <div className="rounded-full p-3 bg-gray-10">
+                    <item.icon strokeWidth={1} width={25} height={25} />
+                  </div>
+                  <h2 className="text-xl font-semibold mt-2">{item.title}</h2>
+                  <p className="text-base mt-2 text-gray-50 lg:mt-[10px] lg:bg-none text-justify">
+                    {item.description}
+                  </p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>

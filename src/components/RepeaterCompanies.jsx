@@ -1,9 +1,10 @@
 import { useAuth } from "@/context/AuthContext";
 import Section from "./Section";
-import { Share } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
+import ShareCompany from "./ShareCompany";
+import { SquareArrowOutUpRight } from "lucide-react";
 
 const RepeaterCompanies = () => {
   const { createCompanyInstance } = useAuth();
@@ -13,6 +14,7 @@ const RepeaterCompanies = () => {
   const [offset, setOffset] = useState(0); // Controla desde dónde obtener los registros
   const [hasMore, setHasMore] = useState(false); // Verifica si hay más registros
   const effectRan = useRef(false);
+  const [selectedCompany, setSelectedCompany] = useState(null);
 
   const company = createCompanyInstance({});
   const fetchRecords = async (newOffset) => {
@@ -63,11 +65,13 @@ const RepeaterCompanies = () => {
                 alt=""
                 className="w-full h-60 object-cover rounded-2xl"
               />
-              <Share
-                strokeWidth={1}
-                className="absolute top-2 right-2 w-6 h-6"
-                color="#ea6020"
-              />
+              <div className="absolute top-2 right-2 rounded-lg p-1 border border-gray-10 bg-white shadow-lg">
+                <SquareArrowOutUpRight
+                  strokeWidth={1}
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => setSelectedCompany(record)}
+                />
+              </div>
             </div>
             <div className="flex flex-col items-center justify-center gap-1 text-center">
               <h3 className="text-xl font-semibold">{record.company_name}</h3>
@@ -115,6 +119,13 @@ const RepeaterCompanies = () => {
         >
           See more
         </Button>
+      )}
+
+      {selectedCompany && (
+        <ShareCompany
+          company={selectedCompany}
+          onClose={() => setSelectedCompany(null)}
+        />
       )}
     </div>
   );

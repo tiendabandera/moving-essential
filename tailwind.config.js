@@ -135,7 +135,7 @@ export default {
   		backgroundImage: {
   			'radial-gradient': 'radial-gradient(var(--tw-gradient-stops))',
   			'conic-gradient': 'conic-gradient(from 225deg, #FFC876, #79FFF7, #9F53FF, #FF98E2, #FFC876)',
-			'pattern': "url('/src/assets/img/pattern-2.png')",
+			'pattern': "url('/src/assets/img/pattern-3.png')",
 			'pattern-2': "url('/src/assets/img/pattern-bg.png')"
   		},
   		borderRadius: {
