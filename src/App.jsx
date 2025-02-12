@@ -25,7 +25,7 @@ import { Toaster } from "./components/ui/toaster";
 import MembershipPage from "./pages/MembershipPage";
 
 const AppContent = () => {
-  const { userInfo } = useAuth();
+  const { user } = useAuth();
 
   const location = useLocation();
 
@@ -56,11 +56,12 @@ const AppContent = () => {
           <Route path="/company" element={<CompaniesPages.Layout />}>
             <Route
               path="dashboard"
+              //element={<CompaniesPages.DashboardPage />}
               element={
-                userInfo && userInfo.company.business_type_id === 1 ? (
-                  <CompaniesPages.DashboardPage />
-                ) : (
+                user && user.user_metadata.realtor_name ? (
                   <CompaniesPages.DashboardRealtorPage />
+                ) : (
+                  <CompaniesPages.DashboardPage />
                 )
               }
             />

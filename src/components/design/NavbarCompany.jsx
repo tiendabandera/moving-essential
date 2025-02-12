@@ -3,9 +3,10 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/context/AuthContext";
 import { Menu, Search } from "lucide-react";
 import SidebarRoutesCompany from "../SidebarRoutesCompany";
+import company from "@/pages/company";
 
 const NavbarCompany = () => {
-  const { user } = useAuth();
+  const { user, userInfo } = useAuth();
 
   return (
     <nav className="flex items-center px-1 gap-x-4 md:px-6 justify-between w-full bg-background border-b h-20">
@@ -25,10 +26,14 @@ const NavbarCompany = () => {
       </div>
       <div className="hidden md:flex items-center gap-x-2">
         <p className="text-base font-medium">
-          {user.user_metadata.company_name}
+          {user.user_metadata.realtor_name || user.user_metadata.company_name}
         </p>
         <img
-          src="https://static.wixstatic.com/media/9e7c89_a67c6c22857547b49315013c429fe272~mv2.png"
+          src={
+            userInfo
+              ? userInfo.company.images[0]
+              : "https://static.wixstatic.com/media/9e7c89_a67c6c22857547b49315013c429fe272~mv2.png"
+          }
           alt="profile"
           className="w-8 h-8 rounded-full"
         />

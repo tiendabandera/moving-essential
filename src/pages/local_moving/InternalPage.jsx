@@ -12,14 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import {
-  MapPin,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Youtube,
-  Share,
-} from "lucide-react";
+import { MapPin, Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { FaTiktok } from "react-icons/fa";
 import { CiHeart, CiShare1 } from "react-icons/ci";
 import { FaXTwitter } from "react-icons/fa6";
@@ -76,7 +69,7 @@ const InternalPage = () => {
     company && (
       <>
         <div className="mt-[-3px] md:max-container lg:pt-20">
-          <Carousel>
+          <Carousel className="border border-gray-100 lg:rounded-3xl">
             <CarouselContent>
               {company.images.map((img, index) => (
                 <CarouselItem key={index}>

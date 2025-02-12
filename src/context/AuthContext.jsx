@@ -235,7 +235,8 @@ export const AuthProvider = ({ children }) => {
 
     setUploading((prev) => prev.filter((id) => id !== fileData.id));
 
-    return data.publicUrl;
+    const updatedUrl = `${data.publicUrl}?t=${Date.now()}`;
+    return updatedUrl;
   };
 
   /* HOOKS

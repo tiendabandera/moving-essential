@@ -28,6 +28,13 @@ const Checkbox = ({ name, options, control }) => {
     rules: { required: "Select at least one home type" },
   });
 
+  // Inicializa selectedTypes con value al montar el componente
+  useEffect(() => {
+    if (value && value.length > 0 && selectedTypes.length === 0) {
+      setSelectedTypes(value);
+    }
+  }, [value]);
+
   useEffect(() => {
     onChange(selectedTypes);
   }, [selectedTypes]);
@@ -35,13 +42,13 @@ const Checkbox = ({ name, options, control }) => {
   return (
     <div>
       <div className="flex flex-wrap gap-2">
-        {options.map((homeType) => {
-          const isSelected = value?.includes(homeType.value);
+        {options.map((option) => {
+          const isSelected = value?.includes(option.value);
           return (
             <button
-              key={homeType.value}
+              key={option.value}
               type="button"
-              onClick={() => toggleType(homeType.value)}
+              onClick={() => toggleType(option.value)}
               className={cn(
                 "relative flex items-center px-4 py-2 rounded-full text-sm transition-all duration-200",
                 "border hover:border-primary/50",
@@ -59,7 +66,7 @@ const Checkbox = ({ name, options, control }) => {
               >
                 {isSelected && <Check className="w-3.5 h-3.5 text-primary" />}
               </span>
-              {homeType.label}
+              {option.label}
             </button>
           );
         })}

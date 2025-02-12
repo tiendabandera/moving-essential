@@ -28,11 +28,18 @@ export class Company {
   }
 
   async update(companyId, userId, uploadImages) {
-    const countImages = this.data.companyInfo.business_type_id === 1 ? 6 : 7;
+    const setupUpload = {
+      countImages: this.data.companyInfo.business_type_id === 1 ? 6 : 7,
+      bucketName:
+        this.data.companyInfo.business_type_id === 1
+          ? "company_images"
+          : "realtor_images",
+    };
+
     const images = this.data.images;
     const resImages = [];
 
-    for (let i = 1; i <= countImages; i++) {
+    for (let i = 1; i <= setupUpload.countImages; i++) {
       if (!images[`img_${i}`]) continue;
 
       const image = images[`img_${i}`];
@@ -46,7 +53,7 @@ export class Company {
       const res = await uploadImages(
         `${userId}/img_${i}`,
         image,
-        "company_images"
+        setupUpload.bucketName
       );
 
       if (res) resImages.push(res);
@@ -59,8 +66,13 @@ export class Company {
       .update(this.data.companyInfo)
       .eq("id", companyId);
 
+    const service =
+      this.data.companyInfo.business_type_id === 1
+        ? "local_moving"
+        : "realtors";
+
     return await supabase
-      .from("local_moving")
+      .from(service)
       .update(this.data.serviceInfo)
       .eq("company_id", companyId);
   }

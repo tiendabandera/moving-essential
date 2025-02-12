@@ -226,6 +226,7 @@ const DashboardPage = () => {
                   errors={errors}
                   control={control}
                   errorsForm={errorsForm}
+                  reset={reset}
                 />
               </div>
             </div>
