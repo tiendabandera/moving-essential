@@ -111,6 +111,7 @@ export const AuthProvider = ({ children }) => {
       password,
       role: "company",
       company_name: company.company_name,
+      realtor_name: company.business_type_id === 2 ? name : null,
     });
 
     // CREATE USER
@@ -122,17 +123,23 @@ export const AuthProvider = ({ children }) => {
     }
 
     // UPLOAD IMAGE
-    const countImages = company.business_type_id === 1 ? 6 : 7;
+    const setupUpload = {
+      countImages: company.business_type_id === 1 ? 6 : 7,
+      bucketName:
+        company.business_type_id === 1 ? "company_images" : "realtor_images",
+    };
+
+    //const countImages = company.business_type_id === 1 ? 6 : 7;
     const resImages = [];
 
-    for (let i = 1; i <= countImages; i++) {
+    for (let i = 1; i <= setupUpload.countImages; i++) {
       if (!images[`img_${i}`]) continue;
 
       const image = images[`img_${i}`];
       const res = await uploadImages(
         `${resUser.id}/img_${i}`,
         image,
-        "company_images"
+        setupUpload.bucketName
       );
 
       if (res) resImages.push(res);

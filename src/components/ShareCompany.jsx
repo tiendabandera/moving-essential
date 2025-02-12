@@ -15,15 +15,19 @@ import {
 } from "react-icons/fa";
 import { MdEmail, MdSms } from "react-icons/md";
 import { IoCopy } from "react-icons/io5";
-import { Verified } from "lucide-react";
 
 const ShareCompany = memo(({ company, onClose }) => {
   const [copied, setCopied] = useState(false);
 
   if (!company) return null;
 
-  const shareLink = `${window.location.origin}/local-moving/${company.id}`;
+  const businessType =
+    company.business_type_id === 1 ? "local-moving" : "realtors";
 
+  const shareLink = `${window.location.origin}/${businessType}/${company.id}`;
+
+  /* FUNCTIONS
+  _________________________________________ */
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareLink);
@@ -34,6 +38,31 @@ const ShareCompany = memo(({ company, onClose }) => {
     }
   };
 
+  const handleWhatsappShare = async () => {
+    window.open(
+      `https://api.whatsapp.com/send?text=${encodeURIComponent(shareLink)}`
+    );
+  };
+
+  const handleSMSShare = async () => {
+    window.open(`sms:?body=${encodeURIComponent(shareLink)}`);
+  };
+
+  const handleEmailShare = async () => {
+    window.open(`mailto:?body=${encodeURIComponent(shareLink)}`);
+  };
+
+  const handleFacebookShare = async () => {
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareLink
+      )}`
+    );
+  };
+
+  /* BUTTONS
+  _________________________________________ */
+
   const buttons = [
     {
       icon: IoCopy,
@@ -43,23 +72,24 @@ const ShareCompany = memo(({ company, onClose }) => {
     {
       icon: MdEmail,
       name: "Email",
+      onClick: handleEmailShare,
     },
     {
       icon: FaWhatsappSquare,
       name: "Whatsapp",
+      onClick: handleWhatsappShare,
     },
     {
       icon: FaFacebookSquare,
       name: "Facebook",
+      onClick: handleFacebookShare,
     },
     {
       icon: MdSms,
       name: "SMS",
+      onClick: handleSMSShare,
     },
   ];
-
-  /* FUNCTIONS
-  _________________________________________ */
 
   return (
     <Dialog open={!!company} onOpenChange={onClose}>

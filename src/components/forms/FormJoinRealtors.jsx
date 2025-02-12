@@ -1,16 +1,21 @@
-import { useState } from "react";
 import Input from "../Input";
 import Select from "../Select";
-import { useAuth } from "@/context/AuthContext";
-import { fedTaxClass, rateTypes, states } from "@/constants/index";
 import SelectWithSearch from "../SelectWithSearch";
 import TextArea from "../TextArea";
 import CustomIcon from "../design/CustomIcon";
-import { Link } from "lucide-react";
+import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { Eye, Link } from "lucide-react";
+import {
+  states,
+  yearOfExperience,
+  totalSales,
+  homeTypes,
+} from "@/constants/index";
+import Checkbox from "../Checkbox";
 
-const FormJoinCompany = ({ register, control, errors }) => {
+const FormJoinRealtors = ({ register, control, errors }) => {
   const { getZipcodes } = useAuth();
-
   const [zipcodes, setZipcodes] = useState([]);
 
   const searchZipcode = async (input) => {
@@ -77,17 +82,7 @@ const FormJoinCompany = ({ register, control, errors }) => {
     },
   ];
 
-  const inputCompany = [
-    {
-      id: "company_name",
-      name: "company.company_name",
-      type: "text",
-      placeholder: "Enter your company name",
-      label: "Company name",
-      isInput: true,
-      isRequired: true,
-      isReadOnly: false,
-    },
+  const inputsRealtor = [
     {
       id: "phone",
       name: "company.phone",
@@ -148,37 +143,60 @@ const FormJoinCompany = ({ register, control, errors }) => {
       isRequired: true,
       isReadOnly: false,
     },
+  ];
+
+  const inputsAdditionalInfo = [
     {
-      id: "fed_tax_class",
-      name: "service.fed_tax_class",
+      id: "company_name",
+      name: "company.company_name",
       type: "text",
-      placeholder: "Select fed. tax classification",
-      label: "Federal tax classification",
-      isInput: false,
-      isRequired: true,
-      isReadOnly: false,
-      options: fedTaxClass,
-    },
-    {
-      id: "slogan",
-      name: "service.slogan",
-      type: "text",
-      placeholder: "Enter your slogan",
-      label: "Slogan",
+      placeholder: "Enter your agency",
+      label: "Agency",
       isInput: true,
       isRequired: true,
       isReadOnly: false,
     },
     {
-      id: "rate_type_id",
-      name: "service.rate_type_id",
+      id: "agency_website",
+      name: "service.agency_website",
       type: "text",
-      placeholder: "How do you charge?",
-      label: "How do you charge?",
+      placeholder: "Enter your website",
+      label: "Website",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
+    {
+      id: "title_work",
+      name: "service.title_work",
+      type: "text",
+      placeholder: "Enter your title",
+      label: "Title",
+      isInput: true,
+      isRequired: true,
+      isReadOnly: false,
+    },
+    {
+      id: "experience",
+      name: "service.experience",
+      type: "text",
+      placeholder: "Select year of experience",
+      label: "Year of experience",
       isInput: false,
       isRequired: true,
       isReadOnly: false,
-      options: rateTypes,
+      options: yearOfExperience,
+    },
+    {
+      id: "total_sales",
+      name: "service.total_sales",
+      type: "text",
+      placeholder: "Select total sales",
+      label: "Total sales",
+      isInput: false,
+      isRequired: true,
+      isReadOnly: false,
+      options: totalSales,
     },
   ];
 
@@ -272,7 +290,7 @@ const FormJoinCompany = ({ register, control, errors }) => {
           }
           return null;
         })}
-        {inputCompany.map((input) => {
+        {inputsRealtor.map((input) => {
           return (
             <div key={input.id}>
               <label htmlFor={input.id} className="text-sm font-medium">
@@ -319,18 +337,74 @@ const FormJoinCompany = ({ register, control, errors }) => {
             </div>
           );
         })}
-        <div className="xl:col-span-2 lg:col-span-2 md:col-span-2">
-          <label
-            htmlFor="service.long_description"
-            className="text-sm font-medium"
-          >
-            Long description *
+        <div className="md:col-span-2">
+          <label className="text-sm font-medium">Home types *</label>
+          <Checkbox
+            name="service.home_types"
+            options={homeTypes}
+            control={control}
+          />
+        </div>
+        <div className="mt-7 xl:col-span-2 md:col-span-2 flex gap-x-2 items-center">
+          <CustomIcon icon={Eye} />
+          <h3 className="font-medium">Additional information</h3>
+        </div>
+        {inputsAdditionalInfo.map((input) => {
+          return (
+            <div key={input.id}>
+              <label htmlFor={input.id} className="text-sm font-medium">
+                {input.label}
+                {input.isRequired && " *"}
+              </label>
+              {input.isInput ? (
+                <Input
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  readOnly={input.isReadOnly}
+                  register={register}
+                  required={input.isRequired}
+                  errors={errors}
+                  onChange={input.onChange}
+                  validations={input.validations}
+                />
+              ) : input.withSearch ? (
+                <SelectWithSearch
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  readOnly={input.isReadOnly}
+                  options={input.options}
+                  required={input.isRequired}
+                  placeholder={input.placeholder}
+                  control={control}
+                />
+              ) : (
+                <Select
+                  id={input.id}
+                  label={input.label}
+                  name={input.name}
+                  readOnly={input.isReadOnly}
+                  options={input.options}
+                  required={input.isRequired}
+                  placeholder={input.placeholder}
+                  control={control}
+                />
+              )}
+            </div>
+          );
+        })}
+        <div className="md:col-span-2">
+          <label htmlFor="service.bio" className="text-sm font-medium">
+            Bio *
           </label>
           <TextArea
-            id="service.long_description"
-            label="Long description"
-            name="service.long_description"
-            placeholder="Enter your long description"
+            id="service.bio"
+            label="Bio"
+            name="service.bio"
+            placeholder="Enter your bio"
             readOnly={false}
             register={register}
             required={true}
@@ -367,4 +441,4 @@ const FormJoinCompany = ({ register, control, errors }) => {
   );
 };
 
-export default FormJoinCompany;
+export default FormJoinRealtors;

@@ -12,8 +12,11 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RepeaterCompanies from "@/components/RepeaterCompanies";
+import { useState } from "react";
 
 const HomePage = () => {
+  const [activeTab, setActiveTab] = useState("local-moving");
+
   const FeatureItem = [
     {
       icon: ChartNoAxesCombined,
@@ -126,16 +129,20 @@ const HomePage = () => {
       </section>
       <section className="max-container padding-container flex flex-col items-center gap-10 mb-40">
         <Separator className="" />
-        <SearchCompanies />
-        <Tabs defaultValue="local-moving" className="w-full">
+        <SearchCompanies service={activeTab} />
+        <Tabs
+          defaultValue="local-moving"
+          className="w-full"
+          onValueChange={setActiveTab}
+        >
           <TabsList className="grid grid-cols-2 mb-10">
             <TabsTrigger value="local-moving">Local Moving</TabsTrigger>
-            <TabsTrigger value="realors">Realtors</TabsTrigger>
+            <TabsTrigger value="realtors">Realtors</TabsTrigger>
           </TabsList>
           <TabsContent value="local-moving">
             <RepeaterCompanies />
           </TabsContent>
-          <TabsContent value="realors"></TabsContent>
+          <TabsContent value="realtors"></TabsContent>
         </Tabs>
       </section>
       <section className="flexCenter w-full flex-col pb-[100px]">

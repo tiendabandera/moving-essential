@@ -2,7 +2,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const SearchCompanies = () => {
+const SearchCompanies = ({ service }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [valueInput, setValueInput] = useState("");
@@ -68,6 +68,7 @@ const SearchCompanies = () => {
 
   const compareZipcode = () => {
     if (value) {
+      console.log(service);
       console.log(`Comparando códigos postales: ${value}`);
     }
   };

@@ -236,6 +236,10 @@ body {
     @apply text-[88px] font-[700] leading-[120%];
   }
 
+  .bold-78 {
+    @apply text-[78px] font-[700] leading-[120%];
+  }
+
   .bold-64 {
     @apply text-[64px] font-[700] leading-[120%];
   }

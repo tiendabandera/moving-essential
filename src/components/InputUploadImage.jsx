@@ -3,7 +3,14 @@ import { Loader2, Upload, X } from "lucide-react";
 import { useController } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
 
-const InputUploadImage = ({ id, placeholder, name, control, required }) => {
+const InputUploadImage = ({
+  id,
+  placeholder,
+  name,
+  control,
+  required,
+  className,
+}) => {
   const [preview, setPreview] = useState({});
   //const [isUploading, setIsUploading] = useState(false);
   const { uploading } = useAuth();
@@ -56,7 +63,7 @@ const InputUploadImage = ({ id, placeholder, name, control, required }) => {
   const isUploading = uploading.includes(id);
 
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col ${className}`}>
       <div key={id} className="relative">
         <div
           className={`border-2 border-dashed rounded-lg p-4 ${

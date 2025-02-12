@@ -13,6 +13,7 @@ export class User {
         data: {
           name: this.data.name,
           company_name: this.data.company_name,
+          realtor_name: this.data.realtor_name,
           role: this.data.role, // Asegúrate de usar un valor válido: 'admin', 'user', o 'company'
         },
       },
@@ -32,6 +33,7 @@ export class User {
       data: {
         name: this.data.name,
         company_name: this.data.company.company_name,
+        realtor_name: this.data.realtor_name || null,
       },
     });
   }

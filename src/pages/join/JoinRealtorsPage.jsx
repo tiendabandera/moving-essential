@@ -3,14 +3,14 @@ import Button from "@/components/Button";
 import Section from "@/components/Section";
 import CardBenefit from "@/components/design/CardBenefit";
 import {
-  Building2,
   HeartHandshakeIcon,
   Image,
   Stars,
+  UserRound,
   UserRoundSearch,
 } from "lucide-react";
 import CustomIcon from "@/components/design/CustomIcon";
-import FormJoinCompany from "@/components/forms/FormJoinCompany";
+import FormJoinRealtors from "@/components/forms/FormJoinRealtors";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import InputUploadImage from "@/components/InputUploadImage";
 
-const JoinCompanyPage = () => {
+const JoinRealtorsPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ const JoinCompanyPage = () => {
       company: {
         company_name: "",
         phone: "",
-        business_type_id: 1,
+        business_type_id: 2,
         zipcode: "",
         city_id: "",
         state: "",
@@ -50,10 +50,12 @@ const JoinCompanyPage = () => {
         tiktok_link: "",
       },
       service: {
-        fed_tax_class: "",
-        slogan: "",
-        rate_type_id: "",
-        long_description: "",
+        total_sales: "",
+        experience: "",
+        title_work: "",
+        bio: "",
+        agency_website: "",
+        home_types: [],
       },
       images: {
         img_1: "",
@@ -119,7 +121,7 @@ const JoinCompanyPage = () => {
   }, [isAuthenticated, user, navigate, registerErrors, toast]);
 
   const handleScroll = () => {
-    const section = document.getElementById("form-join-company");
+    const section = document.getElementById("form-join-realtors");
 
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
@@ -127,11 +129,11 @@ const JoinCompanyPage = () => {
   };
 
   return (
-    <div className="flex flex-col w-full  gap-4 relative overflow-hidden">
-      {/* <div className="w-full xl:px-36 -mt-1 px-14 pt-14 flex flex-col xl:flex-row lg:flex-row justify-center bg-color-1 gap-10">
+    <div className="flex flex-col w-full h-screen gap-4">
+      <div className="w-full xl:px-36 -mt-1 px-14 pt-14 flex flex-col xl:flex-row lg:flex-row justify-center bg-color-1 gap-10">
         <div className="flex flex-col items-center justify-center text-center lg:pb-14 lg:items-start lg:text-left lg:w-[60%] xl:w-[70%] gap-10">
-          <h1 className="font-extrabold h1 text-white xl:w-[60%]">
-            Learn How to Increase Your Business With{" "}
+          <h1 className="font-extrabold h1 text-white xl:w-[75%]">
+            Grow Your Real Estate Business with{" "}
             <span className="inline-block relative">
               Moving Essential!
               <img
@@ -143,78 +145,22 @@ const JoinCompanyPage = () => {
               />
             </span>
           </h1>
-          <p className="font-light xl:text-lg xl:w-2/3">
+          <p className="font-medium xl:text-lg xl:w-2/3">
             Join our trusted network to showcase your moving services and real
             estate expertise to thousands of potential clients.
           </p>
-          <Button white href="/join/real-estate">
+          <Button white onClick={handleScroll}>
             Start listing your services
           </Button>
         </div>
         <div className="flex justify-center lg:w-[45%] xl:w-[30%]">
           <img
-            src="/assets/img/hero-join-company.png"
+            src="/assets/img/realtors.png"
             alt="Join real estate company"
             className="w-2/4 md:w-1/2 lg:w-full"
           />
         </div>
-      </div> */}
-      <section className="max-container padding-container flex xl:flex-row flex-col gap-5 relative z-0 ">
-        <div className="flex flex-col gap-10 py-10 lg:py-20 justify-center">
-          <h1 className="bold-52 lg:bold-88 relative max-w-[520px] lg:max-w-[680px]">
-            Learn <br />
-            How to Increase
-            <span className="inline-block relative ">
-              Your Business!
-              <img
-                src={curve}
-                className="absolute top-full left-0 w-full"
-                width={624}
-                height={28}
-                alt="Curve"
-              />
-            </span>
-          </h1>
-          <p className="mt-5">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis
-            sint error blanditiis, illum nemo quas similique fuga, fugiat totam
-            eligendi nesciunt corporis vitae facilis temporibus in alias! Nobis,
-            ex perferendis.
-          </p>
-          <Button orange onClick={handleScroll} className={"md:w-fit"}>
-            Join Now
-          </Button>
-          <img
-            src="/assets/img/decorator-2.png"
-            alt="decorator-1"
-            className="hidden xl:block absolute xl:top-0 xl:right-[90%] w-[30%] -z-10 opacity-50"
-          />
-        </div>
-        <div className="flex lg:hidden xl:flex justify-end items-end w-full xl:h-screen">
-          <div className="relative w-[90%] md:w-[60%] xl:w-full xl:h-full h-[590px] z-0">
-            <img
-              src="/assets/img/login.png"
-              alt="hero"
-              className="object-contain"
-            />
-          </div>
-          <img
-            src="/assets/img/grafica-1.png"
-            alt="grafica-1"
-            width={130}
-            height={130}
-            className="absolute top-[50%] right-[60%] lg:-right-[1%] -z-10 lg:z-10"
-          />
-          <img
-            src="/assets/img/cohete.png"
-            alt="cohete"
-            width={200}
-            height={200}
-            className="absolute top-20 -right-[5%] lg:right-[40%] -z-10 lg:z-10"
-          />
-          <div className="absolute top-1/2 md:top-[40%] xl:-top-24 xl:-right-1/2 -right-1/4 bg-[url('/assets/img/mask-1.png')] g bg-repeat-round -z-10 w-full xl:h-screen h-[390px] md:h-[590px] overflow-hidden" />
-        </div>
-      </section>
+      </div>
       <Section className={"flex flex-col gap-10"}>
         <h1 className="h3 font-bold text-center">
           How Moving Essential Works for You
@@ -230,7 +176,7 @@ const JoinCompanyPage = () => {
           ))}
         </div>
       </Section>
-      <Section className={`bg-[#f1f1f1]`} id="form-join-company">
+      <Section className={`bg-[#f1f1f1]`} id="form-join-realtors">
         <h1 className="h3 font-bold text-center">
           How Moving Essential Works for You
         </h1>
@@ -239,11 +185,11 @@ const JoinCompanyPage = () => {
             <div className="col-span-2">
               <div className="shadow-lg bg-background rounded-lg p-5">
                 <div className="flex gap-x-2 items-center">
-                  <CustomIcon icon={Building2} />
-                  <h3 className="font-medium">Company information</h3>
+                  <CustomIcon icon={UserRound} />
+                  <h3 className="font-medium">Agents information</h3>
                 </div>
                 <div className="mt-4">
-                  <FormJoinCompany
+                  <FormJoinRealtors
                     register={register}
                     control={control}
                     errors={errors}
@@ -263,19 +209,20 @@ const JoinCompanyPage = () => {
                     <InputUploadImage
                       id="images.img_1"
                       name="images.img_1"
-                      placeholder="Upload logo"
+                      placeholder="Upload profile photo"
                       errors={errors}
                       required={true}
                       control={control}
+                      className={"col-span-2"}
                     />
-                    {[2, 3, 4, 5, 6].map((index) => (
+                    {[2, 3, 4, 5, 6, 7].map((index) => (
                       <InputUploadImage
                         key={index}
                         id={`images.img_${index}`}
                         name={`images.img_${index}`}
-                        placeholder={`Additional image`}
+                        placeholder={`Upload house photo`}
                         errors={errors}
-                        required={false}
+                        required={true}
                         control={control}
                       />
                     ))}
@@ -300,4 +247,4 @@ const JoinCompanyPage = () => {
   );
 };
 
-export default JoinCompanyPage;
+export default JoinRealtorsPage;

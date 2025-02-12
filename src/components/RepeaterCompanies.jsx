@@ -18,7 +18,7 @@ const RepeaterCompanies = () => {
 
   const company = createCompanyInstance({});
   const fetchRecords = async (newOffset) => {
-    const { data, error } = await company.getAll(newOffset);
+    const { data, error } = await company.getAllByBusinessType(newOffset, 1);
 
     if (error) {
       console.error("Error al obtener registros:", error);
@@ -57,7 +57,10 @@ const RepeaterCompanies = () => {
         {records.map((record, index) => (
           <div
             key={index}
-            className="flex flex-col gap-3 items-center justify-center p-6 shadow-sm border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
+            className="flex flex-col gap-3 items-center justify-center p-6 cursor-pointer shadow-sm border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
+            onClick={() => {
+              window.location.href = `/local-moving/${record.id}`;
+            }}
           >
             <div className="relative w-full">
               <img
@@ -69,7 +72,10 @@ const RepeaterCompanies = () => {
                 <SquareArrowOutUpRight
                   strokeWidth={1}
                   className="w-5 h-5 cursor-pointer"
-                  onClick={() => setSelectedCompany(record)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCompany(record);
+                  }}
                 />
               </div>
             </div>
@@ -96,7 +102,8 @@ const RepeaterCompanies = () => {
             <div className="w-full flex flex-col gap-1">
               <Button
                 className="w-full bg-color-1 border border-color-1 rounded-full hover:bg-transparent hover:text-color-1"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   window.location.href = `tel:${record.phone}`;
                 }}
               >
@@ -106,7 +113,12 @@ const RepeaterCompanies = () => {
                 className="w-full bg-black border border-black rounded-full hover:bg-transparent hover:text-black"
                 asChild
               >
-                <Link to={`/local-moving/${record.id}`}>Contact</Link>
+                <Link
+                  to={`/local-moving/${record.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Contact
+                </Link>
               </Button>
             </div>
           </div>

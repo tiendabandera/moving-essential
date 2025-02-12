@@ -80,7 +80,8 @@ function Header() {
                 >
                   Wellcome{" "}
                   {user.user_metadata.role === roles.company
-                    ? user.user_metadata.company_name
+                    ? user.user_metadata.realtor_name ||
+                      user.user_metadata.company_name
                     : user.user_metadata.name}
                 </Link>
                 <Button className="hidden lg:flex" onClick={submitLogout}>

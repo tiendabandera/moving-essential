@@ -6,11 +6,7 @@ import Select from "../Select";
 import SelectWithSearch from "../SelectWithSearch";
 import TextArea from "../TextArea";
 import CustomIcon from "../design/CustomIcon";
-import {
-  fedTaxClass,
-  rateTypes,
-  states,
-} from "@/constants/sidebar.routes.company.data";
+import { fedTaxClass, rateTypes, states } from "@/constants/index";
 
 const FormCompany = ({ userInfo, register, errors, control, errorsForm }) => {
   const [zipcodes, setZipcodes] = useState([]);

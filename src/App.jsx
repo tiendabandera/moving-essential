@@ -1,12 +1,15 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { roles } from "./constants/index";
 import { PageTitleManager } from "./components/PageTitle";
 
+/* PAGES
+_________________________________________ */
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import JoinCompanyPage from "./pages/join/JoinCompanyPage";
+
+import JoinPages from "./pages/join/index";
 import UserPages from "./pages/user/index";
 import CompaniesPages from "./pages/company/index";
 import LocalMovingPages from "./pages/local_moving/index";
@@ -15,9 +18,15 @@ import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
 import NotAuthorizationPage from "./pages/NotAuthorizationPage";
 import NotFoundPage from "./pages/NotFoundPage";
+
+/* TOASTER
+_________________________________________ */
 import { Toaster } from "./components/ui/toaster";
+import MembershipPage from "./pages/MembershipPage";
 
 const AppContent = () => {
+  const { userInfo } = useAuth();
+
   const location = useLocation();
 
   const showHeader =
@@ -32,7 +41,11 @@ const AppContent = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/join" element={<JoinCompanyPage />} />
+        <Route path="/membership" element={<MembershipPage />} />
+        <Route path="/join" element={<JoinPages.JoinMain />}>
+          <Route path="company" element={<JoinPages.JoinCompanyPage />} />
+          <Route path="realtors" element={<JoinPages.JoinRealtorsPage />} />
+        </Route>
         <Route path="/authorization" element={<NotAuthorizationPage />} />
         <Route element={<ProtectedRoute roles={[roles.admin, roles.user]} />}>
           <Route path="/user/dashboard" element={<UserPages.DashboardPage />} />
@@ -43,14 +56,19 @@ const AppContent = () => {
           <Route path="/company" element={<CompaniesPages.Layout />}>
             <Route
               path="dashboard"
-              element={<CompaniesPages.DashboardPage />}
+              element={
+                userInfo && userInfo.company.business_type_id === 1 ? (
+                  <CompaniesPages.DashboardPage />
+                ) : (
+                  <CompaniesPages.DashboardRealtorPage />
+                )
+              }
             />
             <Route path="data" element={<CompaniesPages.DataPage />} />
             <Route
               path="notifications"
               element={<CompaniesPages.NotificationsPage />}
             />
-
             <Route path="leads">
               <Route
                 path="phone-pool"

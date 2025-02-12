@@ -12,8 +12,11 @@ export class Company {
       .eq("user_id", this.data.id)
       .limit(1);
 
+    const service =
+      companyInfo.data[0].business_type_id === 1 ? "local_moving" : "realtors";
+
     const serviceInfo = await supabase
-      .from("local_moving")
+      .from(service)
       .select()
       .eq("company_id", companyInfo.data[0].id)
       .limit(1);
@@ -73,9 +76,15 @@ export class Company {
   }
 
   async createService(businessTypeId, data) {
-    // For Company
     if (businessTypeId == 1) {
+      // For Company
       return await supabase.from("local_moving").insert(data);
+    } else if (businessTypeId == 2) {
+      // For Realtor
+      const res = await supabase.from("realtors").insert(data);
+      console.log(res);
+
+      return res;
     }
   }
 
@@ -85,6 +94,17 @@ export class Company {
     return await supabase
       .from("companies")
       .select(`*, local_moving(*), cities(name)`)
+      .range(offset, offset + pageSize - 1)
+      .order("created_at", { ascending: false });
+  }
+
+  async getAllByBusinessType(offset, businessTypeId) {
+    const pageSize = 8;
+
+    return await supabase
+      .from("companies")
+      .select(`*, local_moving(*), cities(name)`)
+      .eq("business_type_id", businessTypeId)
       .range(offset, offset + pageSize - 1)
       .order("created_at", { ascending: false });
   }
