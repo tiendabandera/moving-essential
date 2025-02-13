@@ -1,114 +1,110 @@
 export const navigation = [
-    {
-      id: "0",
-      title: "Services",
-      url: "/services",
-      visibleIsAuthenticated: true
-    },
-    {
-      id: "1",
-      title: "blog",
-      url: "/blog",
-      visibleIsAuthenticated: true
-    },
-    {
-      id: "2",
-      title: "About",
-      url: "/about",
-      visibleIsAuthenticated: true
-    },
-    {
-      id: "3",
-      title: "FAQs",
-      url: "/faq",
-      visibleIsAuthenticated: true
-    },
-    {
-      id: "4",
-      title: "Tips & Tricks",
-      url: "/tips",
-      visibleIsAuthenticated: true
-    },
-    {
-      id: "5",
-      title: "Join Us",
-      url: "/register",
-      onlyMobile: true,
-      visibleIsAuthenticated: false
-    },
-    {
-      id: "6",
-      title: "Sign in",
-      url: "/login",
-      onlyMobile: true,
-      visibleIsAuthenticated: false
-    },    
-  ];
+  {
+    id: "0",
+    title: "Services",
+    url: "/services",
+    visibleIsAuthenticated: true,
+  },
+  {
+    id: "1",
+    title: "blog",
+    url: "/blog",
+    visibleIsAuthenticated: true,
+  },
+  {
+    id: "2",
+    title: "About",
+    url: "/about",
+    visibleIsAuthenticated: true,
+  },
+  {
+    id: "3",
+    title: "FAQs",
+    url: "/faq",
+    visibleIsAuthenticated: true,
+  },
+  {
+    id: "4",
+    title: "Tips & Tricks",
+    url: "/tips",
+    visibleIsAuthenticated: true,
+  },
+  {
+    id: "5",
+    title: "Join Us",
+    url: "/register",
+    onlyMobile: true,
+    visibleIsAuthenticated: false,
+  },
+  {
+    id: "6",
+    title: "Sign in",
+    url: "/login",
+    onlyMobile: true,
+    visibleIsAuthenticated: false,
+  },
+];
 
 export const roles = {
-  user: 'user',
-  company: 'company',
-  admin: 'admin'
-}
+  user: "user",
+  company: "company",
+  admin: "admin",
+};
 
 export const states = [
-  { value: "AL", label: "AL" },
-  { value: "AK", label: "AK" },
-  { value: "AR", label: "AR" },
-  { value: "AS", label: "AS" },
-  { value: "AZ", label: "AZ" },
-  { value: "CA", label: "CA" },
-  { value: "CM", label: "CM" },
-  { value: "CO", label: "CO" },
-  { value: "CT", label: "CT" },
-  { value: "DC", label: "DC" },
-  { value: "DE", label: "DE" },
-  { value: "FL", label: "FL" },
-  { value: "GA", label: "GA" },
-  { value: "GU", label: "GU" },
-  { value: "HI", label: "HI" },
-  { value: "IA", label: "IA" },
-  { value: "ID", label: "ID" },
-  { value: "IL", label: "IL" },
-  { value: "IN", label: "IN" },
-  { value: "KS", label: "KS" },
-  { value: "KY", label: "KY" },
-  { value: "LA", label: "LA" },
-  { value: "MA", label: "MA" },
-  { value: "MD", label: "MD" },
-  { value: "ME", label: "ME" },
-  { value: "MI", label: "MI" },
-  { value: "MN", label: "MN" },
-  { value: "MO", label: "MO" },
-  { value: "MS", label: "MS" },
-  { value: "MT", label: "MT" },
-  { value: "NC", label: "NC" },
-  { value: "ND", label: "ND" },
-  { value: "NE", label: "NE" },
-  { value: "NH", label: "NH" },
-  { value: "NJ", label: "NJ" },
-  { value: "NM", label: "NM" },
-  { value: "NV", label: "NV" },
-  { value: "OH", label: "OH" },
-  { value: "OK", label: "OK" },
-  { value: "OR", label: "OR" },
-  { value: "PA", label: "PA" },
-  { value: "PI", label: "PI" },
-  { value: "PR", label: "PR" },
-  { value: "RI", label: "RI" },
-  { value: "SC", label: "SC" },
-  { value: "SD", label: "SD" },
-  { value: "TN", label: "TN" },
-  { value: "TT", label: "TT" },
-  { value: "TX", label: "TX" },
-  { value: "UT", label: "UT" },
-  { value: "VA", label: "VA" },
-  { value: "VI", label: "VI" },
-  { value: "VT", label: "VT" },
-  { value: "WA", label: "WA" },
-  { value: "WI", label: "WI" },
-  { value: "WV", label: "WV" },
-  { value: "WY", label: "WY" },
+  { value: "AL", label: "Alabama" },
+  { value: "AK", label: "Alaska" },
+  { value: "AZ", label: "Arizona" },
+  { value: "AR", label: "Arkansas" },
+  { value: "CA", label: "California" },
+  { value: "CO", label: "Colorado" },
+  { value: "CT", label: "Connecticut" },
+  { value: "DE", label: "Delaware" },
+  { value: "FL", label: "Florida" },
+  { value: "GA", label: "Georgia" },
+  { value: "HI", label: "Hawaii" },
+  { value: "ID", label: "Idaho" },
+  { value: "IL", label: "Illinois" },
+  { value: "IN", label: "Indiana" },
+  { value: "IA", label: "Iowa" },
+  { value: "KS", label: "Kansas" },
+  { value: "KY", label: "Kentucky" },
+  { value: "LA", label: "Louisiana" },
+  { value: "ME", label: "Maine" },
+  { value: "MD", label: "Maryland" },
+  { value: "MA", label: "Massachusetts" },
+  { value: "MI", label: "Michigan" },
+  { value: "MN", label: "Minnesota" },
+  { value: "MS", label: "Mississippi" },
+  { value: "MO", label: "Missouri" },
+  { value: "MT", label: "Montana" },
+  { value: "NE", label: "Nebraska" },
+  { value: "NV", label: "Nevada" },
+  { value: "NH", label: "New Hampshire" },
+  { value: "NJ", label: "New Jersey" },
+  { value: "NM", label: "New Mexico" },
+  { value: "NY", label: "New York" },
+  { value: "NC", label: "North Carolina" },
+  { value: "ND", label: "North Dakota" },
+  { value: "OH", label: "Ohio" },
+  { value: "OK", label: "Oklahoma" },
+  { value: "OR", label: "Oregon" },
+  { value: "PA", label: "Pennsylvania" },
+  { value: "RI", label: "Rhode Island" },
+  { value: "SC", label: "South Carolina" },
+  { value: "SD", label: "South Dakota" },
+  { value: "TN", label: "Tennessee" },
+  { value: "TX", label: "Texas" },
+  { value: "UT", label: "Utah" },
+  { value: "VT", label: "Vermont" },
+  { value: "VA", label: "Virginia" },
+  { value: "WA", label: "Washington" },
+  { value: "WV", label: "West Virginia" },
+  { value: "WI", label: "Wisconsin" },
+  { value: "WY", label: "Wyoming" },
+  { value: "DC", label: "District of Columbia" },
+  { value: "PR", label: "Puerto Rico" },
+  { value: "VI", label: "Virgin Islands" },
 ];
 
 export const fedTaxClass = [
@@ -122,13 +118,13 @@ export const fedTaxClass = [
 export const rateTypes = [
   { value: 1, label: "Hourly rate" },
   { value: 2, label: "Flat rate" },
-  { value: 3, label: "Both" },  
+  { value: 3, label: "Both" },
 ];
 
 export const yearOfExperience = [
   { value: "5-10", label: "5-10" },
   { value: "10-15", label: "10-15" },
-  { value: "15-20", label: "15-20" },  
+  { value: "15-20", label: "15-20" },
 ];
 
 export const totalSales = [
@@ -137,8 +133,8 @@ export const totalSales = [
   { value: "20-30", label: "20-30" },
   { value: "30-40", label: "30-40" },
   { value: "40-50", label: "40-50" },
-  { value: "More than 50", label: "More than 50" },  
-]
+  { value: "More than 50", label: "More than 50" },
+];
 
 export const homeTypes = [
   { value: "single-family-home", label: "Single-Family Home" },
@@ -156,5 +152,5 @@ export const homeTypes = [
   { value: "tiny-house", label: "Tiny House" },
   { value: "farmhouse", label: "Farmhouse" },
   { value: "split-level-home", label: "Split-Level Home" },
-  { value: "all", label: "All" }
+  { value: "all", label: "All" },
 ];

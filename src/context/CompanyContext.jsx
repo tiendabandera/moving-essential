@@ -128,4 +128,12 @@ export class Company {
       .eq("id", this.data.id)
       .single();
   }
+
+  async getAllReviews() {
+    return await supabase
+      .from("reviews")
+      .select(
+        "company_id, user_id, companies(company_name), user_info(user_metadata)"
+      );
+  }
 }

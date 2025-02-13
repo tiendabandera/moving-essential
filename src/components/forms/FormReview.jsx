@@ -3,9 +3,9 @@ import Input from "../Input";
 import TextArea from "../TextArea";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Share2 } from "lucide-react";
 
-const FormGetQuote = ({ className }) => {
+const FormReview = ({ className }) => {
   const classes = `w-full flex flex-col gap-6 items-center justify-center p-10 border border-gray-200 rounded-xl shadow-2xl ${
     className || ""
   }`;
@@ -14,35 +14,46 @@ const FormGetQuote = ({ className }) => {
 
   const inputs = [
     {
-      id: "full_name",
-      name: "full_name",
+      id: "origin",
+      name: "origin",
       type: "text",
-      placeholder: "Enter your full name",
-      label: "Full name",
+      placeholder: "Origin",
+      label: "Origin",
       isInput: true,
       required: true,
       isReadOnly: false,
       validations: {},
     },
     {
-      id: "email",
-      name: "email",
-      type: "email",
-      placeholder: "Enter your email",
-      label: "Email",
+      id: "destination",
+      name: "destination",
+      type: "text",
+      placeholder: "Destination",
+      label: "Destination",
       isInput: true,
       required: true,
       isReadOnly: false,
       validations: {},
     },
     {
-      id: "phone",
-      name: "phone",
+      id: "quoted_price",
+      name: "quoted_price",
       type: "number",
-      placeholder: "Enter your phone",
-      label: "Phone",
+      placeholder: "Quoted Price",
+      label: "Quoted Price",
       isInput: true,
-      required: false,
+      required: true,
+      isReadOnly: false,
+      validations: {},
+    },
+    {
+      id: "actual_price",
+      name: "actual_price",
+      type: "number",
+      placeholder: "Actual Price",
+      label: "Actual Price",
+      isInput: true,
+      required: true,
       isReadOnly: false,
       validations: {},
     },
@@ -75,8 +86,14 @@ const FormGetQuote = ({ className }) => {
   return (
     <form onSubmit={onSubmit}>
       <div className={classes}>
-        <h3 className="font-semibold text-color-1 text-3xl">Get a Quote</h3>
-        <div className="w-full grid grid-cols-1 gap-3">
+        <Button
+          className="w-full bg-black border border-black rounded-md hover:bg-transparent hover:text-black"
+          type="button"
+        >
+          <Share2 className="!hover:bg-black" color="#fff" />
+          Get more reviews
+        </Button>
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
           {inputs.map((input) => (
             <div key={input.id}>
               <label htmlFor={input.id} className="text-sm font-medium">
@@ -86,7 +103,7 @@ const FormGetQuote = ({ className }) => {
               <Input {...input} register={register} errors={errors} />
             </div>
           ))}
-          <div>
+          <div className="lg:col-span-2">
             <label htmlFor="message" className="text-sm font-medium">
               Message *
             </label>
@@ -118,4 +135,4 @@ const FormGetQuote = ({ className }) => {
   );
 };
 
-export default FormGetQuote;
+export default FormReview;
