@@ -144,8 +144,7 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-		screens: {
-			'xs': '400px',
+		screens: {			
 			'3xl': '1680px',
 			'4xl': '2200px',
 		},

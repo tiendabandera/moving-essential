@@ -70,10 +70,6 @@ const InternalPage = () => {
   useEffect(() => {
     const loadCompany = async () => {
       if (params.id) {
-        /* const { data, error } = await createCompanyInstance({
-          id: params.id,
-        }).getById();
- */
         const company = await createCompanyInstance({
           id: params.id,
         });
@@ -146,7 +142,7 @@ const InternalPage = () => {
                     />
                     <span
                       className={`text-xs font-medium text-gray-50 ${
-                        copied ? "!text-color-1" : ""
+                        copied ? "text-color-1!" : ""
                       }`}
                     >
                       {copied ? "Copied!" : "Share"}
@@ -229,8 +225,10 @@ const InternalPage = () => {
           <div className="flex flex-col">
             <Separator className="my-5" />
             <h3 className="text-3xl font-semibold">Write review</h3>
-            <div className="mt-5">
-              <FormReview />
+            <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+              <div className="lg:col-span-2">
+                <FormReview company={company} />
+              </div>
             </div>
           </div>
         </section>
@@ -240,7 +238,7 @@ const InternalPage = () => {
               <DialogTitle className="text-2xl"></DialogTitle>
               <DialogDescription />
             </DialogHeader>
-            <FormGetQuote className={" !shadow-none"} />
+            <FormGetQuote className={" shadow-none!"} />
           </DialogContent>
         </Dialog>
       </div>

@@ -20,8 +20,8 @@ function Header() {
     <>
       <div className="pt-[4.75rem] lg:pt-[6.25rem] overflow-hidden">
         <div
-          className={`fixed top-0 left-0 w-full z-50 border-b border-n-6  lg:bg-n-8/90 lg:backdrop-blur-sm ${
-            openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"
+          className={`fixed top-0 left-0 w-full z-50 border-b border-n-6  lg:bg-n-8/90 lg:backdrop-blur-xs ${
+            openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-xs"
           }`}
         >
           <div className="flex items-center py-2 px-5 lg:px-7 ">

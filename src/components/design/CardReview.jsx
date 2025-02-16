@@ -22,8 +22,8 @@ const CardReview = ({ review }) => {
         <Trash strokeWidth={1} width={20} height={20} />
       </div>
       <div className="flex flex-col items-center gap-1">
-        <p className="font-medium text-lg">{review.customer_name}</p>
-        <p className="text-gray-50 font-light text-sm">
+        <p className="font-medium text-xl lg:text-lg">{review.customer_name}</p>
+        <p className="text-gray-50 font-light text-base lg:text-sm">
           {new Date().toDateString()}
         </p>
         <div className="flex gap-2">
@@ -33,7 +33,7 @@ const CardReview = ({ review }) => {
         </div>
       </div>
 
-      <p className="text-gray-50 font-light text-justify text-sm">
+      <p className="text-gray-50 font-light text-justify text-base lg:text-sm">
         {isExpanded || review.message.length <= maxLength
           ? review.message
           : `${review.message.slice(0, maxLength)}...`}
@@ -47,7 +47,7 @@ const CardReview = ({ review }) => {
         )}
       </p>
       <Separator className="w-1/4 bg-color-1 h-[2px]" />
-      <div className="w-full flex flex-col justify-center 2xl:flex-row 2xl:justify-between text-sm">
+      <div className="w-full flex flex-col text-base justify-center 2xl:flex-row 2xl:justify-between lg:text-sm">
         <div className="flex flex-col items-center 2xl:items-start">
           <div className="flex gap-x-2">
             <p className="font-medium">Quoted Price:</p>

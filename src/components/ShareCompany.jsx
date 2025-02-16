@@ -116,7 +116,7 @@ const ShareCompany = memo(({ company, onClose }) => {
                 className="border border-gray-400 bg-transparent text-black shadow-none py-5 hover:bg-gray-300/40"
                 onClick={button.onClick}
               >
-                {<button.icon className="!w-6 !h-6" color="#000000" />}{" "}
+                {<button.icon className="w-6! h-6!" color="#000000" />}{" "}
                 {button.name}
               </Button>
             ))}
@@ -124,7 +124,7 @@ const ShareCompany = memo(({ company, onClose }) => {
           {copied && (
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg px-4 py-2 text-sm font-semibold transition-opacity duration-300">
               <div className="flex gap-2">
-                <FaCheckCircle className="!w-5 !h-5" color="green" /> Link
+                <FaCheckCircle className="w-5! h-5!" color="green" /> Link
                 copied!
               </div>
             </div>

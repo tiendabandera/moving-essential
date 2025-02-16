@@ -57,7 +57,7 @@ const RepeaterCompanies = () => {
         {records.map((record, index) => (
           <div
             key={index}
-            className="flex flex-col gap-3 items-center justify-center p-6 cursor-pointer shadow-sm border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
+            className="flex flex-col gap-3 items-center justify-center p-6 cursor-pointer shadow-xs border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
             onClick={() => {
               window.location.href = `/local-moving/${record.id}`;
             }}

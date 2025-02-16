@@ -129,11 +129,16 @@ export class Company {
       .single();
   }
 
+  /* REVIEWS ZONE
+  __________________________________________________ */
+
   async getAllReviews() {
     return await supabase
       .from("reviews")
-      .select(
-        "company_id, user_id, companies(company_name), user_info(user_metadata)"
-      );
+      .select("*, companies(company_name), user_info(user_metadata)");
+  }
+
+  async createReview() {
+    return await supabase.from("reviews").insert(this.data).select();
   }
 }

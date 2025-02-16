@@ -79,7 +79,7 @@ const SearchCompanies = ({ service }) => {
         <input
           type="text"
           placeholder="Enter ZIP Code or City"
-          className="w-full focus-visible:outline-none text-base md:text-sm"
+          className="w-full focus-visible:outline-hidden text-base md:text-sm"
           onChange={(e) => searchZipcode(e)}
           onFocus={() => setIsOpen(true)}
           ref={inputRef}

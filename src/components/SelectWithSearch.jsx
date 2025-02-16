@@ -14,7 +14,7 @@ const SelectWithSearch = ({
 }) => {
   /* const classes = `option-hover appearance-none h-9 w-full rounded-md border border-slate-200 px-3 
       py-1 text-base md:text-sm shadow-sm transition-colors placeholder:text-slate-500 
-      focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 
+      focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-slate-950 
       ${className || ""}
       ${readOnly ? "pointer-events-none bg-slate-400/20" : "bg-transparent"}`; */
 
@@ -84,7 +84,7 @@ const SelectWithSearch = ({
             }}
             onFocus={() => setIsOpen(true)}
             placeholder={placeholder}
-            className="w-full text-base md:text-sm bg-transparent border-none focus:outline-none text-gray-900 placeholder-gray-500"
+            className="w-full text-base md:text-sm bg-transparent border-none focus:outline-hidden text-gray-900 placeholder-gray-500"
           />
           <ChevronDown
             strokeWidth={1}

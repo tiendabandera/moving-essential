@@ -80,6 +80,7 @@ const AppContent = () => {
           </Route>
         </Route>
         <Route>
+          <Route path="/local-moving" element={<LocalMovingPages.AllPage />} />
           <Route
             path="/local-moving/:id"
             element={<LocalMovingPages.InternalPage />}
