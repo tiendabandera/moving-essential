@@ -3,7 +3,7 @@ import CustomIcon from "./CustomIcon";
 
 const CardSummary = ({ icon, total, avarage, title, tooltipText }) => {
   return (
-    <div className="shadow-sm bg-background rounded-lg p-5 py-3 hover:shadow-lg transition">
+    <div className="shadow-xs bg-background rounded-lg p-5 py-3 hover:shadow-lg transition">
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
           <CustomIcon icon={icon} />

@@ -12,7 +12,7 @@ const Button = ({
   orange,
   disabled,
 }) => {
-  const classes = `button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 ${
+  const classes = `cursor-pointer button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 ${
     px || "px-7"
   } ${white ? "text-color-1" : "text-n-1"}  ${className || ""}`;
 

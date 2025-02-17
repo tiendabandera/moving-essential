@@ -253,7 +253,7 @@ const JoinCompanyPage = () => {
               </div>
             </div>
             <div className="col-span-2 xl:col-span-1">
-              <div className="shadow-sm bg-background rounded-lg p-5">
+              <div className="shadow-xs bg-background rounded-lg p-5">
                 <div className="flex gap-x-2 items-center">
                   <CustomIcon icon={Image} />
                   <h3 className="font-medium">Images</h3>

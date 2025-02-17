@@ -18,7 +18,7 @@ const SelectWithSearch = ({
       ${className || ""}
       ${readOnly ? "pointer-events-none bg-slate-400/20" : "bg-transparent"}`; */
 
-  const classes = `w-full h-9 bg-white border border-slate-200 rounded-md shadow-sm ${
+  const classes = `w-full h-9 bg-white border border-slate-200 rounded-md shadow-xs ${
     className || ""
   } ${readOnly ? "pointer-events-none bg-slate-400/20" : "bg-transparent"}`;
 

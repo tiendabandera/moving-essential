@@ -12,9 +12,9 @@ const Select = ({
   placeholder,
   control,
 }) => {
-  const classes = `text-left flex items-center justify-between option-hover appearance-none h-9 w-full rounded-md border border-slate-200 px-3 
-  py-1 text-base md:text-sm shadow-sm transition-colors placeholder:text-slate-500 
-  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 
+  const classes = `cursor-pointer text-left flex items-center justify-between option-hover appearance-none h-9 w-full rounded-md border border-slate-200 px-3 
+  py-1 text-base md:text-sm shadow-xs transition-colors placeholder:text-slate-500 
+  focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-slate-950 
   ${className || ""}
   ${readOnly ? "pointer-events-none bg-slate-400/20" : "bg-transparent"}`;
 

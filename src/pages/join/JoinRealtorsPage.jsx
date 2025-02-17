@@ -130,7 +130,7 @@ const JoinRealtorsPage = () => {
 
   return (
     <div className="flex flex-col w-full h-screen gap-4">
-      <div className="w-full xl:px-36 -mt-1 px-14 pt-14 flex flex-col xl:flex-row lg:flex-row justify-center bg-color-1 gap-10">
+      <div className="w-full xl:px-36 -mt-1 px-14 pt-14 flex flex-col lg:flex-row lg:mt-[1px] justify-center bg-color-1 gap-10">
         <div className="flex flex-col items-center justify-center text-center lg:pb-14 lg:items-start lg:text-left lg:w-[60%] xl:w-[70%] gap-10">
           <h1 className="font-extrabold h1 text-white xl:w-[75%]">
             Grow Your Real Estate Business with{" "}
@@ -199,7 +199,7 @@ const JoinRealtorsPage = () => {
               </div>
             </div>
             <div className="col-span-2 xl:col-span-1">
-              <div className="shadow-sm bg-background rounded-lg p-5">
+              <div className="shadow-xs bg-background rounded-lg p-5">
                 <div className="flex gap-x-2 items-center">
                   <CustomIcon icon={Image} />
                   <h3 className="font-medium">Images</h3>

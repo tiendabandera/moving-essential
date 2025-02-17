@@ -98,9 +98,9 @@ function Header() {
                 >
                   Join Us
                 </Link>
-                <Button className="hidden lg:flex" href="/login">
-                  Login
-                </Button>
+                <div className="hidden lg:flex">
+                  <Button href="/login">Login</Button>
+                </div>
               </>
             )}
 
