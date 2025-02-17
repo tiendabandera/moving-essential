@@ -50,7 +50,7 @@ const Checkbox = ({ name, options, control }) => {
               type="button"
               onClick={() => toggleType(option.value)}
               className={cn(
-                "relative flex items-center px-4 py-2 rounded-full text-sm transition-all duration-200",
+                "cursor-pointer relative flex items-center px-4 py-2 rounded-full text-sm transition-all duration-200",
                 "border hover:border-primary/50",
                 "focus:outline-hidden focus:ring-2 focus:ring-primary/20",
                 isSelected

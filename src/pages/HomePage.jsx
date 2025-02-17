@@ -102,7 +102,7 @@ const HomePage = () => {
         <div className="relative flex flex-1 items-start">
           <div className="relative z-20 flex w-[268px] flex-col gap-8 rounded-3xl bg-color-1 px-7 py-8">
             <div className="flex flex-col">
-              <div className="flexBetween">
+              <div className="flex-between">
                 <p className="font-normal">Location</p>
                 <img
                   src="/assets/svg/close.svg"
@@ -114,7 +114,7 @@ const HomePage = () => {
               <p className="bold-20 text-white">5489 NW 27th St, Margate</p>
             </div>
 
-            <div className="flexBetween">
+            <div className="flex-between">
               <div className="flex flex-col">
                 <p className="block font-normal">State</p>
                 <p className="bold-20 text-white">Florida</p>
@@ -145,7 +145,7 @@ const HomePage = () => {
           <TabsContent value="realtors"></TabsContent>
         </Tabs>
       </section>
-      <section className="flexCenter w-full flex-col pb-[100px]">
+      <section className="flex-center w-full flex-col pb-[100px]">
         <div className="get-app">
           <div className="z-20 flex w-full flex-1 flex-col items-start justify-center gap-12">
             <h2 className="bold-40 lg:bold-64 xl:max-w-[420px]">

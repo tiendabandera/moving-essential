@@ -214,7 +214,7 @@ const DashboardPage = () => {
       <form onSubmit={onSubmit}>
         <div className="grid grid-cols-1 mt-10 gap-y-10 xl:grid-cols-3 md:gap-x-10">
           <div className="col-span-2">
-            <div className="shadow-sm bg-background rounded-lg p-5">
+            <div className="shadow-xs bg-background rounded-lg p-5">
               <div className="flex gap-x-2 items-center">
                 <CustomIcon icon={Building2} />
                 <h3 className="font-medium">Company information</h3>
@@ -232,7 +232,7 @@ const DashboardPage = () => {
             </div>
           </div>
           <div className="col-span-2 xl:col-span-1">
-            <div className="shadow-sm bg-background rounded-lg p-5">
+            <div className="shadow-xs bg-background rounded-lg p-5">
               <div className="flex gap-x-2 items-center">
                 <CustomIcon icon={Image} />
                 <h3 className="font-medium">Images</h3>
