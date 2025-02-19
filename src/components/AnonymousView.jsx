@@ -17,7 +17,7 @@ export const AnonymousView = ({ isOpen, onClose }) => {
             <DialogTitle />
             <DialogDescription />
           </DialogHeader>
-          <div className="flex flex-col gap-5 p-2 lg:flex-row justify-between">
+          <div className="flex flex-col gap-5 p-2 items-center lg:items-start lg:flex-row justify-between">
             <div className="flex flex-col items-center lg:pl-6 lg:mt-20 lg:items-start">
               <h3 className="text-xl font-semibold text-color-1">Welcome to</h3>
               <h1 className="bold-32">Moving Esstential</h1>
@@ -38,7 +38,7 @@ export const AnonymousView = ({ isOpen, onClose }) => {
                 </Link>
               </div>
             </div>
-            <div className="hidden w-[45%] lg:flex">
+            <div className="w-[45%]">
               <img
                 src="/assets/img/anonymous-view.png"
                 alt="Welcome to Moving Essential"

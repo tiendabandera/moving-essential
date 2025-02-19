@@ -3,13 +3,13 @@ import Input from "../Input";
 import TextArea from "../TextArea";
 import { Button } from "../ui/button";
 import { useEffect, useRef, useState } from "react";
-import { Loader2, Share2, Star } from "lucide-react";
+import { Loader2, Star } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { AnonymousView } from "../AnonymousView";
 
 const FormReview = ({ className, company }) => {
-  const classes = `w-full flex flex-col gap-6 items-center justify-center p-10 border border-gray-200 rounded-xl shadow-2xl ${
+  const classes = `w-full relative flex flex-col gap-6 items-center justify-center p-10 border border-gray-200 rounded-xl shadow-2xl ${
     className || ""
   }`;
 
@@ -138,28 +138,6 @@ const FormReview = ({ className, company }) => {
   });
 
   const inputs = [
-    /* {
-      id: "origin",
-      name: "origin",
-      type: "text",
-      placeholder: "Origin",
-      label: "Origin",
-      isInput: true,
-      required: true,
-      isReadOnly: false,
-      validations: {},
-    }, */
-    /* {
-      id: "destination",
-      name: "destination",
-      type: "text",
-      placeholder: "Destination",
-      label: "Destination",
-      isInput: true,
-      required: true,
-      isReadOnly: false,
-      validations: {},
-    }, */
     {
       id: "quoted_price",
       name: "quoted_price",
@@ -199,7 +177,7 @@ const FormReview = ({ className, company }) => {
       return;
     }
 
-    if (!originValue || !destinationValue) {
+    if ((!originValue || !destinationValue) && company.business_type_id === 1) {
       toast({
         title: "Error",
         description:
@@ -281,109 +259,109 @@ const FormReview = ({ className, company }) => {
     <div>
       <form onSubmit={onSubmit}>
         <div className={classes}>
-          <Button
-            className="w-full bg-black border border-black rounded-md hover:bg-transparent hover:text-black"
-            type="button"
-          >
-            <Share2 className="!hover:bg-black" color="#fff" />
-            Get more reviews
-          </Button>
           <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
-            <div ref={originRef} className="relative">
-              <label htmlFor="origin" className="text-sm font-medium">
-                Origin *
-              </label>
-              <Input
-                id="origin"
-                name="origin"
-                type="text"
-                placeholder="Origin"
-                label="Origin"
-                required={true}
-                register={register}
-                errors={errors}
-                onChange={searchZipcode}
-                onFocus={() => setIsOpenOrigin(true)}
-              />
-              {isOpenOrigin && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
-                  <ul className="py-1 max-h-60 overflow-auto">
-                    {zipcodes.origin.length > 0 ? (
-                      zipcodes.origin.map((option) => (
-                        <li
-                          key={option.value}
-                          onClick={() => handleOptionClick(option, "origin")}
-                          className={`px-4 py-2 cursor-pointer text-sm ${
-                            option.value === originValue
-                              ? "bg-blue-50 text-color-1"
-                              : "text-gray-900 hover:bg-blue-50 hover:text-color-1"
-                          }`}
-                        >
-                          {option.label}
-                        </li>
-                      ))
-                    ) : (
-                      <li className="px-4 py-2 text-sm text-gray-500">
-                        No results found
-                      </li>
-                    )}
-                  </ul>
+            {company.business_type_id === 1 && (
+              <>
+                <div ref={originRef} className="relative">
+                  <label htmlFor="origin" className="text-sm font-medium">
+                    Origin *
+                  </label>
+                  <Input
+                    id="origin"
+                    name="origin"
+                    type="text"
+                    placeholder="Origin"
+                    label="Origin"
+                    required={true}
+                    register={register}
+                    errors={errors}
+                    onChange={searchZipcode}
+                    onFocus={() => setIsOpenOrigin(true)}
+                  />
+                  {isOpenOrigin && (
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                      <ul className="py-1 max-h-60 overflow-auto">
+                        {zipcodes.origin.length > 0 ? (
+                          zipcodes.origin.map((option) => (
+                            <li
+                              key={option.value}
+                              onClick={() =>
+                                handleOptionClick(option, "origin")
+                              }
+                              className={`px-4 py-2 cursor-pointer text-sm ${
+                                option.value === originValue
+                                  ? "bg-blue-50 text-color-1"
+                                  : "text-gray-900 hover:bg-blue-50 hover:text-color-1"
+                              }`}
+                            >
+                              {option.label}
+                            </li>
+                          ))
+                        ) : (
+                          <li className="px-4 py-2 text-sm text-gray-500">
+                            No results found
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div ref={destinationRef} className="relative">
-              <label htmlFor="destination" className="text-sm font-medium">
-                Destination *
-              </label>
-              <Input
-                id="destination"
-                name="destination"
-                type="text"
-                placeholder="Destination"
-                label="Destination"
-                required={true}
-                register={register}
-                errors={errors}
-                onChange={searchZipcode}
-                onFocus={() => setIsOpenDestination(true)}
-              />
-              {isOpenDestination && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
-                  <ul className="py-1 max-h-60 overflow-auto">
-                    {zipcodes.destination.length > 0 ? (
-                      zipcodes.destination.map((option) => (
-                        <li
-                          key={option.value}
-                          onClick={() =>
-                            handleOptionClick(option, "destination")
-                          }
-                          className={`px-4 py-2 cursor-pointer text-sm ${
-                            option.value === destinationValue
-                              ? "bg-blue-50 text-color-1"
-                              : "text-gray-900 hover:bg-blue-50 hover:text-color-1"
-                          }`}
-                        >
-                          {option.label}
-                        </li>
-                      ))
-                    ) : (
-                      <li className="px-4 py-2 text-sm text-gray-500">
-                        No results found
-                      </li>
-                    )}
-                  </ul>
+                <div ref={destinationRef} className="relative">
+                  <label htmlFor="destination" className="text-sm font-medium">
+                    Destination *
+                  </label>
+                  <Input
+                    id="destination"
+                    name="destination"
+                    type="text"
+                    placeholder="Destination"
+                    label="Destination"
+                    required={true}
+                    register={register}
+                    errors={errors}
+                    onChange={searchZipcode}
+                    onFocus={() => setIsOpenDestination(true)}
+                  />
+                  {isOpenDestination && (
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                      <ul className="py-1 max-h-60 overflow-auto">
+                        {zipcodes.destination.length > 0 ? (
+                          zipcodes.destination.map((option) => (
+                            <li
+                              key={option.value}
+                              onClick={() =>
+                                handleOptionClick(option, "destination")
+                              }
+                              className={`px-4 py-2 cursor-pointer text-sm ${
+                                option.value === destinationValue
+                                  ? "bg-blue-50 text-color-1"
+                                  : "text-gray-900 hover:bg-blue-50 hover:text-color-1"
+                              }`}
+                            >
+                              {option.label}
+                            </li>
+                          ))
+                        ) : (
+                          <li className="px-4 py-2 text-sm text-gray-500">
+                            No results found
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            {inputs.map((input) => (
-              <div key={input.id}>
-                <label htmlFor={input.id} className="text-sm font-medium">
-                  {input.label}
-                  {input.required && " *"}
-                </label>
-                <Input {...input} register={register} errors={errors} />
-              </div>
-            ))}
+                {inputs.map((input) => (
+                  <div key={input.id}>
+                    <label htmlFor={input.id} className="text-sm font-medium">
+                      {input.label}
+                      {input.required && " *"}
+                    </label>
+                    <Input {...input} register={register} errors={errors} />
+                  </div>
+                ))}
+              </>
+            )}
+
             <div className="lg:col-span-2">
               <label className="text-sm font-medium">Rating *</label>
               <div className="flex gap-1">

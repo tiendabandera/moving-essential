@@ -27,6 +27,11 @@ import {
   Linkedin,
   Youtube,
   SquareArrowOutUpRight,
+  BrickWall,
+  GraduationCap,
+  BadgeDollarSign,
+  BriefcaseBusiness,
+  Unlink,
 } from "lucide-react";
 
 import { FaStar, FaTiktok } from "react-icons/fa";
@@ -38,13 +43,29 @@ import { Button } from "@/components/ui/button";
 import { TbPointFilled } from "react-icons/tb";
 import FormReview from "@/components/forms/FormReview";
 import CarouselReview from "@/components/CarouselReview";
+import { homeTypes } from "@/constants";
+
+export const GetCosultationButton = ({ phone }) => {
+  return (
+    <div className="w-full flex flex-col gap-2 items-center justify-center py-6 px-10 border border-gray-200 rounded-xl shadow-2xl text-center">
+      <h3 className="font-semibold text-3xl">Get a Consultation</h3>
+      <Button
+        className="w-full bg-color-1 border border-color-1 rounded-md hover:bg-transparent hover:text-color-1"
+        onClick={() => window.open(`tel:${phone}`)}
+      >
+        Phone number
+      </Button>
+      <span>Talk to a knowledgeable agent, not a call center</span>
+    </div>
+  );
+};
 
 const InternalPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const { createCompanyInstance, user } = useAuth();
 
-  const [company, setCompany] = useState(null);
+  const [realtor, setCompany] = useState(null);
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [owner, setOwner] = useState(false);
@@ -80,19 +101,19 @@ const InternalPage = () => {
   ];
 
   useEffect(() => {
-    const loadCompany = async () => {
+    const loadRealtor = async () => {
       if (params.id) {
-        const company = await createCompanyInstance({
+        const realtorInstance = await createCompanyInstance({
           id: params.id,
         });
 
-        const { data, error } = await company.getCompanyById();
+        const { data, error } = await realtorInstance.getRealtorById();
         if (error) navigate("/not-found");
 
         if (user && data.user_id === user.id) setOwner(true);
 
         setCompany(data);
-        const resReviews = await company.getAllReviews();
+        const resReviews = await realtorInstance.getAllReviews();
         const totalReviews = resReviews.data.length;
 
         if (totalReviews > 0) {
@@ -103,10 +124,10 @@ const InternalPage = () => {
           setAverageRating(average);
         }
 
-        document.title = data.company_name; //Cambiar el titulo de la pagina
+        document.title = data.user_info.user_metadata.realtor_name; //Cambiar el titulo de la pagina
       }
     };
-    loadCompany();
+    loadRealtor();
   }, [user, params]);
 
   const handleCopyLink = async (query = "") => {
@@ -122,12 +143,12 @@ const InternalPage = () => {
   };
 
   return (
-    company && (
+    realtor && (
       <div>
         <div className="mt-[-3px] md:max-container lg:pt-20 lg:padding-container">
-          <Carousel className="border border-gray-100 lg:rounded-3xl">
+          <Carousel className="block lg:hidden border border-gray-100 lg:rounded-3xl">
             <CarouselContent>
-              {company.images.map((img, index) => (
+              {realtor.images.map((img, index) => (
                 <CarouselItem key={index}>
                   <img
                     src={img}
@@ -137,21 +158,111 @@ const InternalPage = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            {company.images.length > 1 && (
+            {realtor.images.length > 1 && (
               <div className="hidden xl:flex">
                 <CarouselPrevious />
                 <CarouselNext />
               </div>
             )}
           </Carousel>
+          <div className="hidden border border-gray-100 rounded-3xl h-[500px] lg:flex lg:gap-5">
+            <div className="w-[35%]">
+              <img
+                src={realtor.images[0]}
+                alt="Realtor"
+                className="w-full h-full object-cover rounded-l-3xl"
+              />
+            </div>
+            <div className="flex-auto rounded-r-3xl">
+              <div className="w-full h-full grid grid-cols-3 gap-5">
+                {/* {realtor.images.map((image, index) => {
+                  if (index !== 0) {
+                    let classes = "";
+
+                    switch (index) {
+                      case 3:
+                        classes = "rounded-tr-3xl";
+                        break;
+
+                      case 6:
+                        classes = "rounded-br-3xl";
+                        break;
+
+                      default:
+                        break;
+                    }
+
+                    return (
+                      <div
+                        key={index}
+                        className={`w-full h-auto overflow-hidden ${classes}`}
+                      >
+                        <img
+                          key={index}
+                          src={image}
+                          alt="houses"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    );
+                  }
+                })} */}
+                <div className="w-full h-auto overflow-hidden">
+                  <img
+                    src={realtor.images[1]}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="w-full h-auto overflow-hidden">
+                  <img
+                    src={realtor.images[2]}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="w-full h-auto overflow-hidden rounded-tr-3xl">
+                  <img
+                    src={realtor.images[3]}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="w-full h-auto overflow-hidden">
+                  <img
+                    src={realtor.images[4]}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="w-full h-auto overflow-hidden">
+                  <img
+                    src={realtor.images[5]}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="w-full h-auto overflow-hidden rounded-br-3xl">
+                  <img
+                    src={realtor.images[6]}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <section className="max-container padding-container flex flex-col gap-12 py-10 pb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="md:col-span-2">
               <div className="flex flex-col-reverse gap-5 md:flex-row md:items-center md:justify-between">
-                <h1 className="text-3xl font-semibold">
-                  {company.company_name}
-                </h1>
+                <div className="flex flex-col">
+                  <h1 className="text-3xl font-semibold">
+                    {realtor.user_info.user_metadata.realtor_name}
+                  </h1>
+                  <p className="font-medium text-lg">{realtor.company_name}</p>
+                </div>
                 <div className="flex items-center gap-2">
                   <div className="flex flex-col items-center">
                     <CiHeart color="#ff0000" className="w-8 h-8" />
@@ -177,35 +288,87 @@ const InternalPage = () => {
               <div className="flex items-center gap-2">
                 <MapPin strokeWidth={1} className="w-5 h-5" color="#EA6020" />
                 <p className="text-gray-50 font-light">
-                  {company.cities.name}, {company.state}, {company.zipcode}
+                  {realtor.cities.name}, {realtor.state}, {realtor.zipcode}
                 </p>
               </div>
-              <div className="mt-8">
-                <p className="font-medium text-lg">{company.service.slogan}</p>
-                <p className="text-gray-50 font-light text-justify">
-                  {company.service.long_description}
-                </p>
-              </div>
-              <p className="mt-8 font-medium text-lg">How we charge:</p>
-              <div className="flex text-gray-50 font-light">
-                {(company.service.rate_type_id === 2 ||
-                  company.service.rate_type_id === 3) && <p>Flat rate</p>}
+              <p className="mt-8 font-medium text-lg">About me</p>
+              <p className="text-gray-50 font-light text-justify">
+                {realtor.service.bio}
+              </p>
+              {realtor.service.agency_website && (
+                <Button
+                  variant="link"
+                  className="mt-8 text-color-1 text-base text-left p-0"
+                  asChild
+                >
+                  <Link to={realtor.service.agency_website}>
+                    <Unlink />
+                    Website
+                  </Link>
+                </Button>
+              )}
 
-                {company.service.rate_type_id === 3 && (
-                  <span className="mx-2 font-semibold text-black">/</span>
-                )}
-
-                {(company.service.rate_type_id === 1 ||
-                  company.service.rate_type_id === 3) && <p>Hourly rate</p>}
+              <Separator className="my-8" />
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-x-5 gap-y-2 md:flex-row items-start">
+                  <BrickWall />
+                  <div className="flex flex-col gap-1 ">
+                    <p className="font-medium text-lg leading-none">
+                      Homes types:
+                    </p>
+                    <p className="text-gray-50 font-light">
+                      {realtor.service.home_types
+                        .map((name) => {
+                          const type = homeTypes.find(
+                            (type) => type.value === name
+                          );
+                          return type.label;
+                        })
+                        .join(", ")}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-x-5 gap-y-2 md:flex-row items-start">
+                  <GraduationCap />
+                  <div className="flex flex-col gap-1 ">
+                    <p className="font-medium text-lg leading-none">Title:</p>
+                    <p className="text-gray-50 font-light">
+                      {realtor.service.title_work}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-x-5 gap-y-2 md:flex-row items-start">
+                  <BadgeDollarSign />
+                  <div className="flex flex-col gap-1 ">
+                    <p className="font-medium text-lg leading-none">
+                      Total sales:
+                    </p>
+                    <p className="text-gray-50 font-light">
+                      {realtor.service.total_sales}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-x-5 gap-y-2 md:flex-row items-start">
+                  <BriefcaseBusiness />
+                  <div className="flex flex-col gap-1 ">
+                    <p className="font-medium text-lg leading-none">
+                      Years of experience:
+                    </p>
+                    <p className="text-gray-50 font-light">
+                      {realtor.service.experience}
+                    </p>
+                  </div>
+                </div>
               </div>
+              <Separator className="my-8" />
               <div className="mt-8 flex gap-2">
                 {socialNetworks.map(
                   (network, index) =>
-                    company[network.field] && (
+                    realtor[network.field] && (
                       <Link
                         key={index}
                         target="_blank"
-                        to={company[network.field]}
+                        to={realtor[network.field]}
                       >
                         <CustomIcon icon={network.icon} />
                       </Link>
@@ -214,13 +377,7 @@ const InternalPage = () => {
               </div>
               <div className="md:hidden">
                 <Separator className="my-8" />
-                <Button
-                  className="w-full bg-color-1 border border-color-1 rounded-md hover:bg-transparent hover:text-color-1"
-                  type="submit"
-                  onClick={() => setOpen(true)}
-                >
-                  Get a quote
-                </Button>
+                <GetCosultationButton phone={realtor.phone} />
               </div>
               <div className="flex flex-col">
                 <Separator className="my-8" />
@@ -242,7 +399,7 @@ const InternalPage = () => {
             </div>
             <div className="hidden md:block lg:col-span-1 relative">
               <div className="sticky top-32">
-                <FormGetQuote />
+                <GetCosultationButton phone={realtor.phone} />
               </div>
             </div>
           </div>
@@ -272,7 +429,7 @@ const InternalPage = () => {
             </div>
             <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               <div className="lg:col-span-2">
-                <FormReview company={company} />
+                <FormReview company={realtor} />
               </div>
               <div className="w-full flex flex-col items-center relative animate-float">
                 <img

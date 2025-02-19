@@ -4,9 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import ShareCompany from "./ShareCompany";
-import { Heart, MessageSquareQuote, SquareArrowOutUpRight } from "lucide-react";
+import {
+  GraduationCap,
+  Heart,
+  MessageSquareQuote,
+  SquareArrowOutUpRight,
+} from "lucide-react";
 
-const RepeaterCompanies = () => {
+const RepeaterRealtors = () => {
   const navigate = useNavigate();
   const { createCompanyInstance } = useAuth();
 
@@ -19,7 +24,8 @@ const RepeaterCompanies = () => {
 
   const company = createCompanyInstance({});
   const fetchRecords = async (newOffset) => {
-    const { data, error } = await company.getAllByBusinessType(newOffset, 1);
+    const { data, error } = await company.getAllByBusinessType(newOffset, 2);
+    console.log(data);
 
     if (error) {
       console.error("Error al obtener registros:", error);
@@ -60,14 +66,14 @@ const RepeaterCompanies = () => {
             key={index}
             className="flex flex-col gap-3 items-center justify-center p-6 cursor-pointer shadow-2xs border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
             onClick={() => {
-              navigate(`/local-moving/${record.id}`);
+              navigate(`/realtors/${record.id}`);
             }}
           >
             <div className="relative w-full">
               <img
                 src={record.images[0]}
                 alt=""
-                className="w-full h-60 object-cover rounded-2xl"
+                className="w-full h-70 object-cover rounded-2xl"
               />
               <div className="absolute top-2 right-2 rounded-lg p-1 border border-gray-10 bg-white shadow-lg">
                 <SquareArrowOutUpRight
@@ -81,24 +87,19 @@ const RepeaterCompanies = () => {
               </div>
             </div>
             <div className="flex flex-col items-center justify-center gap-1 text-center">
-              <h3 className="text-xl font-semibold">{record.company_name}</h3>
-              <p className="text-base">{record.service.slogan}</p>
+              <h3 className="text-xl font-semibold">
+                {record.user_info.user_metadata.realtor_name}
+              </h3>
+              <p className="text-base">{record.company_name}</p>
+              <div className="flex gap-3 items-center">
+                <GraduationCap strokeWidth={2} className="w-5 h-5" />
+                <p className="text-base">{record.service.title_work}</p>
+              </div>
+
               <p className="text-base">
                 <span className="font-semibold">{record.cities.name}, </span>
                 {record.state} {record.zipcode}
               </p>
-              <p className="text-base font-semibold">How we charge:</p>
-              <div className="flex text-base">
-                {(record.service.rate_type_id === 2 ||
-                  record.service.rate_type_id === 3) && <p>Flat rate</p>}
-
-                {record.service.rate_type_id === 3 && (
-                  <span className="mx-2 font-semibold">/</span>
-                )}
-
-                {(record.service.rate_type_id === 1 ||
-                  record.service.rate_type_id === 3) && <p>Hourly rate</p>}
-              </div>
             </div>
             <div className="w-full flex justify-between gap-2 h-9 px-14 py-2 bg-slate-100 rounded-3xl">
               <div className="flex gap-2 items-center">
@@ -111,7 +112,7 @@ const RepeaterCompanies = () => {
                   className="w-6 h-6 text-blue-600"
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/local-moving/${record.id}#form-reviews`);
+                    navigate(`/realtors/${record.id}#form-reviews`);
                   }}
                 />
                 <p>{record.reviews.length}</p>
@@ -132,7 +133,7 @@ const RepeaterCompanies = () => {
                 asChild
               >
                 <Link
-                  to={`/local-moving/${record.id}`}
+                  to={`/realtors/${record.id}`}
                   onClick={(e) => e.stopPropagation()}
                 >
                   Contact
@@ -161,4 +162,4 @@ const RepeaterCompanies = () => {
   );
 };
 
-export default RepeaterCompanies;
+export default RepeaterRealtors;

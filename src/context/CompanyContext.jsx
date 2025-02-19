@@ -113,18 +113,32 @@ export class Company {
   async getAllByBusinessType(offset, businessTypeId) {
     const pageSize = 8;
 
+    const service = businessTypeId === 1 ? "local_moving(*)" : "realtors(*)";
+
     return await supabase
       .from("companies")
-      .select(`*, local_moving(*), cities(name)`)
+      .select(
+        `*, service:${service}, cities(name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
+      )
       .eq("business_type_id", businessTypeId)
       .range(offset, offset + pageSize - 1)
       .order("created_at", { ascending: false });
   }
 
-  async getById() {
+  async getCompanyById() {
     return await supabase
       .from("companies")
-      .select(`*, local_moving(*), cities(name)`)
+      .select(`*, service:local_moving(*), cities(name)`)
+      .eq("id", this.data.id)
+      .single();
+  }
+
+  async getRealtorById() {
+    return await supabase
+      .from("companies")
+      .select(
+        `*, service:realtors(*), cities(name), user_info:user_info!companies_user_id_fkey(user_metadata)`
+      )
       .eq("id", this.data.id)
       .single();
   }
@@ -133,9 +147,21 @@ export class Company {
   __________________________________________________ */
 
   async getAllReviews() {
-    return await supabase
+    const { data } = await supabase
       .from("reviews")
-      .select("*, companies(company_name), user_info(user_metadata)");
+      .select(
+        "*, company:companies(business_type_id), user_info(user_metadata)"
+      )
+      .eq("company_id", this.data.id);
+
+    const { data: totalRating } = await supabase.rpc("get_total_rating", {
+      company_id_param: this.data.id,
+    });
+
+    return {
+      data,
+      totalRating,
+    };
   }
 
   async createReview() {

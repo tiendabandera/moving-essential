@@ -107,7 +107,11 @@ const ShareCompany = memo(({ company, onClose }) => {
               alt=""
               className="w-[50px] h-[50px] rounded-lg object-cover border border-gray-100/60"
             />
-            <p className="font-medium text-base">{company.company_name}</p>
+            <p className="font-medium text-base">
+              {company.business_type_id === 1
+                ? company.company_name
+                : company.user_info.user_metadata.realtor_name}
+            </p>
           </div>
           <div className="grid grid-cols-2 gap-4">
             {buttons.map((button) => (

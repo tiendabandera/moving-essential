@@ -13,6 +13,7 @@ import JoinPages from "./pages/join/index";
 import UserPages from "./pages/user/index";
 import CompaniesPages from "./pages/company/index";
 import LocalMovingPages from "./pages/local_moving/index";
+import RealtorsPages from "./pages/realtors/index";
 
 import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
@@ -23,11 +24,13 @@ import NotFoundPage from "./pages/NotFoundPage";
 _________________________________________ */
 import { Toaster } from "./components/ui/toaster";
 import MembershipPage from "./pages/MembershipPage";
+import useScrollToHash from "./hooks/useScrollToHash";
 
 const AppContent = () => {
   const { user } = useAuth();
 
   const location = useLocation();
+  useScrollToHash(location);
 
   const showHeader =
     !location.pathname.includes("/company/") &&
@@ -84,6 +87,13 @@ const AppContent = () => {
           <Route
             path="/local-moving/:id"
             element={<LocalMovingPages.InternalPage />}
+          />
+        </Route>
+        <Route>
+          <Route path="/realtors" element={<RealtorsPages.AllPage />} />
+          <Route
+            path="/realtors/:id"
+            element={<RealtorsPages.InternalPage />}
           />
         </Route>
         <Route path="*" element={<NotFoundPage />} />

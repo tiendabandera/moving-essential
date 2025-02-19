@@ -33,45 +33,47 @@ function Header() {
                 alt="Moving Essential"
               />
             </Link>
-            <nav
-              className={`${
-                openNavigation ? "flex" : "hidden"
-              } fixed top-[4.55rem] left-0 right-0 bottom-0 bg-n-8 lg:static lg:flex lg:mx-auto lg:bg-transparent`}
-            >
-              <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
-                {navigation
-                  .filter((item) => {
-                    if (isAuthenticated) return item.visibleIsAuthenticated;
-                    return item;
-                  })
-                  .map((item) => (
-                    <Link
-                      to={item.url}
-                      key={item.id}
-                      className={`block relative text-2xl uppercase text-n-1 px-4 py-2 transition-colors hover:text-color-1 ${
-                        item.onlyMobile ? "lg:hidden" : ""
-                      } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
-                        item.url === pathname
-                          ? "z-2 lg:text-color-1"
-                          : "lg:text-n-1"
-                      } lg:leading-5 xl:px-12`}
-                    >
-                      {item.title}
-                    </Link>
-                  ))}
-                {isAuthenticated && (
-                  <>
-                    <a
-                      href={`/${user.user_metadata.role}/dashboard`}
-                      className="block relative text-2xl uppercase text-n-1 px-6 py-6 transition-colors hover:text-color-1 lg:hidden md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold"
-                    >
-                      Profile
-                    </a>
-                  </>
-                )}
-              </div>
-              <HamburgerMenu />
-            </nav>
+            {
+              <nav
+                className={`${
+                  openNavigation ? "flex" : "hidden"
+                } fixed top-[4.55rem] left-0 right-0 bottom-0 bg-n-8 lg:static lg:flex lg:mx-auto lg:bg-transparent`}
+              >
+                <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
+                  {navigation
+                    .filter((item) => {
+                      if (isAuthenticated) return item.visibleIsAuthenticated;
+                      return item;
+                    })
+                    .map((item) => (
+                      <Link
+                        to={item.url}
+                        key={item.id}
+                        className={`block relative text-2xl uppercase text-n-1 px-4 py-2 transition-colors hover:text-color-1 ${
+                          item.onlyMobile ? "lg:hidden" : ""
+                        } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
+                          item.url === pathname
+                            ? "z-2 lg:text-color-1"
+                            : "lg:text-n-1"
+                        } lg:leading-5 xl:px-12`}
+                      >
+                        {item.title}
+                      </Link>
+                    ))}
+                  {isAuthenticated && (
+                    <>
+                      <a
+                        href={`/${user.user_metadata.role}/dashboard`}
+                        className="block relative text-2xl uppercase text-n-1 px-6 py-6 transition-colors hover:text-color-1 lg:hidden md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold"
+                      >
+                        Profile
+                      </a>
+                    </>
+                  )}
+                </div>
+                <HamburgerMenu />
+              </nav>
+            }
             {isAuthenticated ? (
               <>
                 <Link
@@ -84,9 +86,9 @@ function Header() {
                       user.user_metadata.company_name
                     : user.user_metadata.name}
                 </Link>
-                <Button className="hidden lg:flex" onClick={submitLogout}>
-                  Logout
-                </Button>
+                <div className="hidden lg:flex">
+                  <Button onClick={submitLogout}>Logout</Button>
+                </div>
               </>
             ) : (
               <>

@@ -22,9 +22,11 @@ const CardReview = ({ review }) => {
         <Trash strokeWidth={1} width={20} height={20} />
       </div>
       <div className="flex flex-col items-center gap-1">
-        <p className="font-medium text-xl lg:text-lg">{review.customer_name}</p>
+        <p className="font-medium text-xl lg:text-lg">
+          {review.user_info.user_metadata.name}
+        </p>
         <p className="text-gray-50 font-light text-base lg:text-sm">
-          {new Date().toDateString()}
+          {new Date(review.created_at).toDateString()}
         </p>
         <div className="flex gap-2">
           {Array.from({ length: review.rating }).map((_, index) => {
@@ -46,29 +48,37 @@ const CardReview = ({ review }) => {
           </span>
         )}
       </p>
-      <Separator className="w-1/4 bg-color-1 h-[2px]" />
-      <div className="w-full flex flex-col text-base justify-center 2xl:flex-row 2xl:justify-between lg:text-sm">
-        <div className="flex flex-col items-center 2xl:items-start">
-          <div className="flex gap-x-2">
-            <p className="font-medium">Quoted Price:</p>
-            <p className="text-gray-50 font-light">${review.quoted_price}</p>
+      {review.company.business_type_id === 1 && (
+        <>
+          <Separator className="w-1/4 bg-color-1 h-[2px]" />
+          <div className="w-full flex flex-col text-base justify-center 2xl:flex-row 2xl:justify-between lg:text-sm">
+            <div className="flex flex-col items-center 2xl:items-start">
+              <div className="flex gap-x-2">
+                <p className="font-medium">Quoted Price:</p>
+                <p className="text-gray-50 font-light">
+                  ${review.quoted_price}
+                </p>
+              </div>
+              <div className="flex gap-x-2">
+                <p className="font-medium">Actual Price:</p>
+                <p className="text-gray-50 font-light">
+                  ${review.actual_price}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col items-center 2xl:items-start">
+              <div className="flex gap-x-2">
+                <p className="font-medium">Origin:</p>
+                <p className="text-gray-50 font-light">{review.origin}</p>
+              </div>
+              <div className="flex gap-x-2">
+                <p className="font-medium">Destination:</p>
+                <p className="text-gray-50 font-light">{review.destination}</p>
+              </div>
+            </div>
           </div>
-          <div className="flex gap-x-2">
-            <p className="font-medium">Actual Price:</p>
-            <p className="text-gray-50 font-light">${review.actual_price}</p>
-          </div>
-        </div>
-        <div className="flex flex-col items-center 2xl:items-start">
-          <div className="flex gap-x-2">
-            <p className="font-medium">Origin:</p>
-            <p className="text-gray-50 font-light">{review.origin}</p>
-          </div>
-          <div className="flex gap-x-2">
-            <p className="font-medium">Destination:</p>
-            <p className="text-gray-50 font-light">{review.destination}</p>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

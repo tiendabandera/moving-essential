@@ -154,6 +154,7 @@ export default {
   	}
   },
   plugins: [
+	require("tailwindcss-animate"),
     plugin(function ({ addBase, addComponents, addUtilities }) {
       addBase({});
       addComponents({
@@ -208,6 +209,5 @@ export default {
         },
       });
     }),
-      require("tailwindcss-animate")
 ],
 };

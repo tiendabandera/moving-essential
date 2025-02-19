@@ -29,6 +29,30 @@ layer(base);
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5%);
+  } 
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@theme {
+  --breakpoint-xs: 25rem;
+  --animate-float: float 3s ease-in-out infinite;  
+}
+
+.type-writer-effect::after{
+  content: '|';
+  animation: blink 0.7s infinite;
+}
+
 @utility btn_white {
   @apply border-white bg-white px-8 py-3 text-green-50;
 }
@@ -184,69 +208,6 @@ layer(base);
     font-weight: 200;
   }
 
-  .rotate-45 {
-    @apply rotate-[45deg];
-  }
-
-  .rotate-90 {
-    @apply rotate-[90deg];
-  }
-
-  .rotate-135 {
-    @apply rotate-[135deg];
-  }
-
-  .rotate-180 {
-    @apply rotate-[180deg];
-  }
-
-  .rotate-225 {
-    @apply rotate-[225deg];
-  }
-
-  .rotate-270 {
-    @apply rotate-[270deg];
-  }
-
-  .rotate-315 {
-    @apply rotate-[315deg];
-  }
-
-  .rotate-360 {
-    @apply rotate-[360deg];
-  }
-
-  .-rotate-45 {
-    @apply rotate-[-45deg];
-  }
-
-  .-rotate-90 {
-    @apply rotate-[-90deg];
-  }
-
-  .-rotate-135 {
-    @apply rotate-[-135deg];
-  }
-
-  .-rotate-180 {
-    @apply rotate-[-180deg];
-  }
-
-  .-rotate-225 {
-    @apply rotate-[-225deg];
-  }
-
-  .-rotate-270 {
-    @apply rotate-[-270deg];
-  }
-
-  .-rotate-315 {
-    @apply rotate-[-315deg];
-  }
-
-  .-rotate-360 {
-    @apply rotate-[-360deg];
-  }
 }
 
 @layer base {
@@ -312,4 +273,7 @@ layer(base);
   body {
     @apply bg-background text-foreground;  
   }  
+  button {
+    @apply cursor-pointer;
+  }
 }

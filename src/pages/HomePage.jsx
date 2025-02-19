@@ -1,5 +1,4 @@
 import SearchCompanies from "@/components/SearchCompanies";
-import curve from "../assets/img/curve.png";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -13,6 +12,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RepeaterCompanies from "@/components/RepeaterCompanies";
 import { useState } from "react";
+import TypeWriterEffect from "@/components/design/TypeWriterEffect";
+import RepeaterRealtors from "@/components/RepeaterRealtors";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("local-moving");
@@ -50,17 +51,16 @@ const HomePage = () => {
         <div className="hero-map" />
         <div className="relative z-20 flex flex-1 flex-col xl:w-1/2">
           <div>
-            <h1 className="bold-52 lg:bold-88">Compare Moving Services Near</h1>
-            <span className="bold-52 lg:bold-88 inline-block relative">
-              You Today!
-              <img
-                src={curve}
-                className="absolute top-full left-0 w-full"
-                width={624}
-                height={28}
-                alt="Curve"
-              />
-            </span>
+            <h1 className="bold-52 lg:bold-88 text-transparent bg-clip-text bg-gradient-to-r from-color-1 to-orange-300">
+              Compare
+            </h1>
+            <h2 className="bold-52 lg:bold-88 text-transparent bg-clip-text bg-gradient-to-r from-color-1 to-orange-300">
+              Moving Services
+            </h2>
+            <TypeWriterEffect
+              className="bold-52 lg:bold-88"
+              text={"Near You Today!"}
+            />
           </div>
           <p className="regular-16 mt-11 text-gray-50 xl:max-w-[520px]">
             Find reputable realtors and movers near you to ease the burden. Just
@@ -142,7 +142,9 @@ const HomePage = () => {
           <TabsContent value="local-moving">
             <RepeaterCompanies />
           </TabsContent>
-          <TabsContent value="realtors"></TabsContent>
+          <TabsContent value="realtors">
+            <RepeaterRealtors />
+          </TabsContent>
         </Tabs>
       </section>
       <section className="flex-center w-full flex-col pb-[100px]">
