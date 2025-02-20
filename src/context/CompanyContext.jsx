@@ -5,28 +5,6 @@ export class Company {
     this.data = data;
   }
 
-  async getInfo() {
-    const companyInfo = await supabase
-      .from("companies")
-      .select()
-      .eq("user_id", this.data.id)
-      .limit(1);
-
-    const service =
-      companyInfo.data[0].business_type_id === 1 ? "local_moving" : "realtors";
-
-    const serviceInfo = await supabase
-      .from(service)
-      .select()
-      .eq("company_id", companyInfo.data[0].id)
-      .limit(1);
-
-    return {
-      companyInfo: companyInfo.data[0],
-      serviceInfo: serviceInfo.data[0],
-    };
-  }
-
   async update(companyId, userId, uploadImages) {
     const setupUpload = {
       countImages: this.data.companyInfo.business_type_id === 1 ? 6 : 7,
@@ -100,6 +78,31 @@ export class Company {
     }
   }
 
+  /* GET ZONE
+  __________________________________________________ */
+
+  async getInfo() {
+    const companyInfo = await supabase
+      .from("companies")
+      .select()
+      .eq("user_id", this.data.id)
+      .limit(1);
+
+    const service =
+      companyInfo.data[0].business_type_id === 1 ? "local_moving" : "realtors";
+
+    const serviceInfo = await supabase
+      .from(service)
+      .select()
+      .eq("company_id", companyInfo.data[0].id)
+      .limit(1);
+
+    return {
+      companyInfo: companyInfo.data[0],
+      serviceInfo: serviceInfo.data[0],
+    };
+  }
+
   async getAll(offset) {
     const pageSize = 8;
 
@@ -110,37 +113,88 @@ export class Company {
       .order("created_at", { ascending: false });
   }
 
-  async getAllByBusinessType(offset, businessTypeId) {
+  async getAllByBusinessType(offset, businessTypeId, filterParams) {
     const pageSize = 8;
+    const service =
+      businessTypeId === 1 ? "local_moving!inner(*)" : "realtors!inner(*)";
 
-    const service = businessTypeId === 1 ? "local_moving(*)" : "realtors(*)";
-
-    return await supabase
+    /* return await supabase
       .from("companies")
       .select(
         `*, service:${service}, cities(name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
       )
       .eq("business_type_id", businessTypeId)
       .range(offset, offset + pageSize - 1)
-      .order("created_at", { ascending: false });
-  }
+      .order("created_at", { ascending: false }); */
 
-  async getCompanyById() {
-    return await supabase
+    let query = supabase
       .from("companies")
-      .select(`*, service:local_moving(*), cities(name)`)
-      .eq("id", this.data.id)
-      .single();
+      .select(
+        `*, service:${service}, cities!inner(name, state_id, county_name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
+      )
+      .eq("business_type_id", businessTypeId)
+      .range(offset, offset + pageSize - 1);
+
+    console.log("filtrar", filterParams);
+
+    switch (filterParams.field) {
+      case "company_name":
+        query = query.ilike("company_name", `%${filterParams.value}%`);
+        break;
+
+      case "city":
+        query = query.ilike("cities.name", `%${filterParams.value}%`);
+        break;
+
+      case "rate_type_id":
+        query = query.or(
+          `rate_type_id.eq.${filterParams.type}, rate_type_id.eq.3`,
+          {
+            referencedTable: "service",
+          }
+        );
+        break;
+
+      default:
+        break;
+    }
+
+    return await query;
   }
 
-  async getRealtorById() {
+  async getById() {
+    const service =
+      this.data.business_type_id === 1 ? "local_moving(*)" : "realtors(*)";
+
     return await supabase
       .from("companies")
       .select(
-        `*, service:realtors(*), cities(name), user_info:user_info!companies_user_id_fkey(user_metadata)`
+        `*, service:${service}, cities(name), user_info:user_info!companies_user_id_fkey(user_metadata)`
       )
       .eq("id", this.data.id)
       .single();
+  }
+
+  async getAllByBusinessTypeQueryParams(offset, businessTypeId, filterParams) {
+    const pageSize = 8;
+    const service = businessTypeId === 1 ? "local_moving(*)" : "realtors(*)";
+
+    return await supabase
+      .from("companies")
+      .select(
+        `*, service:${service}, cities!inner(name, state_id, county_name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
+      )
+      .eq("business_type_id", businessTypeId)
+      /* .eq("cities.name", filterParams.placename)*/
+      .eq("cities.state_id", filterParams.state)
+      .or(
+        `name.eq.${filterParams.placename}, county_name.eq.${filterParams.county}`,
+        {
+          referencedTable: "cities",
+        }
+      )
+      .range(offset, offset + pageSize - 1)
+      .order("created_at", { ascending: false });
   }
 
   /* REVIEWS ZONE

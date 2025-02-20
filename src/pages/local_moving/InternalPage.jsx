@@ -84,9 +84,10 @@ const InternalPage = () => {
       if (params.id) {
         const company = await createCompanyInstance({
           id: params.id,
+          business_type_id: 1,
         });
 
-        const { data, error } = await company.getCompanyById();
+        const { data, error } = await company.getById();
         if (error) navigate("/not-found");
 
         if (user && data.user_id === user.id) setOwner(true);

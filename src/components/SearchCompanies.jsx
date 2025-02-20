@@ -1,8 +1,10 @@
 import { useAuth } from "@/context/AuthContext";
 import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SearchCompanies = ({ service }) => {
+  const nativage = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [valueInput, setValueInput] = useState("");
@@ -30,7 +32,12 @@ const SearchCompanies = ({ service }) => {
         }
 
         const formattedZipcodes = zipcodes.map((zipcode) => ({
-          value: zipcode.id,
+          value: {
+            id: zipcode.id,
+            name: zipcode.name,
+            state_id: zipcode.state_id,
+            county_name: zipcode.county_name,
+          },
           label: isNumber
             ? `${zipcode.zipcodes[0]} - ${zipcode.name}, ${zipcode.state_id}`
             : `${zipcode.name}, ${zipcode.state_id}`,
@@ -48,7 +55,7 @@ const SearchCompanies = ({ service }) => {
   };
 
   const handleOptionClick = (option) => {
-    setValue(option.value);
+    setValue(option);
     setValueInput(option.label);
     setIsOpen(false);
   };
@@ -68,8 +75,9 @@ const SearchCompanies = ({ service }) => {
 
   const compareZipcode = () => {
     if (value) {
-      console.log(service);
-      console.log(`Comparando códigos postales: ${value}`);
+      nativage(
+        `/${service}?placename=${value.value.name}&county=${value.value.county_name}&state=${value.value.state_id}`
+      );
     }
   };
 
@@ -100,7 +108,7 @@ const SearchCompanies = ({ service }) => {
             {zipcodes.length > 0 ? (
               zipcodes.map((option) => (
                 <li
-                  key={option.value}
+                  key={option.value.id}
                   onClick={() => handleOptionClick(option)}
                   className={`px-4 py-2 cursor-pointer text-sm ${
                     option.value === value

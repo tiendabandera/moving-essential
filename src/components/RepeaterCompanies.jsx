@@ -5,8 +5,12 @@ import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import ShareCompany from "./ShareCompany";
 import { Heart, MessageSquareQuote, SquareArrowOutUpRight } from "lucide-react";
+import FilterSectionCompanies from "./FilterSectionCompanies";
 
-const RepeaterCompanies = () => {
+const RepeaterCompanies = ({
+  filterSection = false,
+  filterQueryParams = {},
+}) => {
   const navigate = useNavigate();
   const { createCompanyInstance } = useAuth();
 
@@ -16,20 +20,49 @@ const RepeaterCompanies = () => {
   const [hasMore, setHasMore] = useState(false); // Verifica si hay más registros
   const effectRan = useRef(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
-
+  const [filterParams, setFilterParams] = useState({}); // Almacena el filtro actual
   const company = createCompanyInstance({});
-  const fetchRecords = async (newOffset) => {
-    const { data, error } = await company.getAllByBusinessType(newOffset, 1);
 
-    if (error) {
-      console.error("Error al obtener registros:", error);
+  const fetchRecords = async (newOffset, params) => {
+    let response = {
+      data: [],
+      error: null,
+    };
+
+    //console.log("consultar registros");
+
+    if (
+      Object.keys(filterQueryParams).length > 0 &&
+      Object.keys(params).length === 0
+    ) {
+      const { data, error } = await company.getAllByBusinessTypeQueryParams(
+        newOffset,
+        1,
+        filterQueryParams
+      );
+
+      response.data = data;
+      response.error = error;
+    } else {
+      const { data, error } = await company.getAllByBusinessType(
+        newOffset,
+        1,
+        params
+      );
+
+      response.data = data;
+      response.error = error;
+    }
+
+    if (response.error) {
+      console.error("Error al obtener registros:", response.error);
       return;
     }
 
-    setRecords((prev) => [...prev, ...data]);
+    setRecords((prev) => [...prev, ...response.data]);
 
     // Si la cantidad de datos obtenidos es menor al pageSize, no hay más registros
-    if (data.length < pageSize) {
+    if (response.data.length < pageSize) {
       setHasMore(false);
     } else {
       setHasMore(true);
@@ -37,20 +70,31 @@ const RepeaterCompanies = () => {
   };
 
   useEffect(() => {
+    Object.keys(filterParams).length > 0 && fetchRecords(0, filterParams);
+
     if (!effectRan.current) {
-      fetchRecords(0);
+      fetchRecords(0, filterParams);
       effectRan.current = true; // Marca que el efecto ya corrió
     }
-  }, []);
+  }, [filterParams]);
+
+  const handleFilterChange = (value, newFilterParams) => {
+    setRecords([]); // Reinicia la lista
+    setOffset(0); // Reinicia el offset
+    setFilterParams({ value, ...newFilterParams }); // Aplica el nuevo filtro
+  };
 
   const loadMore = () => {
     const newOffset = offset + pageSize; // Calcula el nuevo punto de inicio
     setOffset(newOffset);
-    fetchRecords(newOffset);
+    fetchRecords(newOffset, filterParams);
   };
 
   return (
     <div className="flex flex-col gap-8 items-center">
+      {filterSection && (
+        <FilterSectionCompanies onFilterChange={handleFilterChange} />
+      )}
       <Section
         className={`grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4`}
         customPaddings
@@ -82,13 +126,13 @@ const RepeaterCompanies = () => {
             </div>
             <div className="flex flex-col items-center justify-center gap-1 text-center">
               <h3 className="text-xl font-semibold">{record.company_name}</h3>
-              <p className="text-base">{record.service.slogan}</p>
-              <p className="text-base">
+              <p>{record.service.slogan}</p>
+              <p>
                 <span className="font-semibold">{record.cities.name}, </span>
                 {record.state} {record.zipcode}
               </p>
-              <p className="text-base font-semibold">How we charge:</p>
-              <div className="flex text-base">
+              <p className="font-semibold">How we charge:</p>
+              <div className="flex">
                 {(record.service.rate_type_id === 2 ||
                   record.service.rate_type_id === 3) && <p>Flat rate</p>}
 
@@ -103,7 +147,7 @@ const RepeaterCompanies = () => {
             <div className="w-full flex justify-between gap-2 h-9 px-14 py-2 bg-slate-100 rounded-3xl">
               <div className="flex gap-2 items-center">
                 <Heart strokeWidth={1} className="w-6 h-6 text-red-600" />
-                <p>5</p>
+                <p className="">5</p>
               </div>
               <div className="flex gap-2 items-center">
                 <MessageSquareQuote
@@ -150,7 +194,6 @@ const RepeaterCompanies = () => {
           See more
         </Button>
       )}
-
       {selectedCompany && (
         <ShareCompany
           company={selectedCompany}
