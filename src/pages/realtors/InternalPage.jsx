@@ -105,9 +105,10 @@ const InternalPage = () => {
       if (params.id) {
         const realtorInstance = await createCompanyInstance({
           id: params.id,
+          business_type_id: 2,
         });
 
-        const { data, error } = await realtorInstance.getRealtorById();
+        const { data, error } = await realtorInstance.getById();
         if (error) navigate("/not-found");
 
         if (user && data.user_id === user.id) setOwner(true);

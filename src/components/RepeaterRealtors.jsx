@@ -11,7 +11,7 @@ import {
   SquareArrowOutUpRight,
 } from "lucide-react";
 
-const RepeaterRealtors = () => {
+const RepeaterRealtors = (filterSection = false, filterQueryParams = {}) => {
   const navigate = useNavigate();
   const { createCompanyInstance } = useAuth();
 
@@ -21,21 +21,49 @@ const RepeaterRealtors = () => {
   const [hasMore, setHasMore] = useState(false); // Verifica si hay más registros
   const effectRan = useRef(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
-
+  const [filterParams, setFilterParams] = useState({}); // Almacena el filtro actual
   const company = createCompanyInstance({});
-  const fetchRecords = async (newOffset) => {
-    const { data, error } = await company.getAllByBusinessType(newOffset, 2);
-    console.log(data);
 
-    if (error) {
-      console.error("Error al obtener registros:", error);
+  const fetchRecords = async (newOffset, params) => {
+    let response = {
+      data: [],
+      error: null,
+    };
+    /* const { data, error } = await company.getAllByBusinessType(newOffset, 2);
+    console.log(data); */
+
+    if (
+      Object.keys(filterQueryParams).length > 0 &&
+      Object.keys(params).length === 0
+    ) {
+      const { data, error } = await company.getAllByBusinessTypeQueryParams(
+        newOffset,
+        2,
+        filterQueryParams
+      );
+
+      response.data = data;
+      response.error = error;
+    } else {
+      const { data, error } = await company.getAllByBusinessType(
+        newOffset,
+        2,
+        params
+      );
+
+      response.data = data;
+      response.error = error;
+    }
+
+    if (response.error) {
+      console.error("Error al obtener registros:", response.error);
       return;
     }
 
-    setRecords((prev) => [...prev, ...data]);
+    setRecords((prev) => [...prev, ...response.data]);
 
     // Si la cantidad de datos obtenidos es menor al pageSize, no hay más registros
-    if (data.length < pageSize) {
+    if (response.data.length < pageSize) {
       setHasMore(false);
     } else {
       setHasMore(true);
@@ -43,16 +71,24 @@ const RepeaterRealtors = () => {
   };
 
   useEffect(() => {
+    Object.keys(filterParams).length > 0 && fetchRecords(0, filterParams);
+
     if (!effectRan.current) {
-      fetchRecords(0);
+      fetchRecords(0, filterParams);
       effectRan.current = true; // Marca que el efecto ya corrió
     }
-  }, []);
+  }, [filterParams]);
+
+  const handleFilterChange = (value, newFilterParams) => {
+    setRecords([]); // Reinicia la lista
+    setOffset(0); // Reinicia el offset
+    setFilterParams({ value, ...newFilterParams }); // Aplica el nuevo filtro
+  };
 
   const loadMore = () => {
     const newOffset = offset + pageSize; // Calcula el nuevo punto de inicio
     setOffset(newOffset);
-    fetchRecords(newOffset);
+    fetchRecords(newOffset, filterParams);
   };
 
   return (
