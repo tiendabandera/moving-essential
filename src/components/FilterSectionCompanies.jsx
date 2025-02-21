@@ -13,8 +13,11 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import SelectWithSearch from "./SelectWithSearch";
+import { states } from "@/constants";
 
 const FilterSectionCompanies = ({ onFilterChange }) => {
   const options = [
@@ -55,9 +58,10 @@ const FilterSectionCompanies = ({ onFilterChange }) => {
   ];
 
   const [filterType, setFilterType] = useState({});
-  const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
+  const [value, setValue] = useState(null);
   const [disabledInput, setDisabledInput] = useState(false); // Estado para deshabilitar el input
+  const [hiddenInput, setHiddenInput] = useState(false);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -74,8 +78,22 @@ const FilterSectionCompanies = ({ onFilterChange }) => {
   }, [value, disabledInput]);
 
   useEffect(() => {
-    if (filterType.field === "rate_type_id") setDisabledInput(true);
-    else setDisabledInput(false);
+    switch (filterType.field) {
+      case "rate_type_id":
+        onFilterChange(value, filterType);
+        setDisabledInput(true);
+        setHiddenInput(true);
+        break;
+
+      case "state":
+        setHiddenInput(true);
+        break;
+
+      default:
+        setHiddenInput(false);
+        setDisabledInput(false);
+        break;
+    }
   }, [filterType]);
 
   return (
@@ -200,11 +218,29 @@ const FilterSectionCompanies = ({ onFilterChange }) => {
         <input
           type="text"
           placeholder="Filter company..."
-          className="w-full lg:w-[500px] h-9 rounded-2xl border border-slate-200 px-3 py-1 text-base shadow-xs transition-colors placeholder:text-slate-500 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-slate-950 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+          className={`w-full lg:w-[500px] h-9 rounded-2xl border border-slate-200 px-3 py-1 text-base shadow-xs transition-colors placeholder:text-slate-500 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-slate-950 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm ${
+            hiddenInput ? "hidden" : "block"
+          }`}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           disabled={disabledInput}
         />
+
+        {hiddenInput && (
+          <SelectWithSearch
+            id="state"
+            label="state"
+            name="state"
+            readOnly={false}
+            options={states}
+            required={false}
+            placeholder="Select state"
+            className={"!rounded-2xl"}
+            onOptionChange={(selectedValue) => {
+              setValue(selectedValue);
+            }}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { ChevronDown, Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useController } from "react-hook-form";
+import { useController, useForm } from "react-hook-form";
 
 const SelectWithSearch = ({
   id,
@@ -10,24 +10,31 @@ const SelectWithSearch = ({
   className,
   readOnly,
   placeholder,
-  control,
+  control = null,
+  onOptionChange, // Nueva prop opcional
 }) => {
-  /* const classes = `option-hover appearance-none h-9 w-full rounded-md border border-slate-200 px-3 
-      py-1 text-base md:text-sm shadow-sm transition-colors placeholder:text-slate-500 
-      focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-slate-950 
-      ${className || ""}
-      ${readOnly ? "pointer-events-none bg-slate-400/20" : "bg-transparent"}`; */
-
   const classes = `w-full h-9 bg-white border border-slate-200 rounded-md shadow-xs ${
     className || ""
   } ${readOnly ? "pointer-events-none bg-slate-400/20" : "bg-transparent"}`;
 
-  const {
+  /* const {
     field: { value, onChange },
     fieldState: { error },
   } = useController({
     name,
     control,
+    rules: { required: `${label} is required` },
+  }); */
+
+  // Si no se pasa un control, creamos uno interno con useForm.
+  // Así siempre tendremos un control válido para useController.
+  const internalForm = useForm({ defaultValues: { [name]: "" } });
+  const effectiveControl = control || internalForm.control;
+
+  // useController se llama siempre con un control válido.
+  const { field, fieldState } = useController({
+    name,
+    control: effectiveControl,
     rules: { required: `${label} is required` },
   });
 
@@ -36,7 +43,7 @@ const SelectWithSearch = ({
   const inputRef = useRef(null);
   const dropdownRef = useRef(null);
 
-  const selectedOption = options.find((opt) => opt.value === value);
+  const selectedOption = options.find((opt) => opt.value === field.value);
 
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(searchTerm.toLowerCase())
@@ -61,7 +68,10 @@ const SelectWithSearch = ({
   };
 
   const handleOptionClick = (optionValue) => {
-    onChange(optionValue);
+    field.onChange(optionValue); // Se actualiza el valor usando field.onChange (ya sea el de React Hook Form o el interno)
+    if (onOptionChange) {
+      onOptionChange(optionValue); // Llamamos a la función externa si existe
+    }
     setSearchTerm("");
     setIsOpen(false);
   };
@@ -105,7 +115,7 @@ const SelectWithSearch = ({
                   key={option.value}
                   onClick={() => handleOptionClick(option.value)}
                   className={`px-4 py-2 cursor-pointer text-sm ${
-                    option.value === value
+                    option.value === field.value
                       ? "bg-blue-50 text-color-1"
                       : "text-gray-900 hover:bg-blue-50 hover:text-color-1"
                   }`}
@@ -121,9 +131,9 @@ const SelectWithSearch = ({
           </ul>
         </div>
       )}
-      {error && (
+      {fieldState.error && (
         <span className="text-red-500 text-xs font-semibold">
-          {error.message}
+          {fieldState.error.message}
         </span>
       )}
     </div>

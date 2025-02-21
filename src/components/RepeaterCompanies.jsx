@@ -29,8 +29,6 @@ const RepeaterCompanies = ({
       error: null,
     };
 
-    //console.log("consultar registros");
-
     if (
       Object.keys(filterQueryParams).length > 0 &&
       Object.keys(params).length === 0

@@ -113,6 +113,19 @@ export class Company {
       .order("created_at", { ascending: false });
   }
 
+  async getById() {
+    const service =
+      this.data.business_type_id === 1 ? "local_moving(*)" : "realtors(*)";
+
+    return await supabase
+      .from("companies")
+      .select(
+        `*, service:${service}, cities(name), user_info:user_info!companies_user_id_fkey(user_metadata)`
+      )
+      .eq("id", this.data.id)
+      .single();
+  }
+
   async getAllByBusinessType(offset, businessTypeId, filterParams) {
     const pageSize = 8;
     const service =
@@ -135,8 +148,6 @@ export class Company {
       .eq("business_type_id", businessTypeId)
       .range(offset, offset + pageSize - 1);
 
-    console.log("filtrar", filterParams);
-
     switch (filterParams.field) {
       case "company_name":
         query = query.ilike("company_name", `%${filterParams.value}%`);
@@ -155,6 +166,10 @@ export class Company {
         );
         break;
 
+      case "state":
+        query = query.eq("state", `${filterParams.value}`);
+        break;
+
       default:
         break;
     }
@@ -162,39 +177,53 @@ export class Company {
     return await query;
   }
 
-  async getById() {
-    const service =
-      this.data.business_type_id === 1 ? "local_moving(*)" : "realtors(*)";
-
-    return await supabase
-      .from("companies")
-      .select(
-        `*, service:${service}, cities(name), user_info:user_info!companies_user_id_fkey(user_metadata)`
-      )
-      .eq("id", this.data.id)
-      .single();
-  }
-
   async getAllByBusinessTypeQueryParams(offset, businessTypeId, filterParams) {
     const pageSize = 8;
     const service = businessTypeId === 1 ? "local_moving(*)" : "realtors(*)";
 
-    return await supabase
+    const isNumber = !isNaN(filterParams.placename);
+    const filter = isNumber
+      ? `zipcodes.cs.{${filterParams.placename}}, zipcodes_text.ilike.${filterParams.placename}%`
+      : `name.eq.${filterParams.placename}`;
+
+    const res = await supabase
       .from("companies")
       .select(
         `*, service:${service}, cities!inner(name, state_id, county_name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
       )
       .eq("business_type_id", businessTypeId)
-      /* .eq("cities.name", filterParams.placename)*/
       .eq("cities.state_id", filterParams.state)
-      .or(
-        `name.eq.${filterParams.placename}, county_name.eq.${filterParams.county}`,
-        {
-          referencedTable: "cities",
-        }
-      )
+      .or(`${filter}, county_name.eq.${filterParams.county}`, {
+        referencedTable: "cities",
+      })
       .range(offset, offset + pageSize - 1)
       .order("created_at", { ascending: false });
+
+    // Ordenamos los resultados
+    res.data.sort((a, b) => {
+      if (
+        !isNumber &&
+        a.cities.name === filterParams.placename &&
+        b.cities.name !== filterParams.placename
+      ) {
+        return -1;
+      }
+
+      if (
+        isNumber &&
+        a.zipcode === filterParams.placename &&
+        b.zipcode !== filterParams.placename
+      ) {
+        return -1;
+      }
+
+      return 0;
+    });
+
+    return {
+      data: res.data,
+      error: res.error,
+    };
   }
 
   /* REVIEWS ZONE
