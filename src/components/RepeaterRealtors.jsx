@@ -10,8 +10,12 @@ import {
   MessageSquareQuote,
   SquareArrowOutUpRight,
 } from "lucide-react";
+import FilterSectionCompanies from "./FilterSectionCompanies";
 
-const RepeaterRealtors = (filterSection = false, filterQueryParams = {}) => {
+const RepeaterRealtors = ({
+  filterSection = false,
+  filterQueryParams = {},
+}) => {
   const navigate = useNavigate();
   const { createCompanyInstance } = useAuth();
 
@@ -93,6 +97,12 @@ const RepeaterRealtors = (filterSection = false, filterQueryParams = {}) => {
 
   return (
     <div className="flex flex-col gap-8 items-center">
+      {filterSection && (
+        <FilterSectionCompanies
+          onFilterChange={handleFilterChange}
+          businessTypeId={2}
+        />
+      )}
       <Section
         className={`grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4`}
         customPaddings

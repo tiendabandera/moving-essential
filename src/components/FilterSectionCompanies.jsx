@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 import SelectWithSearch from "./SelectWithSearch";
 import { states } from "@/constants";
 
-const FilterSectionCompanies = ({ onFilterChange }) => {
+const FilterSectionCompanies = ({ onFilterChange, businessTypeId = 1 }) => {
   const options = [
     {
       field: "company_name",
@@ -56,6 +56,12 @@ const FilterSectionCompanies = ({ onFilterChange }) => {
       label: "Both",
     },
   ];
+
+  businessTypeId == 2 &&
+    options.unshift({
+      field: "realtor_name",
+      label: "Name",
+    });
 
   const [filterType, setFilterType] = useState({});
   const [inputValue, setInputValue] = useState("");
@@ -155,48 +161,50 @@ const FilterSectionCompanies = ({ onFilterChange }) => {
                   />
                 </DropdownMenuItem>
               ))}
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Pricing type</DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    {pricingOptions.map((option) => (
-                      <DropdownMenuItem
-                        key={option.label}
-                        textValue={option.field}
-                        onSelect={(e) => {
-                          setValue("");
-                          setInputValue("");
-                          setDisabledInput(true);
-                          const currentValue = e.target.textContent;
+              {businessTypeId === 1 && (
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Pricing type</DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      {pricingOptions.map((option) => (
+                        <DropdownMenuItem
+                          key={option.label}
+                          textValue={option.field}
+                          onSelect={(e) => {
+                            setValue("");
+                            setInputValue("");
+                            setDisabledInput(true);
+                            const currentValue = e.target.textContent;
 
-                          if (
-                            filterType.label &&
-                            filterType.label === currentValue
-                          ) {
-                            setFilterType({});
-                          } else {
-                            setFilterType(
-                              pricingOptions.find(
-                                (option) => option.label === currentValue
-                              )
-                            );
-                          }
-                        }}
-                      >
-                        {option.label}
-                        <Check
-                          className={cn(
-                            "ml-auto",
-                            filterType?.label == option.label
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
+                            if (
+                              filterType.label &&
+                              filterType.label === currentValue
+                            ) {
+                              setFilterType({});
+                            } else {
+                              setFilterType(
+                                pricingOptions.find(
+                                  (option) => option.label === currentValue
+                                )
+                              );
+                            }
+                          }}
+                        >
+                          {option.label}
+                          <Check
+                            className={cn(
+                              "ml-auto",
+                              filterType?.label == option.label
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem

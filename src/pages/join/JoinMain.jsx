@@ -11,11 +11,11 @@ const JoinMain = () => {
       {!hasSubRoute ? (
         <section className="flex-col flex-center overflow-hidden bg-feature-bg bg-center bg-no-repeat lg:-mt-5">
           <div className="max-container padding-container relative w-full flex justify-end">
-            <div className="flex flex-1 lg:min-h-[900px]">
+            <div className="flex flex-1 lg:min-h-[800px]">
               <img
                 src="/assets/img/phone.png"
                 alt="phone"
-                width={440}
+                width={380}
                 height={1000}
                 className="feature-phone"
               />

@@ -134,7 +134,7 @@ export class Company {
     /* return await supabase
       .from("companies")
       .select(
-        `*, service:${service}, cities(name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
+        `*, service:${service}, cities!inner(name, state_id, county_name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
       )
       .eq("business_type_id", businessTypeId)
       .range(offset, offset + pageSize - 1)
@@ -168,6 +168,12 @@ export class Company {
 
       case "state":
         query = query.eq("state", `${filterParams.value}`);
+        break;
+
+      case "realtor_name":
+        query = query
+          .ilike("user_info.user_metadata->>name", `%${filterParams.value}%`)
+          .not("user_info", "is", null);
         break;
 
       default:

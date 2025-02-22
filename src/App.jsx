@@ -25,6 +25,7 @@ _________________________________________ */
 import { Toaster } from "./components/ui/toaster";
 import MembershipPage from "./pages/MembershipPage";
 import useScrollToHash from "./hooks/useScrollToHash";
+import ServicesPage from "./pages/ServicesPage";
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -45,6 +46,7 @@ const AppContent = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/membership" element={<MembershipPage />} />
+        <Route path="/services" element={<ServicesPage />} />
         <Route path="/join" element={<JoinPages.JoinMain />}>
           <Route path="company" element={<JoinPages.JoinCompanyPage />} />
           <Route path="realtors" element={<JoinPages.JoinRealtorsPage />} />
