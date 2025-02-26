@@ -1,9 +1,27 @@
+import { House, UserRound } from "lucide-react";
+
 export const navigation = [
   {
     id: "0",
     title: "Services",
     url: "/services",
-    visibleIsAuthenticated: true,
+    visibleIsAuthenticated: true,    
+    options: [
+      {
+        id: "0",
+        title: "Residential/Local Moving",
+        description: "Compare now Residential/Local moving",
+        url: "/local-moving/compare",
+        icon: House
+      },
+      {
+        id: "1",
+        title: "Realtors",
+        description: "Compare now Realtors",
+        url: "/realtors/compare",
+        icon: UserRound
+      }
+    ]
   },
   {
     id: "1",

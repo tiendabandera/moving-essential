@@ -26,6 +26,7 @@ import { Toaster } from "./components/ui/toaster";
 import MembershipPage from "./pages/MembershipPage";
 import useScrollToHash from "./hooks/useScrollToHash";
 import ServicesPage from "./pages/ServicesPage";
+import Footer from "./components/Footer";
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -38,69 +39,89 @@ const AppContent = () => {
     !location.pathname.includes("/user/");
 
   return (
-    <>
+    <div className="app-container">
       <PageTitleManager />
       {showHeader && <Header />}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/membership" element={<MembershipPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/join" element={<JoinPages.JoinMain />}>
-          <Route path="company" element={<JoinPages.JoinCompanyPage />} />
-          <Route path="realtors" element={<JoinPages.JoinRealtorsPage />} />
-        </Route>
-        <Route path="/authorization" element={<NotAuthorizationPage />} />
-        <Route element={<ProtectedRoute roles={[roles.admin, roles.user]} />}>
-          <Route path="/user/dashboard" element={<UserPages.DashboardPage />} />
-        </Route>
-        <Route
-          element={<ProtectedRoute roles={[roles.admin, roles.company]} />}
-        >
-          <Route path="/company" element={<CompaniesPages.Layout />}>
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/membership" element={<MembershipPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/join" element={<JoinPages.JoinMain />}>
+            <Route path="company" element={<JoinPages.JoinCompanyPage />} />
+            <Route path="realtors" element={<JoinPages.JoinRealtorsPage />} />
+          </Route>
+          <Route path="/authorization" element={<NotAuthorizationPage />} />
+          <Route element={<ProtectedRoute roles={[roles.admin, roles.user]} />}>
             <Route
-              path="dashboard"
-              //element={<CompaniesPages.DashboardPage />}
-              element={
-                user && user.user_metadata.realtor_name ? (
-                  <CompaniesPages.DashboardRealtorPage />
-                ) : (
-                  <CompaniesPages.DashboardPage />
-                )
-              }
+              path="/user/dashboard"
+              element={<UserPages.DashboardPage />}
             />
-            <Route path="data" element={<CompaniesPages.DataPage />} />
-            <Route
-              path="notifications"
-              element={<CompaniesPages.NotificationsPage />}
-            />
-            <Route path="leads">
+          </Route>
+          <Route
+            element={<ProtectedRoute roles={[roles.admin, roles.company]} />}
+          >
+            <Route path="/company" element={<CompaniesPages.Layout />}>
               <Route
-                path="phone-pool"
-                element={<CompaniesPages.PhonePoolPage />}
+                path="dashboard"
+                //element={<CompaniesPages.DashboardPage />}
+                element={
+                  user && user.user_metadata.realtor_name ? (
+                    <CompaniesPages.DashboardRealtorPage />
+                  ) : (
+                    <CompaniesPages.DashboardPage />
+                  )
+                }
               />
-              <Route path="my-leads" element={<CompaniesPages.MyLeadsPage />} />
+              <Route path="data" element={<CompaniesPages.DataPage />} />
+              <Route
+                path="notifications"
+                element={<CompaniesPages.NotificationsPage />}
+              />
+              <Route path="leads">
+                <Route
+                  path="phone-pool"
+                  element={<CompaniesPages.PhonePoolPage />}
+                />
+                <Route
+                  path="my-leads"
+                  element={<CompaniesPages.MyLeadsPage />}
+                />
+              </Route>
             </Route>
           </Route>
-        </Route>
-        <Route>
-          <Route path="/local-moving" element={<LocalMovingPages.AllPage />} />
-          <Route
-            path="/local-moving/:id"
-            element={<LocalMovingPages.InternalPage />}
-          />
-        </Route>
-        <Route>
-          <Route path="/realtors" element={<RealtorsPages.AllPage />} />
-          <Route
-            path="/realtors/:id"
-            element={<RealtorsPages.InternalPage />}
-          />
-        </Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </>
+          <Route>
+            <Route
+              path="/local-moving"
+              element={<LocalMovingPages.AllPage />}
+            />
+            <Route
+              path="/local-moving/compare"
+              element={<LocalMovingPages.ComparePage />}
+            />
+            <Route
+              path="/local-moving/:id"
+              element={<LocalMovingPages.InternalPage />}
+            />
+          </Route>
+          <Route>
+            <Route path="/realtors" element={<RealtorsPages.AllPage />} />
+            <Route
+              path="/realtors/compare"
+              element={<RealtorsPages.ComparePage />}
+            />
+            <Route
+              path="/realtors/:id"
+              element={<RealtorsPages.InternalPage />}
+            />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
+      {showHeader && <Footer />}
+    </div>
   );
 };
 

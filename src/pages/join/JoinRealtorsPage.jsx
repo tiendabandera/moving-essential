@@ -129,7 +129,7 @@ const JoinRealtorsPage = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen gap-4">
+    <div className="flex flex-col w-full gap-4">
       <div className="w-full xl:px-36 -mt-1 px-14 pt-14 flex flex-col lg:flex-row lg:mt-[1px] justify-center bg-color-1 gap-10">
         <div className="flex flex-col items-center justify-center text-center lg:pb-14 lg:items-start lg:text-left lg:w-[60%] xl:w-[70%] gap-10">
           <h1 className="font-extrabold h1 text-white xl:w-[75%]">
@@ -161,7 +161,7 @@ const JoinRealtorsPage = () => {
           />
         </div>
       </div>
-      <Section className={"flex flex-col gap-10"}>
+      <Section className={"gap-10"}>
         <h1 className="h3 font-bold text-center">
           How Moving Essential Works for You
         </h1>
@@ -176,7 +176,7 @@ const JoinRealtorsPage = () => {
           ))}
         </div>
       </Section>
-      <Section className={`bg-[#f1f1f1]`} id="form-join-realtors">
+      <Section classNameParent={`bg-[#f1f1f1] py-10`} id="form-join-realtors">
         <h1 className="h3 font-bold text-center">
           How Moving Essential Works for You
         </h1>

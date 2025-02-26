@@ -54,4 +54,31 @@ export class User {
       .from("user_roles")
       .insert({ user_id: this.data.id, role: "user" });
   }
+
+  /* LIKES ZONE
+  _________________________________________ */
+
+  async getLikes() {
+    return await supabase.from("likes").select("*");
+  }
+
+  async getVerifiedLike(company_id) {
+    return await supabase
+      .from("likes")
+      .select("*")
+      .eq("company_id", company_id)
+      .eq("user_id", this.data.id);
+  }
+
+  async unlikeCompany(company_id) {
+    await supabase.rpc("decrement_likes", { company_id_input: company_id });
+    return await supabase.from("likes").delete().eq("company_id", company_id);
+  }
+
+  async likeCompany(company_id) {
+    await supabase.rpc("increment_likes", { company_id_input: company_id });
+    return await supabase
+      .from("likes")
+      .insert({ company_id: company_id, user_id: this.data.id });
+  }
 }

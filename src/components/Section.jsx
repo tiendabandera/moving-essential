@@ -1,12 +1,14 @@
-const Section = ({ className, id, customPaddings, children }) => {
+const Section = ({ classNameParent, className, id, children }) => {
   return (
-    <div
-      id={id}
-      className={`       
-      ${customPaddings || `px-6 py-10 xl:px-36 lg:py-18 xl:py-10`} 
+    <div className={classNameParent}>
+      <section
+        id={id}
+        className={`    
+      max-container padding-container flex flex-col         
       ${className || ""}`}
-    >
-      {children}
+      >
+        {children}
+      </section>
     </div>
   );
 };

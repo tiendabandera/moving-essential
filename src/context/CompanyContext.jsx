@@ -180,7 +180,7 @@ export class Company {
         break;
     }
 
-    return await query;
+    return await query.order("likes_count", { ascending: false });
   }
 
   async getAllByBusinessTypeQueryParams(offset, businessTypeId, filterParams) {
@@ -203,7 +203,7 @@ export class Company {
         referencedTable: "cities",
       })
       .range(offset, offset + pageSize - 1)
-      .order("created_at", { ascending: false });
+      .order("likes_count", { ascending: false });
 
     // Ordenamos los resultados
     res.data.sort((a, b) => {
