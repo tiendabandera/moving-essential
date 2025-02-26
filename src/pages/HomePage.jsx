@@ -14,6 +14,7 @@ import RepeaterCompanies from "@/components/RepeaterCompanies";
 import { useState } from "react";
 import TypeWriterEffect from "@/components/design/TypeWriterEffect";
 import RepeaterRealtors from "@/components/RepeaterRealtors";
+import Section from "@/components/Section";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("local-moving");
@@ -47,7 +48,7 @@ const HomePage = () => {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="max-container padding-container flex flex-col gap-20 py-10 pb-20 md:gap-28 lg:py-20 xl:flex-row">
+      <Section className="gap-20 py-10 pb-20 md:gap-28 lg:py-20 xl:flex-row">
         <div className="hero-map" />
         <div className="relative z-20 flex flex-1 flex-col xl:w-1/2">
           <div>
@@ -126,7 +127,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
       <section className="max-container padding-container flex flex-col items-center gap-10 mb-40">
         <Separator className="" />
         <SearchCompanies service={activeTab} />
@@ -174,7 +175,7 @@ const HomePage = () => {
                     <item.icon strokeWidth={1} width={25} height={25} />
                   </div>
                   <h2 className="text-xl font-semibold mt-2">{item.title}</h2>
-                  <p className="text-base mt-2 text-gray-50 lg:mt-[10px] lg:bg-none text-justify">
+                  <p className="text-sm mt-2 text-gray-50 lg:mt-[10px] lg:bg-none text-justify">
                     {item.description}
                   </p>
                 </li>

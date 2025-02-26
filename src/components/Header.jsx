@@ -2,11 +2,22 @@ import ButtonGradient from "../assets/svg/ButtonGradiant";
 
 import Button from "./Button";
 import { navigation, roles } from "../constants";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { HamburgerMenu } from "./design/Header";
 import MenuSvg from "../assets/svg/MenuSvg";
 import { useAuth } from "../context/AuthContext";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { Button as ButtonShadcn } from "./ui/button";
+import { ChevronDown } from "lucide-react";
+import CustomIcon from "./design/CustomIcon";
 
 function Header() {
   const pathname = useLocation().pathname;
@@ -15,6 +26,8 @@ function Header() {
 
   const toggleNavigation = () => setOpenNavigation(!openNavigation);
   const submitLogout = () => logout();
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -45,21 +58,69 @@ function Header() {
                       if (isAuthenticated) return item.visibleIsAuthenticated;
                       return item;
                     })
-                    .map((item) => (
-                      <Link
-                        to={item.url}
-                        key={item.id}
-                        className={`block relative text-2xl uppercase text-n-1 px-4 py-2 transition-colors hover:text-color-1 ${
-                          item.onlyMobile ? "lg:hidden" : ""
-                        } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
-                          item.url === pathname
-                            ? "z-2 lg:text-color-1"
-                            : "lg:text-n-1"
-                        } lg:leading-5 xl:px-12`}
-                      >
-                        {item.title}
-                      </Link>
-                    ))}
+                    .map((item) =>
+                      item.options ? (
+                        /* <Link
+                          to={item.url}
+                          key={item.id}
+                          className={`block relative text-2xl uppercase text-n-1 px-4 py-2 transition-colors hover:text-color-1 ${
+                            item.onlyMobile ? "lg:hidden" : ""
+                          } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
+                            item.url === pathname
+                              ? "z-2 lg:text-color-1"
+                              : "lg:text-n-1"
+                          } lg:leading-5 xl:px-12`}
+                        >
+                          {item.title}
+                        </Link> */
+                        <DropdownMenu key={item.id}>
+                          <DropdownMenuTrigger asChild>
+                            <ButtonShadcn
+                              variant="ghost"
+                              className={`text-white text-2xl font-light mb-4 lg:mb-0 lg:font-semibold lg:text-xs hover:bg-transparent uppercase hover:text-color-1 active:outline-none ${
+                                item.onlyMobile ? "lg:hidden" : ""
+                              }`}
+                            >
+                              {item.title}
+                              <ChevronDown className="h-4 w-4" />
+                            </ButtonShadcn>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="p-4 rounded-2xl">
+                            {item.options.map((option) => (
+                              <DropdownMenuItem
+                                key={option.id}
+                                className="cursor-pointer font-medium p-4 rounded-xl"
+                                onSelect={() => navigate(option.url)}
+                              >
+                                <div className="flex items-center gap-4 justify-between">
+                                  <CustomIcon icon={option.icon} />
+                                  <div className="flex flex-col font-semibold">
+                                    {option.title}
+                                    <span className="font-extralight">
+                                      {option.description}
+                                    </span>
+                                  </div>
+                                </div>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      ) : (
+                        <Link
+                          to={item.url}
+                          key={item.id}
+                          className={`block relative text-2xl uppercase text-n-1 px-4 py-2 transition-colors hover:text-color-1 ${
+                            item.onlyMobile ? "lg:hidden" : ""
+                          } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
+                            item.url === pathname
+                              ? "z-2 lg:text-color-1"
+                              : "lg:text-n-1"
+                          } lg:leading-5 xl:px-12`}
+                        >
+                          {item.title}
+                        </Link>
+                      )
+                    )}
                   {isAuthenticated && (
                     <>
                       <a

@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 
 import { FaStar, FaTiktok } from "react-icons/fa";
-import { CiHeart, CiShare1 } from "react-icons/ci";
+//import { CiHeart, CiShare1 } from "react-icons/ci";
 import { FaXTwitter } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -38,11 +38,15 @@ import { Button } from "@/components/ui/button";
 import { TbPointFilled } from "react-icons/tb";
 import FormReview from "@/components/forms/FormReview";
 import CarouselReview from "@/components/CarouselReview";
+import LikeCompany from "@/components/LikeCompany";
+import { AnonymousView } from "@/components/AnonymousView";
 
 const InternalPage = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const { createCompanyInstance, user } = useAuth();
+  const { createCompanyInstance, user, createUserInstance } = useAuth();
+  const [isOpenAnonymous, setIsOpenAnonymous] = useState(null);
+  const [userLikes, setUserLikes] = useState(new Set());
 
   const [company, setCompany] = useState(null);
   const [open, setOpen] = useState(false);
@@ -80,6 +84,13 @@ const InternalPage = () => {
   ];
 
   useEffect(() => {
+    const fetchLike = async (user, company_id) => {
+      const userInstance = createUserInstance(user);
+      const { data } = await userInstance.getLikes(company_id);
+
+      setUserLikes(new Set(data.map((like) => like.company_id)));
+    };
+
     const loadCompany = async () => {
       if (params.id) {
         const company = await createCompanyInstance({
@@ -90,7 +101,10 @@ const InternalPage = () => {
         const { data, error } = await company.getById();
         if (error) navigate("/not-found");
 
-        if (user && data.user_id === user.id) setOwner(true);
+        if (user) {
+          fetchLike(user, params.id);
+          if (data.user_id === user.id) setOwner(true);
+        }
 
         setCompany(data);
         const resReviews = await company.getAllReviews();
@@ -125,7 +139,7 @@ const InternalPage = () => {
   return (
     company && (
       <div>
-        <div className="mt-[-3px] md:max-container lg:pt-20 lg:padding-container">
+        <div className="mt-[-3px] max-container lg:pt-20 lg:padding-container">
           <Carousel className="border border-gray-100 lg:rounded-3xl">
             <CarouselContent>
               {company.images.map((img, index) => (
@@ -153,20 +167,24 @@ const InternalPage = () => {
                 <h1 className="text-3xl font-semibold">
                   {company.company_name}
                 </h1>
-                <div className="flex items-center gap-2">
+                <div className="flex items-start gap-2">
+                  <LikeCompany
+                    company={company}
+                    userLikes={userLikes}
+                    setUserLikes={setUserLikes}
+                    isLiked={userLikes.has(company.id)}
+                    setIsOpenAnonymous={setIsOpenAnonymous}
+                    className={"flex flex-col items-center"}
+                    classNameText={"text-sm font-normal text-gray-50"}
+                  />
                   <div className="flex flex-col items-center">
-                    <CiHeart color="#ff0000" className="w-8 h-8" />
-                    <span className="mt-[-4px] text-xs font-medium text-gray-50">
-                      1
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <CiShare1
-                      className="w-7 h-7 cursor-pointer"
+                    <SquareArrowOutUpRight
+                      strokeWidth={1}
+                      className="w-6 h-6 cursor-pointer"
                       onClick={() => handleCopyLink()}
                     />
                     <span
-                      className={`text-xs font-medium text-gray-50 ${
+                      className={`mt-[1px] text-sm font-normal text-gray-50 ${
                         copied ? "text-color-1!" : ""
                       }`}
                     >
@@ -273,7 +291,10 @@ const InternalPage = () => {
             </div>
             <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               <div className="lg:col-span-2">
-                <FormReview company={company} />
+                <FormReview
+                  company={company}
+                  setIsOpenAnonymous={setIsOpenAnonymous}
+                />
               </div>
               <div className="w-full flex flex-col items-center relative animate-float">
                 <img
@@ -306,6 +327,12 @@ const InternalPage = () => {
             <FormGetQuote className={" shadow-none!"} />
           </DialogContent>
         </Dialog>
+        {isOpenAnonymous && (
+          <AnonymousView
+            isOpen={isOpenAnonymous}
+            onClose={setIsOpenAnonymous}
+          />
+        )}
       </div>
     )
   );

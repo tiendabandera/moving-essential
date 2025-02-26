@@ -6,15 +6,15 @@ import { useEffect, useRef, useState } from "react";
 import { Loader2, Star } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { AnonymousView } from "../AnonymousView";
+//import { AnonymousView } from "../AnonymousView";
 
-const FormReview = ({ className, company }) => {
+const FormReview = ({ className, company, setIsOpenAnonymous }) => {
   const classes = `w-full relative flex flex-col gap-6 items-center justify-center p-10 border border-gray-200 rounded-xl shadow-2xl ${
     className || ""
   }`;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isOpenAnonymous, setIsOpenAnonymous] = useState(null);
+  //const [isOpenAnonymous, setIsOpenAnonymous] = useState(null);
   //const [rating, setRating] = useState(0);
 
   /* Funcion para controlar el rating
@@ -417,9 +417,9 @@ const FormReview = ({ className, company }) => {
           </div>
         </div>
       </form>
-      {isOpenAnonymous && (
+      {/* {isOpenAnonymous && (
         <AnonymousView isOpen={isOpenAnonymous} onClose={setIsOpenAnonymous} />
-      )}
+      )} */}
     </div>
   );
 };

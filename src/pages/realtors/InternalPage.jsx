@@ -35,7 +35,7 @@ import {
 } from "lucide-react";
 
 import { FaStar, FaTiktok } from "react-icons/fa";
-import { CiHeart, CiShare1 } from "react-icons/ci";
+import { CiShare1 } from "react-icons/ci";
 import { FaXTwitter } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -44,6 +44,8 @@ import { TbPointFilled } from "react-icons/tb";
 import FormReview from "@/components/forms/FormReview";
 import CarouselReview from "@/components/CarouselReview";
 import { homeTypes } from "@/constants";
+import { AnonymousView } from "@/components/AnonymousView";
+import LikeCompany from "@/components/LikeCompany";
 
 export const GetCosultationButton = ({ phone }) => {
   return (
@@ -63,7 +65,9 @@ export const GetCosultationButton = ({ phone }) => {
 const InternalPage = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const { createCompanyInstance, user } = useAuth();
+  const { createCompanyInstance, user, createUserInstance } = useAuth();
+  const [isOpenAnonymous, setIsOpenAnonymous] = useState(null);
+  const [userLikes, setUserLikes] = useState(new Set());
 
   const [realtor, setCompany] = useState(null);
   const [open, setOpen] = useState(false);
@@ -101,6 +105,13 @@ const InternalPage = () => {
   ];
 
   useEffect(() => {
+    const fetchLike = async (user, company_id) => {
+      const userInstance = createUserInstance(user);
+      const { data } = await userInstance.getLikes(company_id);
+
+      setUserLikes(new Set(data.map((like) => like.company_id)));
+    };
+
     const loadRealtor = async () => {
       if (params.id) {
         const realtorInstance = await createCompanyInstance({
@@ -111,7 +122,10 @@ const InternalPage = () => {
         const { data, error } = await realtorInstance.getById();
         if (error) navigate("/not-found");
 
-        if (user && data.user_id === user.id) setOwner(true);
+        if (user) {
+          fetchLike(user, params.id);
+          if (data.user_id === user.id) setOwner(true);
+        }
 
         setCompany(data);
         const resReviews = await realtorInstance.getAllReviews();
@@ -265,12 +279,15 @@ const InternalPage = () => {
                   <p className="font-medium text-lg">{realtor.company_name}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="flex flex-col items-center">
-                    <CiHeart color="#ff0000" className="w-8 h-8" />
-                    <span className="mt-[-4px] text-xs font-medium text-gray-50">
-                      1
-                    </span>
-                  </div>
+                  <LikeCompany
+                    company={realtor}
+                    userLikes={userLikes}
+                    setUserLikes={setUserLikes}
+                    isLiked={userLikes.has(realtor.id)}
+                    setIsOpenAnonymous={setIsOpenAnonymous}
+                    className={"flex flex-col items-center"}
+                    classNameText={"text-sm font-normal text-gray-50"}
+                  />
                   <div className="flex flex-col items-center">
                     <CiShare1
                       className="w-7 h-7 cursor-pointer"
@@ -430,7 +447,10 @@ const InternalPage = () => {
             </div>
             <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               <div className="lg:col-span-2">
-                <FormReview company={realtor} />
+                <FormReview
+                  company={realtor}
+                  setIsOpenAnonymous={setIsOpenAnonymous}
+                />
               </div>
               <div className="w-full flex flex-col items-center relative animate-float">
                 <img
@@ -463,6 +483,12 @@ const InternalPage = () => {
             <FormGetQuote className={" shadow-none!"} />
           </DialogContent>
         </Dialog>
+        {isOpenAnonymous && (
+          <AnonymousView
+            isOpen={isOpenAnonymous}
+            onClose={setIsOpenAnonymous}
+          />
+        )}
       </div>
     )
   );

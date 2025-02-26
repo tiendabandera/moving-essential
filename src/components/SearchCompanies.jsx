@@ -103,7 +103,7 @@ const SearchCompanies = ({ service }) => {
         </div>
       </div>
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+        <div className="absolute z-[9999] w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
           <ul className="py-1 max-h-60 overflow-auto">
             {zipcodes.length > 0 ? (
               zipcodes.map((option) => (

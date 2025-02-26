@@ -128,37 +128,6 @@ const JoinCompanyPage = () => {
 
   return (
     <div className="flex flex-col w-full  gap-4 relative overflow-hidden">
-      {/* <div className="w-full xl:px-36 -mt-1 px-14 pt-14 flex flex-col xl:flex-row lg:flex-row justify-center bg-color-1 gap-10">
-        <div className="flex flex-col items-center justify-center text-center lg:pb-14 lg:items-start lg:text-left lg:w-[60%] xl:w-[70%] gap-10">
-          <h1 className="font-extrabold h1 text-white xl:w-[60%]">
-            Learn How to Increase Your Business With{" "}
-            <span className="inline-block relative">
-              Moving Essential!
-              <img
-                src={curve}
-                className="absolute top-full left-0 w-full"
-                width={624}
-                height={28}
-                alt="Curve"
-              />
-            </span>
-          </h1>
-          <p className="font-light xl:text-lg xl:w-2/3">
-            Join our trusted network to showcase your moving services and real
-            estate expertise to thousands of potential clients.
-          </p>
-          <Button white href="/join/real-estate">
-            Start listing your services
-          </Button>
-        </div>
-        <div className="flex justify-center lg:w-[45%] xl:w-[30%]">
-          <img
-            src="/assets/img/hero-join-company.png"
-            alt="Join real estate company"
-            className="w-2/4 md:w-1/2 lg:w-full"
-          />
-        </div>
-      </div> */}
       <section className="max-container padding-container flex xl:flex-row flex-col gap-5 relative z-0 ">
         <div className="flex flex-col gap-10 py-10 lg:py-20 justify-center">
           <h1 className="bold-52 lg:bold-88 relative max-w-[520px] lg:max-w-[680px]">
@@ -215,7 +184,7 @@ const JoinCompanyPage = () => {
           <div className="absolute top-1/2 md:top-[40%] xl:-top-24 xl:-right-1/2 -right-1/4 bg-[url('/assets/img/mask-1.png')] g bg-repeat-round -z-10 w-full xl:h-screen h-[390px] md:h-[590px] overflow-hidden" />
         </div>
       </section>
-      <Section className={"flex flex-col gap-10"}>
+      <Section className={"gap-10"}>
         <h1 className="h3 font-bold text-center">
           How Moving Essential Works for You
         </h1>
@@ -230,7 +199,7 @@ const JoinCompanyPage = () => {
           ))}
         </div>
       </Section>
-      <Section className={`bg-[#f1f1f1]`} id="form-join-company">
+      <Section id="form-join-company" classNameParent={"bg-[#f1f1f1] py-10"}>
         <h1 className="h3 font-bold text-center">
           How Moving Essential Works for You
         </h1>

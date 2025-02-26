@@ -6,18 +6,21 @@ import { Link, useNavigate } from "react-router-dom";
 import ShareCompany from "./ShareCompany";
 import {
   GraduationCap,
-  Heart,
   MessageSquareQuote,
   SquareArrowOutUpRight,
 } from "lucide-react";
 import FilterSectionCompanies from "./FilterSectionCompanies";
+import LikeCompany from "./LikeCompany";
+import { AnonymousView } from "./AnonymousView";
 
 const RepeaterRealtors = ({
   filterSection = false,
   filterQueryParams = {},
 }) => {
   const navigate = useNavigate();
-  const { createCompanyInstance } = useAuth();
+  const { createCompanyInstance, createUserInstance, user } = useAuth();
+  const [isOpenAnonymous, setIsOpenAnonymous] = useState(null);
+  const [userLikes, setUserLikes] = useState(new Set());
 
   const pageSize = 8; // Cantidad de registros por carga
   const [records, setRecords] = useState([]); // Lista de registros
@@ -95,6 +98,19 @@ const RepeaterRealtors = ({
     fetchRecords(newOffset, filterParams);
   };
 
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchLikes = async (user) => {
+      const userInstance = createUserInstance(user);
+      const { data } = await userInstance.getLikes();
+
+      setUserLikes(new Set(data.map((like) => like.company_id)));
+    };
+
+    fetchLikes(user);
+  }, [user]);
+
   return (
     <div className="flex flex-col gap-8 items-center">
       {filterSection && (
@@ -103,92 +119,95 @@ const RepeaterRealtors = ({
           businessTypeId={2}
         />
       )}
-      <Section
-        className={`grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4`}
-        customPaddings
-      >
-        {records.map((record, index) => (
-          <div
-            key={index}
-            className="flex flex-col gap-3 items-center justify-center p-6 cursor-pointer shadow-2xs border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
-            onClick={() => {
-              navigate(`/realtors/${record.id}`);
-            }}
-          >
-            <div className="relative w-full">
-              <img
-                src={record.images[0]}
-                alt=""
-                className="w-full h-70 object-cover rounded-2xl"
-              />
-              <div className="absolute top-2 right-2 rounded-lg p-1 border border-gray-10 bg-white shadow-lg">
-                <SquareArrowOutUpRight
-                  strokeWidth={1}
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedCompany(record);
-                  }}
+      <Section>
+        <div className="grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {records.map((record, index) => (
+            <div
+              key={index}
+              className="flex flex-col gap-3 items-center justify-center p-6 cursor-pointer shadow-2xs border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
+              onClick={() => {
+                navigate(`/realtors/${record.id}`);
+              }}
+            >
+              <div className="relative w-full">
+                <img
+                  src={record.images[0]}
+                  alt=""
+                  className="w-full h-70 object-cover rounded-2xl"
                 />
+                <div className="absolute top-2 right-2 rounded-lg p-1 border border-gray-10 bg-white shadow-lg">
+                  <SquareArrowOutUpRight
+                    strokeWidth={1}
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCompany(record);
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col items-center justify-center gap-1 text-center">
-              <h3 className="text-xl font-semibold">
-                {record.user_info.user_metadata.realtor_name}
-              </h3>
-              <p className="text-base">{record.company_name}</p>
-              <div className="flex gap-3 items-center">
-                <GraduationCap strokeWidth={2} className="w-5 h-5" />
-                <p className="text-base">{record.service.title_work}</p>
-              </div>
+              <div className="flex flex-col items-center justify-center gap-1 text-center">
+                <h3 className="text-xl font-semibold">
+                  {record.user_info.user_metadata.realtor_name}
+                </h3>
+                <p className="text-base">{record.company_name}</p>
+                <div className="flex gap-3 items-center">
+                  <GraduationCap strokeWidth={2} className="w-5 h-5" />
+                  <p className="text-base">{record.service.title_work}</p>
+                </div>
 
-              <p className="text-base">
-                <span className="font-semibold">{record.cities.name}, </span>
-                {record.state} {record.zipcode}
-              </p>
-            </div>
-            <div className="w-full flex justify-between gap-2 h-9 px-14 py-2 bg-slate-100 rounded-3xl">
-              <div className="flex gap-2 items-center">
-                <Heart strokeWidth={1} className="w-6 h-6 text-red-600" />
-                <p>5</p>
+                <p className="text-base">
+                  <span className="font-semibold">{record.cities.name}, </span>
+                  {record.state} {record.zipcode}
+                </p>
               </div>
-              <div className="flex gap-2 items-center">
-                <MessageSquareQuote
-                  strokeWidth={1}
-                  className="w-6 h-6 text-blue-600"
+              <div className="w-full flex justify-between gap-2 h-9 px-14 py-2 bg-slate-100 rounded-3xl">
+                <LikeCompany
+                  company={record}
+                  isLiked={user ? userLikes.has(record.id) : false}
+                  setUserLikes={setUserLikes}
+                  userLikes={userLikes}
+                  setIsOpenAnonymous={setIsOpenAnonymous}
+                />
+                <div className="flex gap-2 items-center">
+                  <MessageSquareQuote
+                    strokeWidth={1}
+                    className="w-6 h-6 text-blue-600"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/realtors/${record.id}#form-reviews`);
+                    }}
+                  />
+                  <p>{record.reviews.length}</p>
+                </div>
+              </div>
+              <div className="w-full flex flex-col gap-1">
+                <Button
+                  className="w-full bg-color-1 border border-color-1 rounded-full hover:bg-transparent hover:text-color-1"
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/realtors/${record.id}#form-reviews`);
+                    window.location.href = `tel:${record.phone}`;
                   }}
-                />
-                <p>{record.reviews.length}</p>
+                >
+                  Call me
+                </Button>
+                <Button
+                  className="w-full bg-black border border-black rounded-full hover:bg-transparent hover:text-black"
+                  asChild
+                >
+                  <Link
+                    to={`/realtors/${record.id}`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Contact
+                  </Link>
+                </Button>
               </div>
             </div>
-            <div className="w-full flex flex-col gap-1">
-              <Button
-                className="w-full bg-color-1 border border-color-1 rounded-full hover:bg-transparent hover:text-color-1"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.location.href = `tel:${record.phone}`;
-                }}
-              >
-                Call me
-              </Button>
-              <Button
-                className="w-full bg-black border border-black rounded-full hover:bg-transparent hover:text-black"
-                asChild
-              >
-                <Link
-                  to={`/realtors/${record.id}`}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  Contact
-                </Link>
-              </Button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </Section>
+
       {hasMore && (
         <Button
           className="bg-color-1 h-12 border border-color-1 rounded-full hover:bg-transparent hover:text-color-1"
@@ -197,12 +216,14 @@ const RepeaterRealtors = ({
           See more
         </Button>
       )}
-
       {selectedCompany && (
         <ShareCompany
           company={selectedCompany}
           onClose={() => setSelectedCompany(null)}
         />
+      )}
+      {isOpenAnonymous && (
+        <AnonymousView isOpen={isOpenAnonymous} onClose={setIsOpenAnonymous} />
       )}
     </div>
   );
