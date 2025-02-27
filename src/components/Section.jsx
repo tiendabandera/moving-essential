@@ -1,6 +1,6 @@
 const Section = ({ classNameParent, className, id, children }) => {
   return (
-    <div className={classNameParent}>
+    <div className={`py-10 ${classNameParent || ""}`}>
       <section
         id={id}
         className={`    

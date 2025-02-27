@@ -32,9 +32,9 @@ function FeatureCard({ feature }) {
             <div className="rounded-full p-4 bg-gradient-to-r from-color-1 to-orange-300">
               <feature.icon className="w-7 h-7 text-white" />
             </div>
-            <div className="text-xl font-semibold text-gray-900">
-              <h2>{feature.title}</h2>
-            </div>
+            <h4 className="text-xl font-semibold text-gray-900">
+              {feature.title}
+            </h4>
           </div>
           <p className="mt-4 text-sm/6 text-gray-950/75">
             {feature.description}
