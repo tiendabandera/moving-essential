@@ -35,8 +35,8 @@ const AppContent = () => {
   useScrollToHash(location);
 
   const showHeader =
-    !location.pathname.includes("/company/") &&
-    !location.pathname.includes("/user/");
+    !location.pathname.startsWith("/company/") &&
+    !location.pathname.startsWith("/user/");
 
   return (
     <div className="app-container">
