@@ -261,7 +261,7 @@ const InternalPage = () => {
             </div>
             <div className="hidden md:block lg:col-span-1 relative">
               <div className="sticky top-32">
-                <FormGetQuote />
+                <FormGetQuote company={company} />
               </div>
             </div>
           </div>
@@ -324,7 +324,7 @@ const InternalPage = () => {
               <DialogTitle className="text-2xl"></DialogTitle>
               <DialogDescription />
             </DialogHeader>
-            <FormGetQuote className={" shadow-none!"} />
+            <FormGetQuote className={"shadow-none!"} company={company} />
           </DialogContent>
         </Dialog>
         {isOpenAnonymous && (

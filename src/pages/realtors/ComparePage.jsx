@@ -84,7 +84,7 @@ const ComparePage = () => {
             support you need every step of the way.
           </p>
         </div>
-        <SearchCompanies service="realtor" />
+        <SearchCompanies service="realtors" />
       </Section>
       <Section>
         <div className="relative isolate">

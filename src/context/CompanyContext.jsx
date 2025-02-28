@@ -256,4 +256,13 @@ export class Company {
   async createReview() {
     return await supabase.from("reviews").insert(this.data).select();
   }
+
+  /* GET A QUOTE
+  __________________________________________________ */
+
+  async createQuote() {
+    return await supabase.functions.invoke("sendEmailToCompany", {
+      body: this.data,
+    });
+  }
 }

@@ -4,18 +4,20 @@ import TextArea from "../TextArea";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
-const FormGetQuote = ({ className }) => {
+const FormGetQuote = ({ className, company }) => {
   const classes = `w-full flex flex-col gap-6 items-center justify-center p-10 border border-gray-200 rounded-xl shadow-2xl ${
     className || ""
   }`;
 
+  const { createCompanyInstance } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const inputs = [
     {
-      id: "full_name",
-      name: "full_name",
+      id: "fullname",
+      name: "fullname",
       type: "text",
       placeholder: "Enter your full name",
       label: "Full name",
@@ -55,7 +57,7 @@ const FormGetQuote = ({ className }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      full_name: "",
+      fullname: "",
       email: "",
       phone: "",
       message: "",
@@ -64,7 +66,16 @@ const FormGetQuote = ({ className }) => {
 
   const onSubmit = handleSubmit(async (values) => {
     setIsSubmitting(true);
-    console.log(values);
+
+    const companyInstance = createCompanyInstance({
+      company,
+      data: values,
+      templateId: 1,
+    });
+
+    const res = await companyInstance.createQuote();
+
+    console.log(res);
 
     setTimeout(() => {
       setIsSubmitting(false);

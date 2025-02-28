@@ -275,7 +275,7 @@ const JoinCompanyPage = () => {
                       What&apos;s new
                     </span>
                   </div>
-                  <h1 className="mt-6 bold-52 lg:bold-88 font-semibold tracking-tight text-pretty text-gray-900">
+                  <h1 className="mt-6 bold-52 lg:bold-88 tracking-tight text-pretty text-gray-900">
                     Learn How to Increase Your Business.
                   </h1>
                   <p className="mt-6 text-base/7 text-gray-600">
