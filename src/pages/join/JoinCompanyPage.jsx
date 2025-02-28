@@ -1,15 +1,6 @@
-import curve from "../../assets/img/curve.png";
 import Button from "@/components/Button";
 import Section from "@/components/Section";
-import CardBenefit from "@/components/design/CardBenefit";
-import {
-  Building2,
-  ChevronRightIcon,
-  HeartHandshakeIcon,
-  Image,
-  Stars,
-  UserRoundSearch,
-} from "lucide-react";
+import { Building2, ChartNoAxesCombined, Image } from "lucide-react";
 import CustomIcon from "@/components/design/CustomIcon";
 import FormJoinCompany from "@/components/forms/FormJoinCompany";
 import { useForm } from "react-hook-form";
@@ -19,7 +10,6 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import InputUploadImage from "@/components/InputUploadImage";
 import BentoCard from "@/components/design/BentoCard";
-import { LinkedAvatars } from "@/components/design/LinkedAvatars";
 import { LogoCluster } from "@/components/design/LogoCluster";
 import { LogoTimeline } from "@/components/design/LogoTimeline";
 
@@ -94,27 +84,6 @@ const JoinCompanyPage = () => {
       },
     },
   });
-
-  const benefits = [
-    {
-      icon: UserRoundSearch,
-      title: "Reach Thousands of Potential Clients",
-      description:
-        "We simplify your search for movers near you by providing a comprehensive list of reliable moving companies near you. Our curated directory helps you find the best moving companies in your area, ensuring your belongings are in trusted hands.",
-    },
-    {
-      icon: HeartHandshakeIcon,
-      title: "Marketing and SEO Support",
-      description:
-        "Get the advantage of our marketing resources and SEO-driven strategies that boost your profile visibility to attract more natural traffic.",
-    },
-    {
-      icon: Stars,
-      title: "Boost Your Credibility",
-      description:
-        "We simplify your search for movers near you by providing a comprehensive list of reliable moving companies near you. Our curated directory helps you find the best moving companies in your area, ensuring your belongings are in trusted hands.",
-    },
-  ];
 
   const {
     isAuthenticated,
@@ -294,14 +263,14 @@ const JoinCompanyPage = () => {
         </form>
       </Section>
     </div> */
-    <div className="">
-      <Section>
+    <div>
+      <Section className={"lg:pt-10"}>
         <div className="bg-white">
-          <div className="relative isolate overflow-hidden bg-linear-to-b from-indigo-100/20">
+          <div className="relative isolate overflow-hidden bg-linear-to-b from-indigo-100/20 rounded-tr-4xl">
             <div className="pb-24 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 ">
-              <div className="px-6 lg:px-0 lg:pt-4 ">
+              <div className="px-6 lg:px-0">
                 <div className="max-w-lg">
-                  <div className="mt-20 sm:mt-10">
+                  <div className="sm:mt-10">
                     <span className="inline-flex space-x-6 rounded-full bg-color-1/10 px-3 py-1 text-sm/6 font-semibold text-color-1 ring-1 ring-color-1/10 ring-inset">
                       What&apos;s new
                     </span>
@@ -323,7 +292,7 @@ const JoinCompanyPage = () => {
                   </Button>
                 </div>
               </div>
-              <div className="mt-20 sm:mt-10">
+              <div className="mt-20 lg:mt-0">
                 <div
                   className="absolute inset-y-0 right-1/2 -z-10 -mr-10 w-[200%] skew-x-[-30deg] bg-white ring-1 shadow-xl shadow-indigo-600/10 ring-indigo-50 md:-mr-20 lg:-mr-36"
                   aria-hidden="true"
@@ -336,24 +305,37 @@ const JoinCompanyPage = () => {
                     />
                     <div className="relative px-6 pt-8 sm:pt-16 md:pr-0 md:pl-16">
                       <div className="mx-auto max-w-2xl md:mx-0 md:max-w-none">
-                        {/* <div className="w-screen overflow-hidden rounded-tl-xl bg-gray-900">
-                          <div className="flex bg-gray-800/40 ring-1 ring-white/5">
-                            <div className="-mb-px flex text-sm/6 font-medium text-gray-400">
-                              <div className="border-r border-b border-r-white/10 border-b-white/20 bg-white/5 px-4 py-2 text-white">
-                                NotificationSetting.jsx
-                              </div>
-                              <div className="border-r border-gray-600/10 px-4 py-2">
-                                App.jsx
-                              </div>
-                            </div>
-                          </div>
-                          <div className="px-6 pt-6 pb-14">
-                            
-                          </div>
-                        </div> */}
                         <img
                           src="/assets/img/login.png"
                           alt="Join Us Residential/Local Moving"
+                        />
+                      </div>
+                      <div className="hidden flex-col items-center p-3 sm:flex absolute right-[60%] top-[10%] rounded-2xl animate-float bg-linear-to-br from-yellow-200 from-15% to-amber-500 to-80% shadow-lg shadow-amber-500/60">
+                        <img
+                          src="/assets/img/medal.png"
+                          alt="Quality Service"
+                          className="size-20"
+                        />
+                        <p className="font-medium text-sm text-white">
+                          Quality Service
+                        </p>
+                      </div>
+                      <div className="hidden flex-col items-center size-20 sm:flex absolute right-[10%] bottom-[30%] rounded-full animate-float bg-linear-to-br from-red-200 from-10% to-red-500 to-80% shadow-inner shadow-red-500 ">
+                        <img
+                          src="/assets/img/cohete.png"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="hidden flex-col gap-3 p-3 sm:flex absolute right-[70%] bottom-[25%] animate-float bg-white/40 rounded-2xl">
+                        <div className="flex gap-2 items-end">
+                          <p className="font-medium text-sm leading-none">
+                            Growth
+                          </p>
+                          <ChartNoAxesCombined className="size-5" />
+                        </div>
+                        <img
+                          src="/assets/img/grafica-3.png"
+                          className="size-40 rounded-2xl lg:rounded-xl lg:size-20 xl:size-40"
                         />
                       </div>
                       <div
@@ -369,7 +351,7 @@ const JoinCompanyPage = () => {
           </div>
         </div>
       </Section>
-      <Section classNameParent={"pt-30"} className={"gap-4"}>
+      <Section className={"gap-4"} classNameParent={"-mt-20"}>
         <div>
           <span className="inline-flex space-x-6 rounded-full bg-color-1/10 px-3 py-1 text-sm/6 font-semibold text-color-1 ring-1 ring-color-1/10 ring-inset">
             Next steps
@@ -402,7 +384,7 @@ const JoinCompanyPage = () => {
           ))}
         </div>
       </Section>
-      <Section classNameParent={"pt-30"} className={"gap-4"}>
+      <Section className={"gap-4"}>
         <div>
           <span className="inline-flex space-x-6 rounded-full bg-color-1/10 px-3 py-1 text-sm/6 font-semibold text-color-1 ring-1 ring-color-1/10 ring-inset">
             Advantages Signing Up
@@ -445,7 +427,7 @@ const JoinCompanyPage = () => {
           />
         </div>
       </Section>
-      <Section classNameParent={"pt-30"} className={"gap-4"}>
+      <Section className={"gap-4"}>
         <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 text-center shadow-2xl sm:rounded-3xl sm:px-16">
           <h2 className="mx-auto max-w-2xl bold-40 lg:bold-64 tracking-tight text-white">
             Why Moving Essential Is Right For My Company!
@@ -468,7 +450,7 @@ const JoinCompanyPage = () => {
           </div>
         </div>
       </Section>
-      <Section id="form-join-company" classNameParent={"pt-30 py-10"}>
+      <Section id="form-join-company">
         <h2 className="max-w-2xl bold-40 lg:bold-64 tracking-tight text-gray-900">
           Sign me up!
         </h2>

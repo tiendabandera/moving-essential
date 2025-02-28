@@ -1,6 +1,16 @@
-const Section = ({ classNameParent, className, id, children }) => {
+const Section = ({
+  classNameParent,
+  className,
+  id,
+  children,
+  customPadding,
+}) => {
   return (
-    <div className={`py-10 ${classNameParent || ""}`}>
+    <div
+      className={`${customPadding || "py-10 lg:py-16"} ${
+        classNameParent || ""
+      }`}
+    >
       <section
         id={id}
         className={`    
