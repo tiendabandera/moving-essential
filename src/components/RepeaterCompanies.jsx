@@ -111,7 +111,7 @@ const RepeaterCompanies = ({
       {filterSection && (
         <FilterSectionCompanies onFilterChange={handleFilterChange} />
       )}
-      <Section>
+      <Section customPadding>
         <div className="grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {records.map((record, index) => (
             <div
