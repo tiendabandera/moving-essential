@@ -75,12 +75,10 @@ const FormGetQuote = ({ className, company }) => {
 
     const res = await companyInstance.createQuote();
 
-    console.log(res);
-
-    setTimeout(() => {
+    if (!res.error) {
       setIsSubmitting(false);
       reset();
-    }, 3000);
+    }
   });
 
   return (

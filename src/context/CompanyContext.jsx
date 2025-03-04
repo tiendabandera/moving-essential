@@ -261,8 +261,27 @@ export class Company {
   __________________________________________________ */
 
   async createQuote() {
+    const insert = await supabase.from("leads").insert({
+      full_name: this.data.data.fullname,
+      email: this.data.data.email,
+      phone: this.data.data.phone,
+      message: this.data.data.message,
+      company_id: this.data.company.id,
+    });
+
+    if (insert.error) return insert.error;
+
     return await supabase.functions.invoke("sendEmailToCompany", {
       body: this.data,
+    });
+  }
+
+  /* ANALYTICS
+  __________________________________________________ */
+  async submitAnalytics(field_name) {
+    return await supabase.rpc("update_or_insert_analytics", {
+      p_company_id: this.data.id,
+      p_field_name: field_name,
     });
   }
 }

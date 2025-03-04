@@ -16,6 +16,7 @@ import { AnonymousView } from "./AnonymousView";
 const RepeaterRealtors = ({
   filterSection = false,
   filterQueryParams = {},
+  className = "",
 }) => {
   const navigate = useNavigate();
   const { createCompanyInstance, createUserInstance, user } = useAuth();
@@ -119,7 +120,7 @@ const RepeaterRealtors = ({
           businessTypeId={2}
         />
       )}
-      <Section customPadding>
+      <Section customPadding className={className}>
         <div className="grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {records.map((record, index) => (
             <div

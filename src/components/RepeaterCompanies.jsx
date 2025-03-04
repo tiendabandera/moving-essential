@@ -12,6 +12,7 @@ import LikeCompany from "./LikeCompany";
 const RepeaterCompanies = ({
   filterSection = false,
   filterQueryParams = {},
+  className = "",
 }) => {
   const navigate = useNavigate();
   const { createCompanyInstance, createUserInstance, user } = useAuth();
@@ -111,7 +112,7 @@ const RepeaterCompanies = ({
       {filterSection && (
         <FilterSectionCompanies onFilterChange={handleFilterChange} />
       )}
-      <Section customPadding>
+      <Section customPadding className={className}>
         <div className="grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {records.map((record, index) => (
             <div

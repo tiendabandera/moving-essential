@@ -1,5 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CustomIcon from "@/components/design/CustomIcon";
 import FormGetQuote from "@/components/forms/FormGetQuote";
@@ -55,6 +55,8 @@ const InternalPage = () => {
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
   const [ownerButtonText, setOwnerButtonText] = useState("Get more reviews");
+  const companyInstanceRef = useRef(null); // Evita re-creación de instancia
+  const analyticsSentRef = useRef(false); // Controla si `submitAnalytics` ya se ejecutó
 
   const socialNetworks = [
     {
@@ -83,6 +85,13 @@ const InternalPage = () => {
     },
   ];
 
+  const submitAnalytics = async (param) => {
+    if (companyInstanceRef.current && !analyticsSentRef.current) {
+      analyticsSentRef.current = true; // Marca que ya se envió la analítica
+      await companyInstanceRef.current.submitAnalytics(param);
+    }
+  };
+
   useEffect(() => {
     const fetchLike = async (user, company_id) => {
       const userInstance = createUserInstance(user);
@@ -92,34 +101,43 @@ const InternalPage = () => {
     };
 
     const loadCompany = async () => {
-      if (params.id) {
-        const company = await createCompanyInstance({
-          id: params.id,
-          business_type_id: 1,
-        });
+      if (!params.id || companyInstanceRef.current) return;
 
-        const { data, error } = await company.getById();
-        if (error) navigate("/not-found");
+      const company = await createCompanyInstance({
+        id: params.id,
+        business_type_id: 1,
+      });
 
-        if (user) {
-          fetchLike(user, params.id);
-          if (data.user_id === user.id) setOwner(true);
-        }
+      companyInstanceRef.current = company; // Almacena la instancia solo una vez
 
-        setCompany(data);
-        const resReviews = await company.getAllReviews();
-        const totalReviews = resReviews.data.length;
+      const { data, error } = await company.getById();
 
-        if (totalReviews > 0) {
-          const totalRating = resReviews.totalRating;
-          const average = (totalRating / totalReviews).toFixed(1);
-
-          setReviews(resReviews.data);
-          setAverageRating(average);
-        }
-
-        document.title = data.company_name; //Cambiar el titulo de la pagina
+      if (error) {
+        navigate("/not-found");
+        return;
       }
+
+      setCompany(data);
+
+      if (user) {
+        fetchLike(user, params.id);
+        if (data.user_id === user.id) setOwner(true);
+      }
+      //setCompanyInstance(company); // Guardar la instancia de la empresa
+
+      const resReviews = await company.getAllReviews();
+      const totalReviews = resReviews.data.length;
+
+      if (totalReviews > 0) {
+        const totalRating = resReviews.totalRating;
+        const average = (totalRating / totalReviews).toFixed(1);
+
+        setReviews(resReviews.data);
+        setAverageRating(average);
+      }
+
+      document.title = data.company_name; //Cambiar el titulo de la pagina
+      submitAnalytics("internal_page");
     };
     loadCompany();
   }, [user, params]);
@@ -296,7 +314,7 @@ const InternalPage = () => {
                   setIsOpenAnonymous={setIsOpenAnonymous}
                 />
               </div>
-              <div className="w-full flex flex-col items-center relative animate-float">
+              {/* <div className="w-full flex flex-col items-center relative animate-float">
                 <img
                   src="/assets/img/form-review-2.png"
                   alt="form-review"
@@ -314,6 +332,13 @@ const InternalPage = () => {
                     Tell us about your experience
                   </p>
                 </div>
+              </div> */}
+              <div className="w-full h-1/2 animate-float border border-gray-200 rounded-xl shadow-2xl">
+                <img
+                  src={company.images[0]}
+                  alt={company.name}
+                  className="rounded-xl w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>

@@ -6,15 +6,15 @@ import {
   ChevronRight,
   Handshake,
   Headset,
+  House,
   Search,
+  Truck,
 } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RepeaterCompanies from "@/components/RepeaterCompanies";
 import { useState } from "react";
-import TypeWriterEffect from "@/components/design/TypeWriterEffect";
 import RepeaterRealtors from "@/components/RepeaterRealtors";
-import Section from "@/components/Section";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("local-moving");
@@ -48,7 +48,7 @@ const HomePage = () => {
 
   return (
     <div className="relative overflow-hidden">
-      <Section className="gap-20 py-10 md:gap-28 lg:py-20 xl:flex-row">
+      {/* <Section className="gap-20 py-10 md:gap-28 lg:py-20 xl:flex-row">
         <div className="hero-map" />
         <div className="relative z-20 flex flex-1 flex-col xl:w-1/2">
           <div>
@@ -127,7 +127,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </Section>
+      </Section> */}
       <section className="max-container padding-container flex flex-col items-center gap-10 mb-40">
         <Separator className="" />
         <SearchCompanies service={activeTab} />
@@ -136,15 +136,25 @@ const HomePage = () => {
           className="w-full"
           onValueChange={setActiveTab}
         >
-          <TabsList className="grid grid-cols-2 mb-10">
-            <TabsTrigger value="local-moving">Local Moving</TabsTrigger>
-            <TabsTrigger value="realtors">Realtors</TabsTrigger>
+          <TabsList className="w-fit h-fit grid grid-cols-2 mb-10">
+            <TabsTrigger value="local-moving">
+              <div className="flex flex-col items-center">
+                <Truck className="size-7" strokeWidth={1.2} />
+                <p className="!text-xs">Local Moving</p>
+              </div>
+            </TabsTrigger>
+            <TabsTrigger value="realtors">
+              <div className="flex flex-col items-center">
+                <House className="size-7" strokeWidth={1.2} />
+                <p className="!text-xs">Realtors</p>
+              </div>
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="local-moving">
-            <RepeaterCompanies />
+            <RepeaterCompanies className="!px-0" />
           </TabsContent>
           <TabsContent value="realtors">
-            <RepeaterRealtors />
+            <RepeaterRealtors className="!px-0" />
           </TabsContent>
         </Tabs>
       </section>
