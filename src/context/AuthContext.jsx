@@ -4,6 +4,7 @@ import { Company } from "./CompanyContext";
 import { User } from "./UserContext";
 //import Cookies from "js-cookie";
 import { registerRequest } from "../api/auth";
+import { decodeJWT } from "@/constants";
 
 export const AuthContext = createContext();
 
@@ -81,7 +82,13 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      setUser(res.data.user);
+      const jwt = res.data.session.access_token;
+      const decoded = decodeJWT(jwt);
+
+      setUser({
+        ...res.data.session.user,
+        profile_picture: decoded.profile_picture,
+      });
       setIsAuthenticated(true);
     } catch (error) {
       console.error(error);
@@ -254,7 +261,13 @@ export const AuthProvider = ({ children }) => {
         const session = await supabase.auth.getSession();
 
         if (session.data.session && session.data.session.user) {
-          setUser(session.data.session.user);
+          const jwt = session.data.session.access_token;
+          const decoded = decodeJWT(jwt);
+
+          setUser({
+            ...session.data.session.user,
+            profile_picture: decoded.profile_picture,
+          });
           setIsAuthenticated(true);
         }
       } catch (error) {
