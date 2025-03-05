@@ -128,8 +128,7 @@ const HomePage = () => {
           </div>
         </div>
       </Section> */}
-      <section className="max-container padding-container flex flex-col items-center gap-10 mb-40">
-        <Separator className="" />
+      <section className="max-container padding-container flex flex-col items-center gap-10 mb-40 pt-10">
         <SearchCompanies service={activeTab} />
         <Tabs
           defaultValue="local-moving"

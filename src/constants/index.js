@@ -172,3 +172,9 @@ export const homeTypes = [
   { value: "split-level-home", label: "Split-Level Home" },
   { value: "all", label: "All" },
 ];
+
+export function decodeJWT(token) {
+  const [header, payload, signature] = token.split(".");
+  const decodedPayload = JSON.parse(atob(payload));
+  return decodedPayload;
+}
