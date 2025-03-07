@@ -1,67 +1,65 @@
-import { House, UserRound } from "lucide-react";
+import { Book, Box, House, MessageCircleMore, Pin, Rocket, UserRound, UserRoundPlus } from "lucide-react";
 
-export const navigation = [
-  {
-    id: "0",
-    title: "Services",
-    url: "/services",
-    visibleIsAuthenticated: true,    
-    options: [
-      {
-        id: "0",
-        title: "Residential/Local Moving",
-        description: "Compare now Residential/Local moving",
-        url: "/local-moving/compare",
-        icon: House
-      },
-      {
-        id: "1",
-        title: "Realtors",
-        description: "Compare now Realtors",
-        url: "/realtors/compare",
-        icon: UserRound
-      }
-    ]
-  },
-  {
-    id: "1",
-    title: "blog",
-    url: "/blog",
-    visibleIsAuthenticated: true,
-  },
-  {
-    id: "2",
-    title: "About",
-    url: "/about",
-    visibleIsAuthenticated: true,
-  },
-  {
-    id: "3",
-    title: "FAQs",
-    url: "/faq",
-    visibleIsAuthenticated: true,
-  },
-  {
-    id: "4",
-    title: "Tips & Tricks",
-    url: "/tips",
-    visibleIsAuthenticated: true,
-  },
-  {
-    id: "5",
-    title: "Join Us",
-    url: "/register",
-    onlyMobile: true,
-    visibleIsAuthenticated: false,
-  },
-  {
-    id: "6",
-    title: "Sign in",
-    url: "/login",
-    onlyMobile: true,
-    visibleIsAuthenticated: false,
-  },
-];
+export const navigation = {
+  profile: [
+    {
+      id: 1,
+      label: "Profile",      
+      icon: UserRound,
+    }
+  ],
+  main: [
+    {
+      id: 1,
+      label: "Services",
+      href: "/services",
+      icon: Box,        
+      options: [
+        {
+          id: 0,
+          label: "Residential/Local Moving",        
+          href: "/local-moving/compare",
+          icon: House
+        },
+        {
+          id: 1,
+          label: "Realtors",
+          href: "/realtors/compare",
+          icon: UserRound
+        }
+      ]
+    }, 
+    {
+      id: 2,
+      label: "Blog",
+      href: "https://www.movingessential.com/blog",
+      icon: Book,
+    },
+    {
+      id: 3,
+      label: "FAQs",
+      href: "/blog",
+      icon: MessageCircleMore,
+    },
+    {
+      id: 4,
+      label: "Tips & Tricks",
+      href: "/blog",
+      icon: Pin,
+    }
+  ],
+  signup: [{
+    id: "join-us",
+    label: "Join Us!",  
+    href: "/join",    
+    icon: Rocket,
+  }, {
+    id: "register",
+    label: "Register now",  
+    href: "/register",    
+    icon: UserRoundPlus,
+  }]
+};
 
 export const roles = {
   user: "user",

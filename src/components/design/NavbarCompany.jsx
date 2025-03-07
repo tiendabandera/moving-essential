@@ -1,9 +1,15 @@
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useAuth } from "@/context/AuthContext";
 import { Menu, Search } from "lucide-react";
 import SidebarRoutesCompany from "../SidebarRoutesCompany";
-import company from "@/pages/company";
 
 const NavbarCompany = () => {
   const { user, userInfo } = useAuth();
@@ -16,6 +22,10 @@ const NavbarCompany = () => {
             <Menu strokeWidth={2} className="w-6 h-6" />
           </SheetTrigger>
           <SheetContent side="left">
+            <SheetHeader>
+              <SheetTitle />
+              <SheetDescription />
+            </SheetHeader>
             <SidebarRoutesCompany />
           </SheetContent>
         </Sheet>

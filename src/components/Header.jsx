@@ -15,20 +15,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import {
-  CircleUser,
-  House,
-  Menu,
-  Power,
-  User,
-  UserRound,
-  X,
-} from "lucide-react";
+import { House, Menu, Power, UserRound, X } from "lucide-react";
 import CustomIcon from "./design/CustomIcon";
 
-import { Separator } from "./ui/separator";
 import { AnimatePresence, motion } from "framer-motion";
-import { Button } from "./ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
+
+import { Separator } from "./ui/separator";
+import Button from "./Button";
+import { navigation } from "@/constants";
+import SidebarItems from "./SidebarItems";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -39,6 +42,7 @@ function Header() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const yeard = new Date().getFullYear();
 
   const toggleNavigation = () => setOpenNavigation(!openNavigation);
   const submitLogout = () => logout();
@@ -82,7 +86,7 @@ function Header() {
                 alt="Moving Essential"
               />
             </Link>
-            <nav
+            {/* <nav
               className={`${
                 openNavigation ? "flex flex-col items-center pt-8" : "hidden"
               } fixed top-[4.53rem] left-0 right-0 bottom-0 bg-gray-100 sm:hidden`}
@@ -133,7 +137,7 @@ function Header() {
                   )}
                 </div>
               </div>
-            </nav>
+            </nav> */}
             <div className="cursor-pointer flex items-center gap-3 ml-auto bg-white rounded-full px-3 py-2 ring-1 ring-white relative">
               <div
                 className="hidden sm:block rounded-full absolute top-0 left-0 w-full h-full"
@@ -272,6 +276,76 @@ function Header() {
           </div>
         </div>
       </div>
+      <Sheet open={openNavigation} onOpenChange={setOpenNavigation}>
+        <SheetTrigger />
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle />
+            <SheetDescription />
+          </SheetHeader>
+          <div className="flex flex-col h-screen">
+            <div>
+              {isAuthenticated ? (
+                <div className="p-2 md:p-6">
+                  <p className="text-slate-500 mb-2">My account</p>
+                  {navigation.profile.map((item) => (
+                    <SidebarItems
+                      key={item.label}
+                      {...item}
+                      href={`/${user?.user_metadata.role}/dashboard`}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="p-2 md:p-6">
+                  <p className="text-slate-500 mb-2">Sign up</p>
+                  {navigation.signup.map((item) => (
+                    <SidebarItems key={item.label} {...item} />
+                  ))}
+                </div>
+              )}
+              <Separator />
+              <div className="p-2 md:p-6">
+                <p className="text-slate-500 mb-2">General</p>
+                {navigation.main.map((item) => (
+                  <SidebarItems key={item.label} {...item} />
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="text-center p-6">
+                {isAuthenticated ? (
+                  <Button
+                    orange
+                    className="w-full"
+                    onClick={() => {
+                      toggleNavigation();
+                      submitLogout();
+                    }}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    orange
+                    className="w-full"
+                    onClick={() => {
+                      toggleNavigation();
+                      navigate("/login");
+                    }}
+                  >
+                    Login
+                  </Button>
+                )}
+              </div>
+              <Separator />
+              <footer className="mt-3 p-3 text-center">
+                <p className="text-sm">{yeard}. All rights reserved</p>
+              </footer>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </>
   );
 
