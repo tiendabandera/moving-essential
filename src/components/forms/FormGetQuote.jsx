@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "@/hooks/use-toast";
 
 const FormGetQuote = ({ className, company }) => {
   const classes = `w-full flex flex-col gap-6 items-center justify-center p-10 border border-gray-200 rounded-xl shadow-2xl ${
@@ -79,6 +80,12 @@ const FormGetQuote = ({ className, company }) => {
       await companyInstance.submitAnalytics("get_a_quote", company.id);
       setIsSubmitting(false);
       reset();
+
+      toast({
+        title: "Success",
+        description: "Your quote was done correctly",
+        variant: "success",
+      });
     }
   });
 
