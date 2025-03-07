@@ -84,7 +84,7 @@ export class Company {
   async getInfo() {
     const companyInfo = await supabase
       .from("companies")
-      .select()
+      .select(`*, analytics:analytics!analitycs_company_id_fkey(*)`)
       .eq("user_id", this.data.id)
       .limit(1);
 
@@ -278,9 +278,9 @@ export class Company {
 
   /* ANALYTICS
   __________________________________________________ */
-  async submitAnalytics(field_name) {
+  async submitAnalytics(field_name, company_id = null) {
     return await supabase.rpc("update_or_insert_analytics", {
-      p_company_id: this.data.id,
+      p_company_id: company_id || this.data.id,
       p_field_name: field_name,
     });
   }

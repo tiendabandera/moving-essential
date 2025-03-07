@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomIcon from "@/components/design/CustomIcon";
 import FormGetQuote from "@/components/forms/FormGetQuote";
 
@@ -85,9 +85,12 @@ const InternalPage = () => {
     },
   ];
 
-  const submitAnalytics = async (param) => {
-    if (companyInstanceRef.current && !analyticsSentRef.current) {
-      analyticsSentRef.current = true; // Marca que ya se envió la analítica
+  const submitAnalytics = async (param, bypassCheck = false) => {
+    if (
+      companyInstanceRef.current &&
+      (bypassCheck || !analyticsSentRef.current)
+    ) {
+      if (!bypassCheck) analyticsSentRef.current = true; // Marca que ya se envió la analítica
       await companyInstanceRef.current.submitAnalytics(param);
     }
   };
@@ -139,6 +142,7 @@ const InternalPage = () => {
       document.title = data.company_name; //Cambiar el titulo de la pagina
       submitAnalytics("internal_page");
     };
+
     loadCompany();
   }, [user, params]);
 
@@ -239,13 +243,15 @@ const InternalPage = () => {
                 {socialNetworks.map(
                   (network, index) =>
                     company[network.field] && (
-                      <Link
+                      <CustomIcon
                         key={index}
-                        target="_blank"
-                        to={company[network.field]}
-                      >
-                        <CustomIcon icon={network.icon} />
-                      </Link>
+                        icon={network.icon}
+                        className={`cursor-pointer`}
+                        onClick={() => {
+                          submitAnalytics(network.field, true);
+                          window.open(company[network.field], "_blank");
+                        }}
+                      />
                     )
                 )}
               </div>

@@ -1,5 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CustomIcon from "@/components/design/CustomIcon";
 import FormGetQuote from "@/components/forms/FormGetQuote";
@@ -47,13 +47,16 @@ import { homeTypes } from "@/constants";
 import { AnonymousView } from "@/components/AnonymousView";
 import LikeCompany from "@/components/LikeCompany";
 
-export const GetCosultationButton = ({ phone }) => {
+export const GetCosultationButton = ({ phone, submitAnalytics }) => {
   return (
     <div className="w-full flex flex-col gap-2 items-center justify-center py-6 px-10 border border-gray-200 rounded-xl shadow-2xl text-center">
       <h3 className="font-semibold text-3xl">Get a Consultation</h3>
       <Button
         className="w-full bg-color-1 border border-color-1 rounded-md hover:bg-transparent hover:text-color-1"
-        onClick={() => window.open(`tel:${phone}`)}
+        onClick={() => {
+          if (submitAnalytics) submitAnalytics("phone_number", true);
+          window.open(`tel:${phone}`);
+        }}
       >
         Phone number
       </Button>
@@ -76,6 +79,8 @@ const InternalPage = () => {
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
   const [ownerButtonText, setOwnerButtonText] = useState("Get more reviews");
+  const realtorInstanceRef = useRef(null); // Evita re-creación de instancia
+  const analyticsSentRef = useRef(false); // Controla si `submitAnalytics` ya se ejecutó
 
   const socialNetworks = [
     {
@@ -104,6 +109,16 @@ const InternalPage = () => {
     },
   ];
 
+  const submitAnalytics = async (param, bypassCheck = false) => {
+    if (
+      realtorInstanceRef.current &&
+      (bypassCheck || !analyticsSentRef.current)
+    ) {
+      if (!bypassCheck) analyticsSentRef.current = true; // Marca que ya se envió la analítica
+      await realtorInstanceRef.current.submitAnalytics(param);
+    }
+  };
+
   useEffect(() => {
     const fetchLike = async (user, company_id) => {
       const userInstance = createUserInstance(user);
@@ -118,6 +133,8 @@ const InternalPage = () => {
           id: params.id,
           business_type_id: 2,
         });
+
+        realtorInstanceRef.current = realtorInstance; // Almacena la instancia solo una vez
 
         const { data, error } = await realtorInstance.getById();
         if (error) navigate("/not-found");
@@ -140,8 +157,10 @@ const InternalPage = () => {
         }
 
         document.title = data.user_info.user_metadata.realtor_name; //Cambiar el titulo de la pagina
+        submitAnalytics("internal_page");
       }
     };
+
     loadRealtor();
   }, [user, params]);
 
@@ -383,19 +402,24 @@ const InternalPage = () => {
                 {socialNetworks.map(
                   (network, index) =>
                     realtor[network.field] && (
-                      <Link
+                      <CustomIcon
                         key={index}
-                        target="_blank"
-                        to={realtor[network.field]}
-                      >
-                        <CustomIcon icon={network.icon} />
-                      </Link>
+                        className={`cursor-pointer`}
+                        icon={network.icon}
+                        onClick={() => {
+                          submitAnalytics(network.field, true);
+                          window.open(realtor[network.field], "_blank");
+                        }}
+                      />
                     )
                 )}
               </div>
               <div className="md:hidden">
                 <Separator className="my-8" />
-                <GetCosultationButton phone={realtor.phone} />
+                <GetCosultationButton
+                  phone={realtor.phone}
+                  submitAnalytics={submitAnalytics}
+                />
               </div>
               <div className="flex flex-col">
                 <Separator className="my-8" />
@@ -417,7 +441,10 @@ const InternalPage = () => {
             </div>
             <div className="hidden md:block lg:col-span-1 relative">
               <div className="sticky top-32">
-                <GetCosultationButton phone={realtor.phone} />
+                <GetCosultationButton
+                  phone={realtor.phone}
+                  submitAnalytics={submitAnalytics}
+                />
               </div>
             </div>
           </div>

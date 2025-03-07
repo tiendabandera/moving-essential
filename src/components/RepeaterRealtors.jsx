@@ -198,7 +198,10 @@ const RepeaterRealtors = ({
                 >
                   <Link
                     to={`/realtors/${record.id}`}
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      company.submitAnalytics("contact_button", record.id);
+                    }}
                   >
                     Contact
                   </Link>

@@ -76,6 +76,7 @@ const FormGetQuote = ({ className, company }) => {
     const res = await companyInstance.createQuote();
 
     if (!res.error) {
+      await companyInstance.submitAnalytics("get_a_quote", company.id);
       setIsSubmitting(false);
       reset();
     }

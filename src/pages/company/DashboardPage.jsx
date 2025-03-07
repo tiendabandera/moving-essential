@@ -178,34 +178,45 @@ const DashboardPage = () => {
     }));
   };
 
+  const socialNetworks = [
+    "facebook_link",
+    "instagram_link",
+    "twitter_link",
+    "linkedin_link",
+    "youtube_link",
+    "tiktok_link",
+  ];
+
   return (
     <div>
       <h2 className="text-2xl mb-4 font-normal">Dashboard</h2>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
         <CardSummary
           icon={User}
-          total="6"
+          total={userInfo?.company.analytics[0].contact_button}
           avarage="10"
           title="Contact button"
           tooltipText="Number of people who clicked the contact button."
         />
         <CardSummary
           icon={Laptop2}
-          total="2289"
+          total={userInfo?.company.analytics[0].internal_page}
           avarage="5"
           title="Internal page"
           tooltipText="Number of people who clicked on your page."
         />
         <CardSummary
           icon={CalendarCheck}
-          total="3"
+          total={userInfo?.company.analytics[0].get_a_quote}
           avarage="5"
           title="Get a quote"
           tooltipText="Number of people who submitted the quote form."
         />
         <CardSummary
           icon={Link}
-          total="1"
+          total={socialNetworks
+            .map((network) => userInfo?.company.analytics[0][network] || 0)
+            .reduce((acc, current) => acc + current, 0)}
           avarage="5"
           title="Social media links"
           tooltipText="Number of people who clicked on your social media links."
@@ -261,17 +272,17 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
+            <div className="mt-10 md:w-1/2">
+              <Button
+                orange
+                type="submit"
+                className={"w-full"}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="mt-10">
-          <Button
-            orange
-            type="submit"
-            className={"w-full 2xl:w-1/6 xl:w-1/6"}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </Button>
         </div>
       </form>
     </div>
