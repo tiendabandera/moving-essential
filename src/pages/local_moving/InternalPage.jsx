@@ -339,7 +339,7 @@ const InternalPage = () => {
                   </p>
                 </div>
               </div> */}
-              <div className="w-full h-1/2 animate-float border border-gray-200 rounded-xl shadow-2xl">
+              <div className="w-full h-[200px] lg:h-1/2 animate-float border border-gray-200 rounded-xl shadow-2xl">
                 <img
                   src={company.images[0]}
                   alt={company.name}

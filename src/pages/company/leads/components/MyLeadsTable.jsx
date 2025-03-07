@@ -11,7 +11,6 @@ import {
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -71,6 +70,69 @@ const data = [
   },
   {
     id: "bhqecj4p",
+    full_name: "max verstappen",
+    amount: 721,
+    phone: null,
+    email: "carmella@hotmail.com",
+    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    createdAt: "2021-10-03",
+  },
+  {
+    id: "bhqecj4p2",
+    full_name: "max verstappen",
+    amount: 721,
+    phone: null,
+    email: "carmella@hotmail.com",
+    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    createdAt: "2021-10-03",
+  },
+  {
+    id: "bhqecj4p3",
+    full_name: "max verstappen",
+    amount: 721,
+    phone: null,
+    email: "carmella@hotmail.com",
+    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    createdAt: "2021-10-03",
+  },
+  {
+    id: "bhqecj4p4",
+    full_name: "max verstappen",
+    amount: 721,
+    phone: null,
+    email: "carmella@hotmail.com",
+    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    createdAt: "2021-10-03",
+  },
+  {
+    id: "bhqecj4p5",
+    full_name: "max verstappen",
+    amount: 721,
+    phone: null,
+    email: "carmella@hotmail.com",
+    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    createdAt: "2021-10-03",
+  },
+  {
+    id: "bhqecj4p5",
+    full_name: "max verstappen",
+    amount: 721,
+    phone: null,
+    email: "carmella@hotmail.com",
+    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    createdAt: "2021-10-03",
+  },
+  {
+    id: "bhqecj4p33",
+    full_name: "max verstappen",
+    amount: 721,
+    phone: null,
+    email: "carmella@hotmail.com",
+    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    createdAt: "2021-10-03",
+  },
+  {
+    id: "bhqecj4p222",
     full_name: "max verstappen",
     amount: 721,
     phone: null,
@@ -147,28 +209,21 @@ export const columns = [
     ),
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "created_at",
     header: "Created At",
     cell: ({ row }) => {
-      const createdAt = row.getValue("createdAt");
+      const createdAt = new Date(row.getValue("created_at")).toLocaleString(
+        "en-GB",
+        {
+          day: "2-digit",
+          month: "short", // Short month (Jan, Feb, Mar, etc.)
+          year: "numeric",
+        }
+      );
+
       return <div>{createdAt}</div>;
     },
   },
-  /* {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  }, */
   {
     id: "actions",
     enableHiding: false,
@@ -200,14 +255,14 @@ export const columns = [
   },
 ];
 
-const MyLeadsTable = () => {
+const MyLeadsTable = ({ leads }) => {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data,
+    data: leads,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -255,7 +310,10 @@ const MyLeadsTable = () => {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {column.id
+                      .split("_")
+                      .map((word) => word)
+                      .join(" ")}
                   </DropdownMenuCheckboxItem>
                 );
               })}
@@ -313,9 +371,14 @@ const MyLeadsTable = () => {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+        {/* <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div> */}
+        <div className="flex-1 text-sm text-muted-foreground">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()} ({table.getFilteredRowModel().rows.length}{" "}
+          items)
         </div>
         <div className="space-x-2">
           <Button

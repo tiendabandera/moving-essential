@@ -284,4 +284,16 @@ export class Company {
       p_field_name: field_name,
     });
   }
+
+  /* LEADS ZONE
+  __________________________________________________ */
+
+  async getAllLeads() {
+    return await supabase
+      .from("leads")
+      .select("*, created_at")
+      .order("created_at", {
+        ascending: false,
+      });
+  }
 }
