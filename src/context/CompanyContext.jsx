@@ -39,10 +39,30 @@ export class Company {
 
     if (resImages.length > 0) this.data.companyInfo[`images`] = resImages;
 
-    await supabase
-      .from("companies")
-      .update(this.data.companyInfo)
-      .eq("id", companyId);
+    // Validar si la empresa tiene premium features para agregar la segunda ubicación
+    const { zipcode_2, city_2_id, state_2, ...rest } = this.data.companyInfo;
+
+    const toUpdate = {
+      data: rest,
+      zipcode_2,
+      city_2_id,
+      state_2,
+    };
+
+    const validate = await supabase
+      .from("premium_features")
+      .select()
+      .eq("company_id", companyId)
+      .limit(1);
+
+    if (validate.data.length > 0 && validate.data[0].is_active) {
+      toUpdate.data["zipcode_2"] = zipcode_2 || null;
+      toUpdate.data["city_2_id"] = city_2_id || null;
+      toUpdate.data["state_2"] = state_2 || null;
+    }
+
+    // Actualizamos la empresa
+    await supabase.from("companies").update(toUpdate.data).eq("id", companyId);
 
     const service =
       this.data.companyInfo.business_type_id === 1
@@ -84,7 +104,9 @@ export class Company {
   async getInfo() {
     const companyInfo = await supabase
       .from("companies")
-      .select(`*, analytics:analytics!analitycs_company_id_fkey(*)`)
+      .select(
+        `*, premium_features:premium_features!premium_features_company_id_fkey(*), analytics:analytics!analitycs_company_id_fkey(*)`
+      )
       .eq("user_id", this.data.id)
       .limit(1);
 
@@ -127,10 +149,6 @@ export class Company {
   }
 
   async getAllByBusinessType(offset, businessTypeId, filterParams) {
-    const pageSize = 8;
-    const service =
-      businessTypeId === 1 ? "local_moving!inner(*)" : "realtors!inner(*)";
-
     /* return await supabase
       .from("companies")
       .select(
@@ -139,6 +157,12 @@ export class Company {
       .eq("business_type_id", businessTypeId)
       .range(offset, offset + pageSize - 1)
       .order("created_at", { ascending: false }); */
+
+    //cities:cities!companies_city_id_fkey(name, state_id, county_name)
+
+    const pageSize = 8;
+    const service =
+      businessTypeId === 1 ? "local_moving!inner(*)" : "realtors!inner(*)";
 
     let query = supabase
       .from("companies")
@@ -174,6 +198,15 @@ export class Company {
         query = query
           .ilike("user_info.user_metadata->>name", `%${filterParams.value}%`)
           .not("user_info", "is", null);
+        break;
+
+      case "zipcode":
+        query = query.or(
+          `zipcodes.cs.{${filterParams.value}}, zipcodes_text.ilike.${filterParams.value}%`,
+          {
+            referencedTable: "cities",
+          }
+        );
         break;
 
       default:
@@ -272,7 +305,7 @@ export class Company {
     if (insert.error) return insert.error;
 
     return await supabase.functions.invoke("sendEmailToCompany", {
-      body: this.data,
+      body: { ...this.data, emails: [this.data.company.email] },
     });
   }
 
@@ -295,5 +328,58 @@ export class Company {
       .order("created_at", {
         ascending: false,
       });
+  }
+
+  /* CANCEL RENEWAL
+  __________________________________________________ */
+
+  async cancelRenewal(message, subcription_id) {
+    const insert = await supabase.from("membership_cancellation").insert({
+      company_id: this.data.id,
+      message: message,
+    });
+
+    if (insert.error) return insert.error;
+
+    const res = await supabase
+      .from("premium_features")
+      .update({
+        stop_payment: true,
+      })
+      .eq("subscription_id", subcription_id);
+
+    if (res.error) return res.error;
+
+    let body = {
+      status: "CANCELLED",
+      chargeSettings: {
+        recurringInterval: "DAY",
+        recurringIntervalCount: 1,
+      },
+    };
+
+    return fetch(
+      `https://app.ecwid.com/api/v3/95308313/subscriptions/${subcription_id}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + import.meta.env.VITE_ECWID_SECRET_KEY,
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    ).then((result) => {
+      if (result.ok) {
+        return {
+          message: "Renewal cancelled successfully",
+          error: null,
+        };
+      }
+
+      return {
+        error: { message: "Something went wrong, please try again" },
+      };
+    });
   }
 }

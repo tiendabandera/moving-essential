@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 
 const SidebarRoutesCompany = () => {
   const yeard = new Date().getFullYear();
-  const { logout } = useAuth();
+  const { logout, userInfo } = useAuth();
 
   const submitLogout = () => logout();
 
@@ -18,9 +18,13 @@ const SidebarRoutesCompany = () => {
       <div>
         <div className="p-2 md:p-6">
           <p className="text-slate-500 mb-2">General</p>
-          {dataGeneral.map((item) => (
-            <SidebarItems key={item.label} {...item} />
-          ))}
+          {dataGeneral
+            .filter((item) =>
+              item.services.includes(userInfo?.company.business_type_id)
+            )
+            .map((item) => (
+              <SidebarItems key={item.label} {...item} />
+            ))}
         </div>
 
         <Separator />

@@ -11,6 +11,7 @@ const Select = ({
   readOnly,
   placeholder,
   control,
+  required,
 }) => {
   const classes = `cursor-pointer text-left flex items-center justify-between option-hover appearance-none h-9 w-full rounded-md border border-slate-200 px-3 
   py-1 text-base md:text-sm shadow-xs transition-colors placeholder:text-slate-500 
@@ -24,7 +25,7 @@ const Select = ({
   } = useController({
     name,
     control,
-    rules: { required: `${label} is required` },
+    rules: { required: required ? `${label} is required` : false },
   });
 
   const [isOpen, setIsOpen] = useState(false);

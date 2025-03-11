@@ -30,118 +30,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const data = [
-  {
-    id: "m5gr84i9",
-    full_name: "Lewis Hamilton",
-    phone: "1234567890",
-    amount: 316,
-    email: "ken99@yahoo.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "3u1reuv4",
-    full_name: "Valentino Rossi",
-    phone: "1234567890",
-    amount: 242,
-    email: "Abe45@gmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "derv1ws0",
-    full_name: "Carlos Sainz",
-    phone: null,
-    amount: 837,
-    email: "Monserrat44@gmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "5kma53ae",
-    full_name: "Lance Stroll",
-    phone: "1234567890",
-    amount: 874,
-    email: "Silas22@gmail.com",
-    message:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "bhqecj4p",
-    full_name: "max verstappen",
-    amount: 721,
-    phone: null,
-    email: "carmella@hotmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "bhqecj4p2",
-    full_name: "max verstappen",
-    amount: 721,
-    phone: null,
-    email: "carmella@hotmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "bhqecj4p3",
-    full_name: "max verstappen",
-    amount: 721,
-    phone: null,
-    email: "carmella@hotmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "bhqecj4p4",
-    full_name: "max verstappen",
-    amount: 721,
-    phone: null,
-    email: "carmella@hotmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "bhqecj4p5",
-    full_name: "max verstappen",
-    amount: 721,
-    phone: null,
-    email: "carmella@hotmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "bhqecj4p5",
-    full_name: "max verstappen",
-    amount: 721,
-    phone: null,
-    email: "carmella@hotmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "bhqecj4p33",
-    full_name: "max verstappen",
-    amount: 721,
-    phone: null,
-    email: "carmella@hotmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-  {
-    id: "bhqecj4p222",
-    full_name: "max verstappen",
-    amount: 721,
-    phone: null,
-    email: "carmella@hotmail.com",
-    message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    createdAt: "2021-10-03",
-  },
-];
-
 export const columns = [
   /* {
     id: "select",
@@ -198,14 +86,14 @@ export const columns = [
         phoneFormatted = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
       }
 
-      return <div>{phoneFormatted}</div>;
+      return <div className="w-28">{phoneFormatted}</div>;
     },
   },
   {
     accessorKey: "message",
     header: "Message",
     cell: ({ row }) => (
-      <div className="truncate w-96">{row.getValue("message")}</div>
+      <div className="truncate w-48 lg:w-96">{row.getValue("message")}</div>
     ),
   },
   {
@@ -224,7 +112,7 @@ export const columns = [
       return <div>{createdAt}</div>;
     },
   },
-  {
+  /* {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
@@ -252,7 +140,7 @@ export const columns = [
         </DropdownMenu>
       );
     },
-  },
+  }, */
 ];
 
 const MyLeadsTable = ({ leads }) => {
@@ -322,7 +210,7 @@ const MyLeadsTable = ({ leads }) => {
       </div>
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-100">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

@@ -12,6 +12,7 @@ const SelectWithSearch = ({
   placeholder,
   control = null,
   onOptionChange, // Nueva prop opcional
+  required,
 }) => {
   const classes = `w-full h-9 bg-white border border-slate-200 rounded-md shadow-xs ${
     className || ""
@@ -35,7 +36,7 @@ const SelectWithSearch = ({
   const { field, fieldState } = useController({
     name,
     control: effectiveControl,
-    rules: { required: `${label} is required` },
+    rules: { required: required ? `${label} is required` : false },
   });
 
   const [isOpen, setIsOpen] = useState(false);

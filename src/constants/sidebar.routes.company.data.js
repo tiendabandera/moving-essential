@@ -18,18 +18,21 @@ export const dataGeneral = [
     label: "Dashboard",
     href: `/${path}/dashboard`,
     icon: PanelsTopLeft,
+    services:[1, 2]
   },
   {
     id: 2,
     label: "Data",
     href: `/${path}/data`,
     icon: ChartNoAxesCombined,
+    services:[1, 2]
   },
   {
     id: 3,
     label: "Notifications",
     href: `/${path}/notifications`,
     icon: BellRing,
+    services:[1, 2]
   },
   {
     id: 4,
@@ -50,6 +53,7 @@ export const dataGeneral = [
         icon: BookUser,
       },
     ],
+    services:[1]
   },
   {
     id: 5,
@@ -70,16 +74,17 @@ export const dataGeneral = [
         icon: BookUser,
       },
     ],
+    services:[1]
   },
 ];
 
 export const dataMembership = [
-  {
+  /* {
     id: 6,
     label: "Subscriptions plan",
     href: `/${path}/membership`,
     icon: BadgeCheck,
-  },
+  }, */
   {
     id: 7,
     label: "Premium features",
