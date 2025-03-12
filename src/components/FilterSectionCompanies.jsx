@@ -18,8 +18,11 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import SelectWithSearch from "./SelectWithSearch";
 import { states } from "@/constants";
+import { useNavigate } from "react-router-dom";
 
 const FilterSectionCompanies = ({ onFilterChange, businessTypeId = 1 }) => {
+  const navigate = useNavigate();
+
   const options = [
     {
       field: "company_name",
@@ -93,6 +96,10 @@ const FilterSectionCompanies = ({ onFilterChange, businessTypeId = 1 }) => {
 
       case "state":
         setHiddenInput(true);
+        break;
+
+      case "all":
+        setDisabledInput(true);
         break;
 
       default:
@@ -210,13 +217,13 @@ const FilterSectionCompanies = ({ onFilterChange, businessTypeId = 1 }) => {
             <DropdownMenuItem
               className="justify-center font-medium text-red-600"
               onSelect={() => {
-                //setFilterType("");
-                setValue("");
-                setInputValue("");
+                navigate("/local-moving", { replace: true });
                 setFilterType({
                   field: "all",
                   label: "All",
                 });
+                setValue("");
+                setInputValue("");
               }}
             >
               <Trash className="h-4 w-4" /> Clear filter

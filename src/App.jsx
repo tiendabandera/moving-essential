@@ -47,7 +47,6 @@ const AppContent = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/membership" element={<MembershipPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/join" element={<JoinPages.JoinMain />}>
             <Route path="company" element={<JoinPages.JoinCompanyPage />} />
@@ -90,7 +89,12 @@ const AppContent = () => {
                   element={<CompaniesPages.MyLeadsPage />}
                 />
               </Route>
+              <Route
+                path="membership-premium-features"
+                element={<CompaniesPages.PremiumFeatures />}
+              />
             </Route>
+            <Route path="/membership" element={<MembershipPage />} />
           </Route>
           <Route>
             <Route

@@ -16,7 +16,7 @@ const Button = ({
     px || "px-7"
   } ${white ? "text-color-1" : "text-n-1"}  ${className || ""}`;
 
-  const spanClasses = `relative z-10`;
+  const spanClasses = `relative z-10 flex items-center gap-2`;
 
   const renderButton = () => (
     <button className={classes} onClick={onClick} disabled={disabled}>

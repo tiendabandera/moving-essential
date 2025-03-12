@@ -7,6 +7,7 @@ import {
   Link,
   Building2,
   Image,
+  Gem,
 } from "lucide-react";
 
 import CustomIcon from "@/components/design/CustomIcon";
@@ -18,11 +19,13 @@ import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import { toast } from "@/hooks/use-toast";
 import InputUploadImage from "@/components/InputUploadImage";
+import FormAdditionalZipcode from "@/components/forms/FormAdditionalZipcode";
 
 const DashboardPage = () => {
   const { userInfo } = useOutletContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visiblePremimumFeatures, setVisiblePremimumFeatures] = useState(false);
   const [errorsForm, setErrorsForm] = useState([]);
 
   const {
@@ -101,6 +104,9 @@ const DashboardPage = () => {
           linkedin_link: userInfo.company?.linkedin_link || "",
           youtube_link: userInfo.company?.youtube_link || "",
           tiktok_link: userInfo.company?.tiktok_link || "",
+          zipcode_2: userInfo.company?.zipcode_2 || null,
+          city_2_id: userInfo.company?.city_2_id || null,
+          state_2: userInfo.company?.state_2 || null,
         },
         service: {
           fed_tax_class: userInfo.service?.fed_tax_class || "",
@@ -110,12 +116,13 @@ const DashboardPage = () => {
         },
         images,
       });
+
+      if (userInfo.company.premium_features?.is_active)
+        setVisiblePremimumFeatures(true);
     }
   }, [userInfo, reset]);
 
   const onSubmit = handleSubmit(async (values) => {
-    //console.log(values);
-
     setIsSubmitting(true); // Deshabilitar el botón de submit
 
     const companyInstance = createCompanyInstance({
@@ -167,6 +174,7 @@ const DashboardPage = () => {
       name: values.name,
       company: {
         id: userInfo.company.id,
+        analytics: userInfo.company.analytics,
         ...values.company,
       },
       service: {
@@ -230,7 +238,7 @@ const DashboardPage = () => {
                 <CustomIcon icon={Building2} />
                 <h3 className="font-medium">Company information</h3>
               </div>
-              <div className="mt-7">
+              <div className="mt-7 pb-8">
                 <FormCompany
                   userInfo={{ ...userInfo }}
                   register={register}
@@ -272,6 +280,25 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
+            {visiblePremimumFeatures && (
+              <div className="mt-10 shadow-xs bg-background rounded-lg p-5">
+                <div className="flex gap-x-2 items-center">
+                  <CustomIcon icon={Gem} />
+                  <h3 className="font-medium">Premium features</h3>
+                </div>
+                <div className="mt-7">
+                  <FormAdditionalZipcode
+                    userInfo={{ ...userInfo }}
+                    register={register}
+                    errors={errors}
+                    control={control}
+                    errorsForm={errorsForm}
+                    reset={reset}
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="mt-10 md:w-1/2">
               <Button
                 orange

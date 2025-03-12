@@ -196,10 +196,14 @@ export const AuthProvider = ({ children }) => {
       }
 
       setUserInfo(userInfo);
+
+      return userInfo;
     } else {
       localStorage.clear();
       setIsAuthenticated(false);
       setUser(null);
+
+      return null;
     }
   };
 

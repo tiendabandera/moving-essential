@@ -21,7 +21,7 @@ const MyLeadsPage = () => {
   return (
     <div>
       <h2 className="text-2xl mb-4 font-normal">My leads</h2>
-      <div>
+      <div className="shadow-xs bg-background rounded-lg p-5">
         <MyLeadsTable leads={leads} />
       </div>
     </div>

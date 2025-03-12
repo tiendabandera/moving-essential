@@ -146,6 +146,14 @@ const RepeaterCompanies = ({
                   <span className="font-semibold">{record.cities.name}, </span>
                   {record.state} {record.zipcode}
                 </p>
+                {record.has_premium_features && (
+                  <p>
+                    <span className="font-semibold">
+                      {record.cities_2.name},{" "}
+                    </span>
+                    {record.state_2} {record.zipcode_2}
+                  </p>
+                )}
                 <p className="font-semibold">How we charge:</p>
                 <div className="flex">
                   {(record.service.rate_type_id === 2 ||

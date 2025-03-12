@@ -4,6 +4,7 @@ import NotificationsPage from "./NotificationsPage";
 import Layout from "./Layout";
 import { PhonePoolPage, MyLeadsPage } from "./leads";
 import DashboardRealtorPage from "./DashboardRealtorPage";
+import PremiumFeatures from "./PremiumFeatures";
 
 export default {
   DashboardPage,
@@ -13,4 +14,5 @@ export default {
   NotificationsPage,
   PhonePoolPage,
   MyLeadsPage,
+  PremiumFeatures,
 };

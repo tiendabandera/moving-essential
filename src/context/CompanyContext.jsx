@@ -39,10 +39,30 @@ export class Company {
 
     if (resImages.length > 0) this.data.companyInfo[`images`] = resImages;
 
-    await supabase
-      .from("companies")
-      .update(this.data.companyInfo)
-      .eq("id", companyId);
+    // Validar si la empresa tiene premium features para agregar la segunda ubicación
+    const { zipcode_2, city_2_id, state_2, ...rest } = this.data.companyInfo;
+
+    const toUpdate = {
+      data: rest,
+      zipcode_2,
+      city_2_id,
+      state_2,
+    };
+
+    const validate = await supabase
+      .from("premium_features")
+      .select()
+      .eq("company_id", companyId)
+      .limit(1);
+
+    if (validate.data.length > 0 && validate.data[0].is_active) {
+      toUpdate.data["zipcode_2"] = zipcode_2 || null;
+      toUpdate.data["city_2_id"] = city_2_id || null;
+      toUpdate.data["state_2"] = state_2 || null;
+    }
+
+    // Actualizamos la empresa
+    await supabase.from("companies").update(toUpdate.data).eq("id", companyId);
 
     const service =
       this.data.companyInfo.business_type_id === 1
@@ -84,7 +104,9 @@ export class Company {
   async getInfo() {
     const companyInfo = await supabase
       .from("companies")
-      .select(`*, analytics:analytics!analitycs_company_id_fkey(*)`)
+      .select(
+        `*, premium_features:premium_features!premium_features_company_id_fkey(*), analytics:analytics!analitycs_company_id_fkey(*)`
+      )
       .eq("user_id", this.data.id)
       .limit(1);
 
@@ -126,25 +148,23 @@ export class Company {
       .single();
   }
 
+  async getRemainingCompanies() {}
+
   async getAllByBusinessType(offset, businessTypeId, filterParams) {
     const pageSize = 8;
     const service =
       businessTypeId === 1 ? "local_moving!inner(*)" : "realtors!inner(*)";
 
-    /* return await supabase
-      .from("companies")
-      .select(
-        `*, service:${service}, cities!inner(name, state_id, county_name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
-      )
-      .eq("business_type_id", businessTypeId)
-      .range(offset, offset + pageSize - 1)
-      .order("created_at", { ascending: false }); */
+    const selectedField = `*, 
+        service:${service}, 
+        cities:cities!companies_city_id_fkey(name, state_id, county_name), 
+        cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
+        reviews:reviews!reviews_company_id_fkey(*), 
+        user_info:user_info!companies_user_id_fkey(user_metadata)`;
 
     let query = supabase
       .from("companies")
-      .select(
-        `*, service:${service}, cities!inner(name, state_id, county_name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
-      )
+      .select(selectedField)
       .eq("business_type_id", businessTypeId)
       .range(offset, offset + pageSize - 1);
 
@@ -154,8 +174,42 @@ export class Company {
         break;
 
       case "city":
-        query = query.ilike("cities.name", `%${filterParams.value}%`);
-        break;
+        //   query = query
+        //     /* .or(`name.ilike.%${filterParams.value}%`, {
+        //   referencedTable: "cities",
+        // }) */
+        //     //.ilike("cities.name", `%${filterParams.value}%`)
+        //     .or(`name.ilike.%${filterParams.value}%`, {
+        //       referencedTable: "cities_2",
+        //     })
+        //     .or(`cities_2.not.is.null`);
+
+        // Obtener empresas que tienen premium features
+        var premiumFeaturesCity = await query
+          .or(`name.ilike.%${filterParams.value}%`, {
+            referencedTable: "cities_2",
+          })
+          .or(`cities_2.not.is.null`)
+          .order("likes_count", { ascending: false });
+
+        // Si no hay empresas con premium features, obtenemos el restante
+        if (premiumFeaturesCity.data.length < 8) {
+          const newOffset = offset > 0 ? offset - 8 : 0; // Calcula el nuevo punto de inicio
+
+          let remainingCompanies = await supabase
+            .from("companies")
+            .select(selectedField)
+            .eq("business_type_id", businessTypeId)
+            .range(newOffset, newOffset + pageSize - 1)
+            .ilike("cities.name", `%${filterParams.value}%`)
+            .or(`cities.not.is.null`)
+            .order("likes_count", { ascending: false });
+
+          if (remainingCompanies.data.length > 0)
+            premiumFeaturesCity.data.push(...remainingCompanies.data);
+        }
+
+        return premiumFeaturesCity;
 
       case "rate_type_id":
         query = query.or(
@@ -167,7 +221,10 @@ export class Company {
         break;
 
       case "state":
-        query = query.eq("state", `${filterParams.value}`);
+        query = query.or(
+          `state.eq.${filterParams.value}, state_2.eq.${filterParams.value}`
+        );
+
         break;
 
       case "realtor_name":
@@ -175,6 +232,42 @@ export class Company {
           .ilike("user_info.user_metadata->>name", `%${filterParams.value}%`)
           .not("user_info", "is", null);
         break;
+
+      case "zipcode":
+        // Obtener empresas que tienen premium features
+        var premiumFeaturesZipcode = await query
+          .or(
+            `zipcodes.cs.{${filterParams.value}}, zipcodes_text.ilike.${filterParams.value}%`,
+            {
+              referencedTable: "cities_2",
+            }
+          )
+          .not("cities_2", "is", null)
+          .order("likes_count", { ascending: false });
+
+        // Si no hay empresas con premium features, obtenemos el restante
+        if (premiumFeaturesZipcode.data.length < 8) {
+          const newOffset = offset > 0 ? offset - 8 : 0; // Calcula el nuevo punto de inicio
+
+          let remainingCompanies = await supabase
+            .from("companies")
+            .select(selectedField)
+            .eq("business_type_id", businessTypeId)
+            .range(newOffset, newOffset + pageSize - 1)
+            .or(
+              `zipcodes.cs.{${filterParams.value}}, zipcodes_text.ilike.${filterParams.value}%`,
+              {
+                referencedTable: "cities",
+              }
+            )
+            .not("cities", "is", null)
+            .order("likes_count", { ascending: false });
+
+          if (remainingCompanies.data.length > 0)
+            premiumFeaturesZipcode.data.push(...remainingCompanies.data);
+        }
+
+        return premiumFeaturesZipcode;
 
       default:
         break;
@@ -192,16 +285,22 @@ export class Company {
       ? `zipcodes.cs.{${filterParams.placename}}, zipcodes_text.ilike.${filterParams.placename}%`
       : `name.eq.${filterParams.placename}`;
 
+    const selectedField = `*, 
+        service:${service}, 
+        cities:cities!companies_city_id_fkey(name, state_id, county_name), 
+        cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
+        reviews:reviews!reviews_company_id_fkey(*), 
+        user_info:user_info!companies_user_id_fkey(user_metadata)`;
+
     const res = await supabase
       .from("companies")
-      .select(
-        `*, service:${service}, cities!inner(name, state_id, county_name), reviews:reviews!reviews_company_id_fkey(*), user_info:user_info!companies_user_id_fkey(user_metadata)`
-      )
+      .select(selectedField)
       .eq("business_type_id", businessTypeId)
       .eq("cities.state_id", filterParams.state)
       .or(`${filter}, county_name.eq.${filterParams.county}`, {
         referencedTable: "cities",
       })
+      .not("cities", "is", null)
       .range(offset, offset + pageSize - 1)
       .order("likes_count", { ascending: false });
 
@@ -272,7 +371,7 @@ export class Company {
     if (insert.error) return insert.error;
 
     return await supabase.functions.invoke("sendEmailToCompany", {
-      body: this.data,
+      body: { ...this.data, emails: [this.data.company.email] },
     });
   }
 
@@ -295,5 +394,58 @@ export class Company {
       .order("created_at", {
         ascending: false,
       });
+  }
+
+  /* CANCEL RENEWAL
+  __________________________________________________ */
+
+  async cancelRenewal(message, subcription_id) {
+    const insert = await supabase.from("membership_cancellation").insert({
+      company_id: this.data.id,
+      message: message,
+    });
+
+    if (insert.error) return insert.error;
+
+    const res = await supabase
+      .from("premium_features")
+      .update({
+        stop_payment: true,
+      })
+      .eq("subscription_id", subcription_id);
+
+    if (res.error) return res.error;
+
+    let body = {
+      status: "CANCELLED",
+      chargeSettings: {
+        recurringInterval: "DAY",
+        recurringIntervalCount: 1,
+      },
+    };
+
+    return fetch(
+      `https://app.ecwid.com/api/v3/95308313/subscriptions/${subcription_id}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + import.meta.env.VITE_ECWID_SECRET_KEY,
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    ).then((result) => {
+      if (result.ok) {
+        return {
+          message: "Renewal cancelled successfully",
+          error: null,
+        };
+      }
+
+      return {
+        error: { message: "Something went wrong, please try again" },
+      };
+    });
   }
 }

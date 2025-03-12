@@ -282,7 +282,7 @@ const FormCompany = ({
 
   return (
     <div className="">
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {inputsUser.map((input) => {
           if (input.isInput) {
             return (
@@ -353,26 +353,24 @@ const FormCompany = ({
             </div>
           );
         })}
-        {
-          <div className="xl:col-span-2 lg:col-span-2 md:col-span-2">
-            <label
-              htmlFor="service.long_description"
-              className="text-sm font-medium"
-            >
-              Long description *
-            </label>
-            <TextArea
-              id="service.long_description"
-              label="Long description"
-              name="service.long_description"
-              placeholder="Enter your long description"
-              readOnly={false}
-              register={register}
-              required={true}
-              errors={errors}
-            />
-          </div>
-        }
+        <div className="xl:col-span-2 lg:col-span-2 md:col-span-2">
+          <label
+            htmlFor="service.long_description"
+            className="text-sm font-medium"
+          >
+            Long description *
+          </label>
+          <TextArea
+            id="service.long_description"
+            label="Long description"
+            name="service.long_description"
+            placeholder="Enter your long description"
+            readOnly={false}
+            register={register}
+            required={true}
+            errors={errors}
+          />
+        </div>
         <div className="mt-7 xl:col-span-2 md:col-span-2 flex gap-x-2 items-center">
           <CustomIcon icon={Link} />
           <h3 className="font-medium">Social networks</h3>
@@ -399,17 +397,13 @@ const FormCompany = ({
           );
         })}
       </div>
-      {
-        <div className="text-center 2xl:text-left lg:text-left">
-          {errorsForm.map((error, i) => (
-            <div key={i} className="first-letter:uppercase">
-              <span className="text-red-500 text-xs font-semibold">
-                {error}
-              </span>
-            </div>
-          ))}
-        </div>
-      }
+      <div className="text-center 2xl:text-left lg:text-left">
+        {errorsForm.map((error, i) => (
+          <div key={i} className="first-letter:uppercase">
+            <span className="text-red-500 text-xs font-semibold">{error}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

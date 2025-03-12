@@ -1,5 +1,12 @@
+import EcwidStore from "@/components/EcwidStore";
+import Section from "@/components/Section";
+
 const MembershipPage = () => {
-  return <div></div>;
+  return (
+    <Section>
+      <EcwidStore />
+    </Section>
+  );
 };
 
 export default MembershipPage;
