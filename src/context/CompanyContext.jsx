@@ -155,16 +155,16 @@ export class Company {
     const service =
       businessTypeId === 1 ? "local_moving!inner(*)" : "realtors!inner(*)";
 
-    let query = supabase
-      .from("companies")
-      .select(
-        `*, 
+    const selectedField = `*, 
         service:${service}, 
         cities:cities!companies_city_id_fkey(name, state_id, county_name), 
         cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
         reviews:reviews!reviews_company_id_fkey(*), 
-        user_info:user_info!companies_user_id_fkey(user_metadata)`
-      )
+        user_info:user_info!companies_user_id_fkey(user_metadata)`;
+
+    let query = supabase
+      .from("companies")
+      .select(selectedField)
       .eq("business_type_id", businessTypeId)
       .range(offset, offset + pageSize - 1);
 
@@ -195,21 +195,10 @@ export class Company {
         // Si no hay empresas con premium features, obtenemos el restante
         if (premiumFeaturesCity.data.length < 8) {
           const newOffset = offset > 0 ? offset - 8 : 0; // Calcula el nuevo punto de inicio
-          const pageSize = 8;
-          const service =
-            businessTypeId === 1
-              ? "local_moving!inner(*)"
-              : "realtors!inner(*)";
 
           let remainingCompanies = await supabase
             .from("companies")
-            .select(
-              `*, service:${service}, 
-              cities:cities!companies_city_id_fkey(name, state_id, county_name), 
-              cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
-              reviews:reviews!reviews_company_id_fkey(*), 
-              user_info:user_info!companies_user_id_fkey(user_metadata)`
-            )
+            .select(selectedField)
             .eq("business_type_id", businessTypeId)
             .range(newOffset, newOffset + pageSize - 1)
             .ilike("cities.name", `%${filterParams.value}%`)
@@ -259,22 +248,10 @@ export class Company {
         // Si no hay empresas con premium features, obtenemos el restante
         if (premiumFeaturesZipcode.data.length < 8) {
           const newOffset = offset > 0 ? offset - 8 : 0; // Calcula el nuevo punto de inicio
-          const pageSize = 8;
-          const service =
-            businessTypeId === 1
-              ? "local_moving!inner(*)"
-              : "realtors!inner(*)";
 
           let remainingCompanies = await supabase
             .from("companies")
-            .select(
-              `*, 
-              service:${service}, 
-              cities:cities!companies_city_id_fkey(name, state_id, county_name), 
-              cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
-              reviews:reviews!reviews_company_id_fkey(*), 
-              user_info:user_info!companies_user_id_fkey(user_metadata)`
-            )
+            .select(selectedField)
             .eq("business_type_id", businessTypeId)
             .range(newOffset, newOffset + pageSize - 1)
             .or(
@@ -308,16 +285,16 @@ export class Company {
       ? `zipcodes.cs.{${filterParams.placename}}, zipcodes_text.ilike.${filterParams.placename}%`
       : `name.eq.${filterParams.placename}`;
 
-    const res = await supabase
-      .from("companies")
-      .select(
-        `*, 
+    const selectedField = `*, 
         service:${service}, 
         cities:cities!companies_city_id_fkey(name, state_id, county_name), 
         cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
         reviews:reviews!reviews_company_id_fkey(*), 
-        user_info:user_info!companies_user_id_fkey(user_metadata)`
-      )
+        user_info:user_info!companies_user_id_fkey(user_metadata)`;
+
+    const res = await supabase
+      .from("companies")
+      .select(selectedField)
       .eq("business_type_id", businessTypeId)
       .eq("cities.state_id", filterParams.state)
       .or(`${filter}, county_name.eq.${filterParams.county}`, {

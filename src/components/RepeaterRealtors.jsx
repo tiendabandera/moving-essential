@@ -156,11 +156,18 @@ const RepeaterRealtors = ({
                   <GraduationCap strokeWidth={2} className="w-5 h-5" />
                   <p className="text-base">{record.service.title_work}</p>
                 </div>
-
                 <p className="text-base">
                   <span className="font-semibold">{record.cities.name}, </span>
                   {record.state} {record.zipcode}
                 </p>
+                {record.has_premium_features && (
+                  <p>
+                    <span className="font-semibold">
+                      {record.cities_2.name},{" "}
+                    </span>
+                    {record.state_2} {record.zipcode_2}
+                  </p>
+                )}
               </div>
               <div className="w-full flex justify-between gap-2 h-9 px-14 py-2 bg-slate-100 rounded-3xl">
                 <LikeCompany
