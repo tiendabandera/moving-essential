@@ -7,7 +7,11 @@ const AllPage = () => {
 
   return (
     <div className="max-container padding-container py-10">
-      <RepeaterCompanies filterSection filterQueryParams={paramsObject} />
+      <RepeaterCompanies
+        className="!px-0"
+        filterSection
+        filterQueryParams={paramsObject}
+      />
     </div>
   );
 };
