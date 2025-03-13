@@ -22,6 +22,8 @@ const RepeaterCompanies = ({
   const pageSize = 8; // Cantidad de registros por carga
   const [records, setRecords] = useState([]); // Lista de registros
   const [offset, setOffset] = useState(0); // Controla desde dónde obtener los registros
+  const [offsetFeatures, setOffsetFeatures] = useState(0); // Controla desde dónde obtener los registros restantes
+
   const [hasMore, setHasMore] = useState(false); // Verifica si hay más registros
   const effectRan = useRef(false); // Realizar una sola consulta a la base de datos
   const [selectedCompany, setSelectedCompany] = useState(null); // Abrir pop up de share
@@ -39,14 +41,20 @@ const RepeaterCompanies = ({
       Object.keys(filterQueryParams).length > 0 &&
       Object.keys(params).length === 0
     ) {
-      const { data, error } = await company.getAllByBusinessTypeQueryParams(
-        newOffset,
-        1,
-        filterQueryParams
-      );
+      const { data, error, newOffsetFeatures } =
+        await company.getAllByBusinessTypeQueryParams(
+          newOffset,
+          1,
+          filterQueryParams,
+          offsetFeatures
+        );
 
       response.data = data;
       response.error = error;
+
+      if (newOffsetFeatures > 0) {
+        setOffsetFeatures(newOffsetFeatures);
+      }
     } else {
       const { data, error } = await company.getAllByBusinessType(
         newOffset,

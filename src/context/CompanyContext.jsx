@@ -276,7 +276,64 @@ export class Company {
     return await query.order("likes_count", { ascending: false });
   }
 
-  async getAllByBusinessTypeQueryParams(offset, businessTypeId, filterParams) {
+  async getAllByBusinessTypeQueryParams(
+    offset,
+    businessTypeId,
+    filterParams,
+    offsetFeatures
+  ) {
+    // const pageSize = 8;
+    // const service = businessTypeId === 1 ? "local_moving(*)" : "realtors(*)";
+
+    // const isNumber = !isNaN(filterParams.placename);
+    // const filter = isNumber
+    //   ? `zipcodes.cs.{${filterParams.placename}}, zipcodes_text.ilike.${filterParams.placename}%`
+    //   : `name.eq.${filterParams.placename}`;
+
+    // const selectedField = `*,
+    //     service:${service},
+    //     cities:cities!companies_city_id_fkey(name, state_id, county_name),
+    //     cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name),
+    //     reviews:reviews!reviews_company_id_fkey(*),
+    //     user_info:user_info!companies_user_id_fkey(user_metadata)`;
+
+    // const res = await supabase
+    //   .from("companies")
+    //   .select(selectedField)
+    //   .eq("business_type_id", businessTypeId)
+    //   .eq("cities.state_id", filterParams.state)
+    //   .or(`${filter}, county_name.eq.${filterParams.county}`, {
+    //     referencedTable: "cities",
+    //   })
+    //   .not("cities", "is", null)
+    //   .range(offset, offset + pageSize - 1)
+    //   .order("likes_count", { ascending: false });
+
+    // // Ordenamos los resultados
+    // res.data.sort((a, b) => {
+    //   if (
+    //     !isNumber &&
+    //     a.cities.name === filterParams.placename &&
+    //     b.cities.name !== filterParams.placename
+    //   ) {
+    //     return -1;
+    //   }
+
+    //   if (
+    //     isNumber &&
+    //     a.zipcode === filterParams.placename &&
+    //     b.zipcode !== filterParams.placename
+    //   ) {
+    //     return -1;
+    //   }
+
+    //   return 0;
+    // });
+
+    // return {
+    //   data: res.data,
+    //   error: res.error,
+    // };
     const pageSize = 8;
     const service = businessTypeId === 1 ? "local_moving(*)" : "realtors(*)";
 
@@ -292,20 +349,57 @@ export class Company {
         reviews:reviews!reviews_company_id_fkey(*), 
         user_info:user_info!companies_user_id_fkey(user_metadata)`;
 
-    const res = await supabase
+    // Obtenemos las empresas con premium features
+    const premiumFeatures = await supabase
       .from("companies")
       .select(selectedField)
       .eq("business_type_id", businessTypeId)
-      .eq("cities.state_id", filterParams.state)
+      .or(`state.eq.${filterParams.state}, state_2.eq.${filterParams.state}`)
       .or(`${filter}, county_name.eq.${filterParams.county}`, {
-        referencedTable: "cities",
+        referencedTable: "cities_2",
       })
-      .not("cities", "is", null)
+      .not("cities_2", "is", null)
       .range(offset, offset + pageSize - 1)
       .order("likes_count", { ascending: false });
 
+    let setOffsetFeatures = 0;
+    let newOffsetEnd = 0;
+    let newOffsetInit = 0;
+    let addRemaining = false;
+
+    if (premiumFeatures.data.length > 0 && premiumFeatures.data.length < 8) {
+      newOffsetEnd = 8 - premiumFeatures.data.length - 1;
+      setOffsetFeatures = newOffsetEnd; // Definimos el indice de inicio para la siguente consulta
+
+      addRemaining = true;
+    } else {
+      newOffsetInit = offsetFeatures == 0 ? 0 : offsetFeatures + 1;
+      newOffsetEnd = newOffsetInit + 8; // Definimos el indice final
+      setOffsetFeatures = newOffsetEnd; // Asignar nuevo indice de inicio para la siguente consulta
+
+      addRemaining = true;
+    }
+
+    // Obtenemos las empresas sin premium features y las agregamos
+    if (addRemaining) {
+      const remainingCompanies = await supabase
+        .from("companies")
+        .select(selectedField)
+        .eq("business_type_id", businessTypeId)
+        //.range(offset, newOffset + pageSize - offset)
+        .range(newOffsetInit, newOffsetEnd)
+        .or(`${filter}, county_name.eq.${filterParams.county}`, {
+          referencedTable: "cities",
+        })
+        .not("cities", "is", null)
+        .order("likes_count", { ascending: false });
+
+      if (remainingCompanies.data.length > 0)
+        premiumFeatures.data.push(...remainingCompanies.data);
+    }
+
     // Ordenamos los resultados
-    res.data.sort((a, b) => {
+    premiumFeatures.data.sort((a, b) => {
       if (
         !isNumber &&
         a.cities.name === filterParams.placename &&
@@ -326,8 +420,9 @@ export class Company {
     });
 
     return {
-      data: res.data,
-      error: res.error,
+      data: premiumFeatures.data,
+      error: premiumFeatures.error,
+      newOffsetFeatures: setOffsetFeatures,
     };
   }
 
