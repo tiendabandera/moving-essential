@@ -137,7 +137,7 @@ const FilterSectionCompanies = ({ onFilterChange, businessTypeId = 1 }) => {
               )}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
+          <DropdownMenuContent className="ml-2 w-56">
             <DropdownMenuGroup>
               {options.map((option) => (
                 <DropdownMenuItem
