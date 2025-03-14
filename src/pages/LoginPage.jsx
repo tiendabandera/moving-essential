@@ -14,7 +14,9 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate(`/${user.user_metadata.role}/dashboard`);
+    //if (isAuthenticated) navigate(`/${user.user_metadata.role}/dashboard`);
+    if (isAuthenticated)
+      window.location.href = `/${user.user_metadata.role}/dashboard`;
   }, [isAuthenticated, navigate, user]);
 
   const onSubmit = handleSubmit(async (values) => {

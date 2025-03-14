@@ -12,9 +12,7 @@ import { Menu, Search } from "lucide-react";
 import SidebarRoutesUser from "../SidebarRoutesUser";
 
 const NavbarUser = () => {
-  const { user, userInfo } = useAuth();
-
-  console.log(user);
+  const { user } = useAuth();
 
   return (
     <nav className="flex items-center px-1 gap-x-4 md:px-6 justify-between w-full bg-background border-b h-20">

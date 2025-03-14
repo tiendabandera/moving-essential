@@ -142,7 +142,11 @@ export class Company {
     return await supabase
       .from("companies")
       .select(
-        `*, service:${service}, cities(name), user_info:user_info!companies_user_id_fkey(user_metadata)`
+        `*, 
+        service:${service}, 
+        cities:cities!companies_city_id_fkey(name, state_id, county_name), 
+        cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
+        user_info:user_info!companies_user_id_fkey(user_metadata)`
       )
       .eq("id", this.data.id)
       .single();
