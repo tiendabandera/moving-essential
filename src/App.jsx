@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 
 import JoinPages from "./pages/join/index";
+import AdminPages from "./pages/admin/index";
 import UserPages from "./pages/user/index";
 import CompaniesPages from "./pages/company/index";
 import LocalMovingPages from "./pages/local_moving/index";
@@ -36,7 +37,8 @@ const AppContent = () => {
 
   const showHeader =
     !location.pathname.startsWith("/company/") &&
-    !location.pathname.startsWith("/user/");
+    !location.pathname.startsWith("/user/") &&
+    !location.pathname.startsWith("/admin/");
 
   return (
     <div className="app-container">
@@ -53,6 +55,11 @@ const AppContent = () => {
             <Route path="realtors" element={<JoinPages.JoinRealtorsPage />} />
           </Route>
           <Route path="/authorization" element={<NotAuthorizationPage />} />
+          <Route element={<ProtectedRoute roles={[roles.admin]} />}>
+            <Route path="/admin" element={<AdminPages.Layout />}>
+              <Route path="dashboard" element={<AdminPages.DashboardPage />} />
+            </Route>
+          </Route>
           <Route element={<ProtectedRoute roles={[roles.admin, roles.user]} />}>
             <Route
               path="/user/dashboard"

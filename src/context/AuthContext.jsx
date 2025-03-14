@@ -270,6 +270,10 @@ export const AuthProvider = ({ children }) => {
 
           setUser({
             ...session.data.session.user,
+            user_metadata: {
+              ...session.data.session.user.user_metadata,
+              role: decoded.user_role,
+            },
             profile_picture: decoded.profile_picture,
           });
           setIsAuthenticated(true);
