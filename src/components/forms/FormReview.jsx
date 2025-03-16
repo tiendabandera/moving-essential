@@ -191,7 +191,8 @@ const FormReview = ({ className, company, setIsOpenAnonymous }) => {
 
     const companyIntance = createCompanyInstance({
       ...values,
-      company_id: company.id,
+      company: company,
+      user: user.user_metadata,
     });
 
     const { error, data } = await companyIntance.createReview();

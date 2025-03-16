@@ -80,7 +80,7 @@ const InputUploadImage = ({
                 }`}
               />
               {isUploading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 rounded-lg">
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-lg">
                   <Loader2 className="w-12 h-12 text-white animate-spin" />
                 </div>
               ) : (

@@ -3,6 +3,7 @@ import CustomIcon from "@/components/design/CustomIcon";
 import Input from "@/components/Input";
 import InputUploadImage from "@/components/InputUploadImage";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "@/hooks/use-toast";
 import { Info } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -10,9 +11,9 @@ import { useOutletContext } from "react-router-dom";
 
 const DashboardPage = () => {
   const { userInfo } = useOutletContext();
-  const { user } = useAuth();
+  const { setUser, user, uploadImages, createUserInstance } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorsForm, setErrorsForm] = useState([]);
+  //const [errorsForm, setErrorsForm] = useState([]);
 
   const {
     register,
@@ -30,17 +31,54 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (userInfo) {
+      console.log(user);
+
       reset({
         name: userInfo.name || "",
         email: userInfo.email || "",
-        profile_picture: user.profile_picture || "",
+        profile_picture: user.user_metadata.profile_picture || "",
       });
     }
   }, [userInfo, reset]);
 
-  const onSubmit = handleSubmit((values) => {
+  const onSubmit = handleSubmit(async (values) => {
     console.log(values);
     setIsSubmitting(true); // Deshabilitar el botón de submit
+
+    const userInstance = createUserInstance({
+      ...values,
+      id: user.id,
+      profile_picture: values.profile_picture,
+    });
+
+    const res = await userInstance.update(true, uploadImages);
+
+    if (res.errors) {
+      toast({
+        title: "Error",
+        description: "An error occurred while updating the information",
+        variant: "destructive",
+      });
+    }
+
+    // Renderizar los datos actualizados
+    setUser((prevUser) => ({
+      ...prevUser,
+      user_metadata: {
+        ...prevUser.user_metadata,
+        name: values.name,
+        profile_picture: values.profile_picture.url,
+      },
+    }));
+
+    toast({
+      description: "Updated successfully",
+      variant: "success",
+    });
+
+    setIsSubmitting(false); // Habilitar el botón de submit
+
+    return;
   });
 
   const inputsUser = [
@@ -118,7 +156,7 @@ const DashboardPage = () => {
                 </div>
               </div>
               <div>
-                <div className="mt-10 w-full md:w-[30%]">
+                <div className="mt-7 w-full sm:w-[30%] lg:w-[20%]">
                   <Button
                     orange
                     type="submit"

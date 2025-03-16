@@ -87,7 +87,12 @@ export const AuthProvider = ({ children }) => {
 
       setUser({
         ...res.data.session.user,
-        profile_picture: decoded.profile_picture,
+        user_metadata: {
+          ...res.data.session.user.user_metadata,
+          profile_picture:
+            decoded.profile_picture ||
+            res.data.session.user.user_metadata.profile_picture,
+        },
       });
       setIsAuthenticated(true);
     } catch (error) {
@@ -272,9 +277,11 @@ export const AuthProvider = ({ children }) => {
             ...session.data.session.user,
             user_metadata: {
               ...session.data.session.user.user_metadata,
-              role: decoded.user_role,
+              profile_picture:
+                decoded.profile_picture ||
+                session.data.session.user.user_metadata.profile_picture,
+              //role: decoded.user_role,
             },
-            profile_picture: decoded.profile_picture,
           });
           setIsAuthenticated(true);
         }

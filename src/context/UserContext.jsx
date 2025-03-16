@@ -28,7 +28,27 @@ export class User {
     };
   }
 
-  async update() {
+  async update(updateUser = false, uploadImages) {
+    if (updateUser) {
+      const image = this.data.profile_picture;
+      let resImage = null;
+      // Validamos si actualizo la imagen
+      if (image || typeof image == "object") {
+        resImage = await uploadImages(
+          `${this.data.id}/profile_picture`,
+          image,
+          "users"
+        );
+      }
+
+      return await supabase.auth.updateUser({
+        data: {
+          name: this.data.name,
+          profile_picture: resImage,
+        },
+      });
+    }
+
     return await supabase.auth.updateUser({
       data: {
         name: this.data.name,

@@ -1,9 +1,12 @@
 import { useAuth } from "@/context/AuthContext";
 import MyLeadsTable from "./components/MyLeadsTable";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const MyLeadsPage = () => {
-  //const { userInfo } = useOutletContext();
+  const [searchParams] = useSearchParams();
+  const paramsObject = Object.fromEntries(searchParams.entries());
+
   const { createCompanyInstance } = useAuth();
   const company = createCompanyInstance({});
 
@@ -11,8 +14,15 @@ const MyLeadsPage = () => {
 
   useEffect(() => {
     const fetchLeads = async () => {
+      if (paramsObject.id) {
+        const leads = await company.getLeadsByField("id", paramsObject.id);
+        setLeads(leads.data);
+        return;
+      }
+
       const leads = await company.getAllLeads();
       setLeads(leads.data);
+      return;
     };
 
     fetchLeads();

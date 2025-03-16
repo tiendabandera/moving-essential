@@ -32,6 +32,7 @@ import { Separator } from "./ui/separator";
 import Button from "./Button";
 import { navigation } from "@/constants";
 import SidebarItems from "./SidebarItems";
+import Notifications from "./Notifications";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -138,7 +139,10 @@ function Header() {
                 </div>
               </div>
             </nav> */}
-            <div className="cursor-pointer flex items-center gap-3 ml-auto bg-white rounded-full px-3 py-2 ring-1 ring-white relative">
+            <div className="ml-auto">
+              {isAuthenticated && <Notifications user={user} />}
+            </div>
+            <div className="cursor-pointer flex items-center gap-3 ml-3 bg-white rounded-full px-3 py-2 ring-1 ring-white relative">
               <div
                 className="hidden sm:block rounded-full absolute top-0 left-0 w-full h-full"
                 onClick={() => setOpen((prev) => !prev)}
@@ -147,7 +151,6 @@ function Header() {
                 className="block sm:hidden rounded-full absolute top-0 left-0 w-full h-full"
                 onClick={toggleNavigation}
               ></div>
-              {/* <Menu className="size-5" /> */}
               <AnimatePresence mode="wait">
                 {openNavigation ? (
                   <motion.div
@@ -172,7 +175,10 @@ function Header() {
                 )}
               </AnimatePresence>
               <img
-                src={user?.profile_picture || "/assets/img/user-not-found.png"}
+                src={
+                  user?.user_metadata.profile_picture ||
+                  "/assets/img/user-not-found.png"
+                }
                 className="size-7 rounded-full"
               />
             </div>

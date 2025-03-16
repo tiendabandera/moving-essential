@@ -8,16 +8,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -29,125 +26,277 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import DetailsLead from "./DetailsLead";
 
-export const columns = [
-  /* {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  }, */
-  {
-    accessorKey: "full_name",
-    header: "Full name",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("full_name")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "phone",
-    header: "Phone",
-    cell: ({ row }) => {
-      const phone = row.getValue("phone");
-      let phoneFormatted = "";
+// export const columns = [
+//   /* {
+//     id: "select",
+//     header: ({ table }) => (
+//       <Checkbox
+//         checked={
+//           table.getIsAllPageRowsSelected() ||
+//           (table.getIsSomePageRowsSelected() && "indeterminate")
+//         }
+//         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+//         aria-label="Select all"
+//       />
+//     ),
+//     cell: ({ row }) => (
+//       <Checkbox
+//         checked={row.getIsSelected()}
+//         onCheckedChange={(value) => row.toggleSelected(!!value)}
+//         aria-label="Select row"
+//       />
+//     ),
+//     enableSorting: false,
+//     enableHiding: false,
+//   }, */
+//   {
+//     accessorKey: "full_name",
+//     header: "Full name",
+//     cell: ({ row }) => (
+//       <div className="capitalize">{row.getValue("full_name")}</div>
+//     ),
+//   },
+//   {
+//     accessorKey: "email",
+//     header: ({ column }) => {
+//       return (
+//         <Button
+//           variant="ghost"
+//           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+//         >
+//           Email
+//           <ArrowUpDown />
+//         </Button>
+//       );
+//     },
+//     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+//   },
+//   {
+//     accessorKey: "phone",
+//     header: "Phone",
+//     cell: ({ row }) => {
+//       const phone = row.getValue("phone");
+//       let phoneFormatted = "";
 
-      if (phone) {
-        phoneFormatted = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
-      }
+//       if (phone) {
+//         phoneFormatted = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+//       }
 
-      return <div className="w-28">{phoneFormatted}</div>;
-    },
-  },
-  {
-    accessorKey: "message",
-    header: "Message",
-    cell: ({ row }) => (
-      <div className="truncate w-48 lg:w-96">{row.getValue("message")}</div>
-    ),
-  },
-  {
-    accessorKey: "created_at",
-    header: "Created At",
-    cell: ({ row }) => {
-      const createdAt = new Date(row.getValue("created_at")).toLocaleString(
-        "en-GB",
-        {
-          day: "2-digit",
-          month: "short", // Short month (Jan, Feb, Mar, etc.)
-          year: "numeric",
-        }
-      );
+//       return <div className="w-28">{phoneFormatted}</div>;
+//     },
+//   },
+//   {
+//     accessorKey: "message",
+//     header: "Message",
+//     cell: ({ row }) => (
+//       <div className="truncate w-48 lg:w-96">{row.getValue("message")}</div>
+//     ),
+//   },
+//   {
+//     accessorKey: "created_at",
+//     header: "Created At",
+//     cell: ({ row }) => {
+//       const createdAt = new Date(row.getValue("created_at")).toLocaleString(
+//         "en-GB",
+//         {
+//           day: "2-digit",
+//           month: "short", // Short month (Jan, Feb, Mar, etc.)
+//           year: "numeric",
+//         }
+//       );
 
-      return <div>{createdAt}</div>;
-    },
-  },
-  /* {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
+//       return <div>{createdAt}</div>;
+//     },
+//   },
+//   {
+//     id: "actions",
+//     enableHiding: false,
+//     cell: ({ row }) => {
+//       const payment = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  }, */
-];
+//       return (
+//         <Eye
+//           onClick={() => {
+//             setDetails(payment);
+//           }}
+//         />
+//       );
+//       /* return (
+//         <DropdownMenu>
+//           <DropdownMenuTrigger asChild>
+//             <Button variant="ghost" className="h-8 w-8 p-0">
+//               <span className="sr-only">Open menu</span>
+//               <MoreHorizontal />
+//             </Button>
+//           </DropdownMenuTrigger>
+//           <DropdownMenuContent align="end">
+//             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+//             <DropdownMenuItem
+//               onClick={() => navigator.clipboard.writeText(payment.id)}
+//             >
+//               Copy payment ID
+//             </DropdownMenuItem>
+//             <DropdownMenuSeparator />
+//             <DropdownMenuItem>View customer</DropdownMenuItem>
+//             <DropdownMenuItem>View payment details</DropdownMenuItem>
+//           </DropdownMenuContent>
+//         </DropdownMenu>
+//       ); */
+//     },
+//   },
+//   /* {
+//     id: "actions",
+//     enableHiding: false,
+//     cell: ({ row }) => {
+//       const payment = row.original;
+
+//       return (
+//         <DropdownMenu>
+//           <DropdownMenuTrigger asChild>
+//             <Button variant="ghost" className="h-8 w-8 p-0">
+//               <span className="sr-only">Open menu</span>
+//               <MoreHorizontal />
+//             </Button>
+//           </DropdownMenuTrigger>
+//           <DropdownMenuContent align="end">
+//             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+//             <DropdownMenuItem
+//               onClick={() => navigator.clipboard.writeText(payment.id)}
+//             >
+//               Copy payment ID
+//             </DropdownMenuItem>
+//             <DropdownMenuSeparator />
+//             <DropdownMenuItem>View customer</DropdownMenuItem>
+//             <DropdownMenuItem>View payment details</DropdownMenuItem>
+//           </DropdownMenuContent>
+//         </DropdownMenu>
+//       );
+//     },
+//   }, */
+// ];
 
 const MyLeadsTable = ({ leads }) => {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
+
+  const [seeDetails, setSeeDetails] = useState(false);
+  const [details, setDetails] = useState({});
+
+  const columns = [
+    {
+      accessorKey: "full_name",
+      header: "Full name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("full_name")}</div>
+      ),
+    },
+    {
+      accessorKey: "email",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Email
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
+    },
+    {
+      accessorKey: "phone",
+      header: "Phone",
+      cell: ({ row }) => {
+        const phone = row.getValue("phone");
+        let phoneFormatted = "";
+
+        if (phone) {
+          phoneFormatted = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+        }
+
+        return <div className="w-28">{phoneFormatted}</div>;
+      },
+    },
+    {
+      accessorKey: "message",
+      header: "Message",
+      cell: ({ row }) => (
+        <div className="truncate w-48 lg:w-96">{row.getValue("message")}</div>
+      ),
+    },
+    {
+      accessorKey: "created_at",
+      header: "Created At",
+      cell: ({ row }) => {
+        const createdAt = new Date(row.getValue("created_at")).toLocaleString(
+          "en-GB",
+          {
+            day: "2-digit",
+            month: "short", // Short month (Jan, Feb, Mar, etc.)
+            year: "numeric",
+          }
+        );
+
+        return <div>{createdAt}</div>;
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const record = row.original;
+
+        return (
+          <Eye
+            className="cursor-pointer"
+            size={20}
+            strokeWidth={1.5}
+            onClick={() => {
+              setDetails(record);
+              setSeeDetails(true);
+            }}
+          />
+        );
+      },
+    },
+    /* {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original;
+  
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(payment.id)}
+              >
+                Copy payment ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View customer</DropdownMenuItem>
+              <DropdownMenuItem>View payment details</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    }, */
+  ];
 
   const table = useReactTable({
     data: leads,
@@ -167,6 +316,7 @@ const MyLeadsTable = ({ leads }) => {
       rowSelection,
     },
   });
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -287,6 +437,13 @@ const MyLeadsTable = ({ leads }) => {
           </Button>
         </div>
       </div>
+      {seeDetails && (
+        <DetailsLead
+          record={details}
+          isOpen={seeDetails}
+          onClose={setSeeDetails}
+        />
+      )}
     </div>
   );
 };

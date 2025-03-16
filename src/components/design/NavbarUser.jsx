@@ -37,7 +37,10 @@ const NavbarUser = () => {
       <div className="hidden md:flex items-center gap-x-2">
         <p className="text-base font-medium">{user.user_metadata.name}</p>
         <img
-          src={user?.profile_picture || "/assets/img/user-not-found.png"}
+          src={
+            user.user_metadata?.profile_picture ||
+            "/assets/img/user-not-found.png"
+          }
           alt="profile"
           className="w-8 h-8 rounded-full"
         />

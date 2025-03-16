@@ -1,8 +1,9 @@
 import { supabase } from "../api/auth";
+import { BaseModel } from "./BaseModel";
 
-export class Company {
+export class Company extends BaseModel {
   constructor(data = {}) {
-    this.data = data;
+    super(data);
   }
 
   async update(companyId, userId, uploadImages) {
@@ -452,22 +453,46 @@ export class Company {
   }
 
   async createReview() {
-    return await supabase.from("reviews").insert(this.data).select();
+    const { user, company, ...res } = this.data;
+
+    // Crear notificacion a la empresa
+    await this.createNotification(
+      company.user_id,
+      3,
+      `${user.name}, wrote a review of your company.`
+    );
+
+    return await supabase
+      .from("reviews")
+      .insert({ ...res, company_id: company.id })
+      .select();
   }
 
   /* GET A QUOTE
   __________________________________________________ */
 
   async createQuote() {
-    const insert = await supabase.from("leads").insert({
-      full_name: this.data.data.fullname,
-      email: this.data.data.email,
-      phone: this.data.data.phone,
-      message: this.data.data.message,
-      company_id: this.data.company.id,
-    });
+    const insert = await supabase
+      .from("leads")
+      .insert({
+        full_name: this.data.data.fullname,
+        email: this.data.data.email,
+        phone: this.data.data.phone,
+        message: this.data.data.message,
+        company_id: this.data.company.id,
+      })
+      .select()
+      .single();
 
     if (insert.error) return insert.error;
+
+    // Crear notificacion a la empresa
+    await this.createNotification(
+      this.data.company.user_id,
+      1,
+      `${this.data.data.fullname}, has contacted you! Check your email inbox.`,
+      `/company/leads/my-leads?id=${insert.data.id}`
+    );
 
     return await supabase.functions.invoke("sendEmailToCompany", {
       body: { ...this.data, emails: [this.data.company.email] },
@@ -493,6 +518,16 @@ export class Company {
       .order("created_at", {
         ascending: false,
       });
+  }
+
+  async getLeadsByField(field, value) {
+    return await supabase
+      .from("leads")
+      .select("*")
+      .order("created_at", {
+        ascending: false,
+      })
+      .eq(field, value);
   }
 
   /* CANCEL RENEWAL

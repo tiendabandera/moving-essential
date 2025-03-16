@@ -8,31 +8,39 @@ import {
   BellRing,
   UserRoundSearch,
   BookUser,
+  House,
 } from "lucide-react";
 
 const path = "company";
 
 export const dataGeneral = [
   {
+    id: 0,
+    label: "Home",
+    href: "/",
+    icon: House,
+    services: [1, 2],
+  },
+  {
     id: 1,
     label: "Dashboard",
     href: `/${path}/dashboard`,
     icon: PanelsTopLeft,
-    services:[1, 2]
+    services: [1, 2],
   },
   {
     id: 2,
     label: "Data",
     href: `/${path}/data`,
     icon: ChartNoAxesCombined,
-    services:[1, 2]
+    services: [1, 2],
   },
   {
     id: 3,
     label: "Notifications",
     href: `/${path}/notifications`,
     icon: BellRing,
-    services:[1, 2]
+    services: [1, 2],
   },
   {
     id: 4,
@@ -53,7 +61,7 @@ export const dataGeneral = [
         icon: BookUser,
       },
     ],
-    services:[1]
+    services: [1],
   },
   {
     id: 5,
@@ -74,7 +82,7 @@ export const dataGeneral = [
         icon: BookUser,
       },
     ],
-    services:[1]
+    services: [1],
   },
 ];
 
@@ -92,5 +100,3 @@ export const dataMembership = [
     icon: Gem,
   },
 ];
-
-
