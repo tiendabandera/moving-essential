@@ -140,7 +140,9 @@ function Header() {
               </div>
             </nav> */}
             <div className="ml-auto">
-              {isAuthenticated && <Notifications user={user} />}
+              {isAuthenticated && user.user_metadata.role === "company" && (
+                <Notifications user={user} />
+              )}
             </div>
             <div className="cursor-pointer flex items-center gap-3 ml-3 bg-white rounded-full px-3 py-2 ring-1 ring-white relative">
               <div
