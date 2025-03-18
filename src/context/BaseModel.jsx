@@ -13,4 +13,14 @@ export class BaseModel {
       link,
     });
   }
+
+  async createNotifications(users_id, type_id, message, link = null) {
+    let toInsert = [];
+
+    users_id.forEach((user_id) => {
+      toInsert.push({ user_id, type_id, message, link });
+    });
+
+    return await supabase.from("notifications").insert(toInsert);
+  }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -7,13 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  ChevronDown,
-  Delete,
-  MoreHorizontal,
-  Trash,
-} from "lucide-react";
+import { ChevronDown, Plus, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,9 +15,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -36,6 +27,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DeleteSelectedRows from "./DeleteSelectedRows";
+import CreatePhonePool from "./CreatePhonePool";
+import { useAuth } from "@/context/AuthContext";
 
 const columns = [
   {
@@ -106,18 +99,24 @@ const columns = [
   },
 ];
 
-const PhonePoolTable = ({ records }) => {
+const PhonePoolTable = ({ records, setRecords }) => {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
   const [open, setOpen] = useState(false);
+  const [createLead, setCreateLead] = useState(false);
 
   const [deleteRows, setDeleteRows] = useState([]);
 
+  const { user } = useAuth();
+
   const table = useReactTable({
     data: records,
-    columns,
+    columns:
+      user.user_metadata.role === "admin"
+        ? columns
+        : columns.filter((column) => column.id !== "select"),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -159,18 +158,28 @@ const PhonePoolTable = ({ records }) => {
           </Button>
         </div>
       ) : (
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter phones..."
-            value={table.getColumn("phone")?.getFilterValue() ?? ""}
-            onChange={(event) =>
-              table.getColumn("phone")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+        <div className="flex flex-col sm:flex-row py-4 gap-4">
+          <div className="md:max-w-sm flex items-center gap-2">
+            <Input
+              placeholder="Filter phones..."
+              value={table.getColumn("phone")?.getFilterValue() ?? ""}
+              onChange={(event) =>
+                table.getColumn("phone")?.setFilterValue(event.target.value)
+              }
+            />
+            {user.user_metadata.role === "admin" && (
+              <Button
+                className="bg-green-500 hover:bg-green-300 hover:text-green-600"
+                onClick={() => setCreateLead(true)}
+              >
+                <p className="hidden xs:block">Insert row</p>
+                <Plus className="xs:hidden" />
+              </Button>
+            )}
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+              <Button variant="outline" className="hidden sm:flex ml-auto">
                 Columns <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -250,11 +259,17 @@ const PhonePoolTable = ({ records }) => {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="text-sm text-muted-foreground">
+        {user.user_metadata.role === "admin" && (
+          <div className="flex-1 text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredRowModel().rows.length} row(s) selected.
+          </div>
+        )}
+        <div
+          className={`${
+            user.user_metadata.role === "company" && "flex-1"
+          } text-sm text-muted-foreground`}
+        >
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()} ({table.getFilteredRowModel().rows.length}{" "}
           items)
@@ -280,9 +295,19 @@ const PhonePoolTable = ({ records }) => {
       </div>
       {open && (
         <DeleteSelectedRows
+          tableName="phone_pool"
           isOpen={open}
           onClose={setOpen}
           records={deleteRows}
+          setNewRecords={setRecords}
+          setRowSelection={setRowSelection}
+        />
+      )}
+      {createLead && (
+        <CreatePhonePool
+          isOpen={createLead}
+          onClose={setCreateLead}
+          setNewRecords={setRecords}
         />
       )}
     </div>

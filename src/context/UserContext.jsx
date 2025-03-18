@@ -1,8 +1,9 @@
 import { supabase } from "../api/auth";
+import { BaseModel } from "./BaseModel";
 
-export class User {
-  constructor(data) {
-    this.data = data;
+export class User extends BaseModel {
+  constructor(data = {}) {
+    super(data);
   }
 
   async create() {
@@ -109,5 +110,53 @@ export class User {
     return await supabase.from("phone_pool").select("*").order("created_at", {
       ascending: false,
     });
+  }
+
+  async getPhonePoolByField(field, value) {
+    return await supabase
+      .from("phone_pool")
+      .select("*")
+      .order("created_at", {
+        ascending: false,
+      })
+      .eq(field, value);
+  }
+
+  async createPhonePool(data) {
+    const { first_name, last_name, phone } = data;
+
+    // Filtrar valores null o undefined
+    const insertData = {};
+    insertData.phone = phone;
+
+    if (first_name) insertData.first_name = first_name;
+    if (last_name) insertData.last_name = last_name;
+
+    const res = await supabase
+      .from("phone_pool")
+      .insert(insertData)
+      .select()
+      .single();
+
+    if (res.data) {
+      const companies = await supabase
+        .from("premium_features")
+        .select("*, company:companies!inner(*)")
+        .eq("company.business_type_id", 1)
+        .eq("notification_pool", true);
+
+      if (companies.data.length > 0) {
+        const users_id = companies.data.map((record) => record.company.user_id);
+
+        await this.createNotifications(
+          users_id,
+          4,
+          `Moving Essential, would like to notify you that the LEADS pool has been updated.`,
+          `/company/leads/phone-pool?id=${res.data.id}`
+        );
+      }
+    }
+
+    return res;
   }
 }

@@ -20,7 +20,7 @@ const PhonePoolPage = () => {
     <div>
       <h2 className="text-2xl mb-4 font-normal">Phone pool</h2>
       <div className="shadow-xs bg-background rounded-lg p-5">
-        <PhonePoolTable records={records} />
+        <PhonePoolTable records={records} setRecords={setRecords} />
       </div>
     </div>
   );
