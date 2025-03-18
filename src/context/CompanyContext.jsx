@@ -582,4 +582,15 @@ export class Company extends BaseModel {
       };
     });
   }
+
+  /* CANCEL RENEWAL
+  __________________________________________________ */
+  async getAllNotifications() {
+    return await supabase
+      .from("notifications")
+      .select("*, notifications_types(name)")
+      .order("created_at", {
+        ascending: false,
+      });
+  }
 }

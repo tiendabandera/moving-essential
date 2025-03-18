@@ -31,8 +31,6 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (userInfo) {
-      console.log(user);
-
       reset({
         name: userInfo.name || "",
         email: userInfo.email || "",
@@ -42,7 +40,6 @@ const DashboardPage = () => {
   }, [userInfo, reset]);
 
   const onSubmit = handleSubmit(async (values) => {
-    console.log(values);
     setIsSubmitting(true); // Deshabilitar el botón de submit
 
     const userInstance = createUserInstance({

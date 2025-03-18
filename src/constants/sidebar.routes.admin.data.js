@@ -4,6 +4,7 @@ import {
   MessageCircleQuestion,
   MessageCircleX,
   PanelsTopLeft,
+  UserRoundCheck,
   UserRoundPlus,
   UserRoundSearch,
 } from "lucide-react";
@@ -28,16 +29,16 @@ export const dataGeneral = [
 export const dataLeads = [
   {
     id: 3,
-    label: "List",
-    href: `/${path}/leads/phone-pool`,
-    icon: UserRoundSearch,
+    label: "Phone pool",
+    href: `/${path}/phone-pool`,
+    icon: UserRoundCheck,
   },
-  {
+  /*  {
     id: 4,
     label: "Create",
     href: `/${path}/leads/create`,
     icon: UserRoundPlus,
-  },
+  }, */
 ];
 
 export const dataReviews = [

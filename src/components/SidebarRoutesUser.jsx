@@ -25,7 +25,7 @@ const SidebarRoutesUser = () => {
         </div>
         <Separator />
         <div className="p-2 md:p-6">
-          <p className="text-slate-500 mb-2">Phone pool</p>
+          <p className="text-slate-500 mb-2">Leads</p>
           {dataLeads.map((item) => (
             <SidebarItems key={item.label} {...item} />
           ))}

@@ -101,4 +101,13 @@ export class User {
       .from("likes")
       .insert({ company_id: company_id, user_id: this.data.id });
   }
+
+  /* LEADS ZONE
+  _________________________________________ */
+
+  async getPhonePool() {
+    return await supabase.from("phone_pool").select("*").order("created_at", {
+      ascending: false,
+    });
+  }
 }

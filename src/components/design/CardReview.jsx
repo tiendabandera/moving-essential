@@ -13,9 +13,12 @@ const CardReview = ({ review }) => {
     <div className="w-full flex flex-col items-center justify-center gap-4 border border-gray-100 rounded-xl p-6 relative">
       <div className="w-12 h-12 rounded-full">
         <img
-          src="/assets/img/user-not-found.png"
+          src={
+            review.user_info.user_metadata.profile_picture ||
+            "/assets/img/user-not-found.png"
+          }
           alt="user-review"
-          className="object-cover"
+          className="object-cover rounded-full"
         />
       </div>
       <div className="hidden absolute top-5 right-5">
