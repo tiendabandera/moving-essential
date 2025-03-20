@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -7,17 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, Plus, Trash } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -26,78 +16,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import DeleteSelectedRows from "./DeleteSelectedRows";
 import CreatePhonePool from "./CreatePhonePool";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Eye, Plus, Trash } from "lucide-react";
+
+import { supabase } from "@/api/auth";
+
 import { useAuth } from "@/context/AuthContext";
-
-const columns = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "first_name",
-    header: "First name",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("first_name")}</div>
-    ),
-  },
-  {
-    accessorKey: "last_name",
-    header: "Last name",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("last_name")}</div>
-    ),
-  },
-  {
-    accessorKey: "phone",
-    header: "Phone",
-    cell: ({ row }) => {
-      const phone = row.getValue("phone");
-      let phoneFormatted = "";
-
-      if (phone) {
-        phoneFormatted = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
-      }
-
-      return <div className="w-28">{phoneFormatted}</div>;
-    },
-  },
-  {
-    accessorKey: "created_at",
-    header: "Created At",
-    cell: ({ row }) => {
-      const createdAt = new Date(row.getValue("created_at")).toLocaleString(
-        "en-GB",
-        {
-          day: "2-digit",
-          month: "short", // Short month (Jan, Feb, Mar, etc.)
-          year: "numeric",
-        }
-      );
-
-      return <div>{createdAt}</div>;
-    },
-  },
-];
+import { Switch } from "./ui/switch";
+import CustomToolTips from "./design/CustomTooltips";
 
 const PhonePoolTable = ({ records, setRecords }) => {
   const [sorting, setSorting] = useState([]);
@@ -106,10 +37,134 @@ const PhonePoolTable = ({ records, setRecords }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [open, setOpen] = useState(false);
   const [createLead, setCreateLead] = useState(false);
+  const [visiblePhones, setVisiblePhones] = useState({});
+  const [views, setViews] = useState({});
+  const [notificationPool, setNotificationPool] = useState(false);
+
+  const handleViewPhone = async (rowId, initialViews) => {
+    setVisiblePhones((prev) => ({
+      ...prev,
+      [rowId]: !prev[rowId],
+    }));
+
+    setViews((prev) => ({
+      ...prev,
+      [rowId]: (prev[rowId] ?? initialViews) + 1, // Incrementa el número de vistas
+    }));
+
+    await supabase.rpc("increment_views", { id_input: rowId });
+  };
 
   const [deleteRows, setDeleteRows] = useState([]);
+  const { user, userInfo } = useAuth();
 
-  const { user } = useAuth();
+  const columns = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "first_name",
+      header: "First name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("first_name")}</div>
+      ),
+    },
+    {
+      accessorKey: "last_name",
+      header: "Last name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("last_name")}</div>
+      ),
+    },
+    {
+      accessorKey: "phone",
+      header: "Phone",
+      cell: ({ row }) => {
+        const phone = row.getValue("phone");
+        const rowId = row.original.id; // Asegúrate de que cada fila tiene un ID único
+        const isPhoneVisible = visiblePhones[rowId];
+
+        let phoneFormatted = phone
+          ? phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")
+          : "";
+
+        return (
+          <div className="w-28">
+            {user.user_metadata.role === "admin" || isPhoneVisible ? (
+              phoneFormatted
+            ) : (
+              <div>
+                <Eye
+                  onClick={() => {
+                    handleViewPhone(rowId, row.getValue("views") || 0);
+                  }}
+                  className={`cursor-pointer ${isPhoneVisible && "hidden"}`}
+                  strokeWidth={1.5}
+                  size={20}
+                />
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "views",
+      header: () => {
+        return (
+          <div className="flex gap-2">
+            <p>Views</p>
+            <CustomToolTips
+              content={`
+                Views: The number of times this lead has been accessed by different users in the Phone Pool.
+              `}
+              size={"size-4"}
+              className={"w-70 mr-5"}
+            />
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const rowId = row.original.id;
+        return <div>{views[rowId] ?? row.getValue("views")}</div>;
+      },
+    },
+    {
+      accessorKey: "created_at",
+      header: "Created At",
+      cell: ({ row }) => {
+        const createdAt = new Date(row.getValue("created_at")).toLocaleString(
+          "en-GB",
+          {
+            day: "2-digit",
+            month: "short", // Short month (Jan, Feb, Mar, etc.)
+            year: "numeric",
+          }
+        );
+
+        return <div>{createdAt}</div>;
+      },
+    },
+  ];
 
   const table = useReactTable({
     data: records,
@@ -138,13 +193,30 @@ const PhonePoolTable = ({ records, setRecords }) => {
     setDeleteRows(records);
   };
 
+  const handleNotification = async (value) => {
+    setNotificationPool(value);
+    await supabase
+      .from("premium_features")
+      .update({ notification_pool: value })
+      .eq("company_id", userInfo.company.id);
+  };
+
+  useEffect(() => {
+    if (
+      userInfo &&
+      user.user_metadata.role === "company" &&
+      userInfo.company.premium_features
+    ) {
+      setNotificationPool(userInfo.company.premium_features.notification_pool);
+    }
+  }, [userInfo]);
+
   return (
     <div className="w-full">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <div className="flex items-center py-4">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => {
               handlerDeleteRows(
                 table
@@ -177,35 +249,25 @@ const PhonePoolTable = ({ records, setRecords }) => {
               </Button>
             )}
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="hidden sm:flex ml-auto">
-                Columns <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id
-                        .split("_")
-                        .map((word) => word)
-                        .join(" ")}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user.user_metadata.role === "company" && (
+            <div className="ml-auto flex flex-col items-end gap-2">
+              <CustomToolTips
+                content={`
+                This is an on & off switch for notifications in the phone pool. 
+                When switched 'on', you will receive alerts and updates. 
+                When 'off' all notifications are silenced, ensuring uninterrupted workflow or focus.
+              `}
+                className={"w-70 mr-5"}
+              />
+              <div className="flex flex-col items-center">
+                <Switch
+                  onCheckedChange={handleNotification}
+                  checked={notificationPool}
+                />
+                <span className="text-xs font-semibold">off/on</span>
+              </div>
+            </div>
+          )}
         </div>
       )}
       <div className="rounded-md border">

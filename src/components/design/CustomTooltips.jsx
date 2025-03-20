@@ -6,14 +6,14 @@ import {
 } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 
-const CustomToolTips = ({ content }) => {
+const CustomToolTips = ({ content, className, size }) => {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
-          <Info strokeWidth={1} className="w-5 h-5" />
+          <Info strokeWidth={1} className={`${size || "size-5"}`} />
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent className={`${className || ""}`}>
           <p>{content}</p>
         </TooltipContent>
       </Tooltip>

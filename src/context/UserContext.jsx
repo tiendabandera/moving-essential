@@ -154,6 +154,25 @@ export class User extends BaseModel {
           `Moving Essential, would like to notify you that the LEADS pool has been updated.`,
           `/company/leads/phone-pool?id=${res.data.id}`
         );
+
+        for (const record of companies.data) {
+          // Cambiar el link del boton de la plantilla del email en brevo
+          await supabase.functions.invoke("sendEmailToCompany", {
+            body: {
+              data: { fullName: record.company.company_name },
+              emails: [record.company.email],
+              templateId: 25,
+            },
+          });
+
+          await supabase.functions.invoke("sendSmsToCompany", {
+            body: {
+              recipient: `1${record.company.phone}`,
+              content: `Hi ${record.company.company_name}, someone’s looking to move in your area.\n\nNew leads are available on Moving Essential. Check them out here:\nhttps://www.movingessential.com/company/leads-pool\n\nBeat your competitors to it and be the first to connect!\n\n– Moving Essential.`,
+              webUrl: `https://www.movingessential.com/company/leads/phone-pool`,
+            },
+          });
+        }
       }
     }
 
