@@ -36,7 +36,7 @@ const ConnectPlatform = ({ platform, isOpen, onClose, params }) => {
   } = useForm();
 
   const onSubmit = handleSubmit((values) => {
-    startTransition(() => {
+    startTransition(async () => {
       if (platform === "teamleader" && !params.code) {
         console.log("Generar code: ", values);
         return;
@@ -50,7 +50,7 @@ const ConnectPlatform = ({ platform, isOpen, onClose, params }) => {
         company_id: userInfo.company.id,
       });
 
-      const res = companyInstance.createIntegration();
+      const res = await companyInstance.createIntegration();
       console.log(res);
     });
   });
