@@ -56,8 +56,8 @@ export const dataGeneral = [
       },
       {
         id: 2,
-        label: "All integrations",
-        href: `/all-integrations`,
+        label: "Integrations",
+        href: `/${path}/crm/integrations`,
         icon: BookUser,
       },
     ],

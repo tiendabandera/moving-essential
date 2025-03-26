@@ -583,14 +583,11 @@ export class Company extends BaseModel {
     });
   }
 
-  /* CANCEL RENEWAL
+  /* CRM
   __________________________________________________ */
-  async getAllNotifications() {
-    return await supabase
-      .from("notifications")
-      .select("*, notifications_types(name)")
-      .order("created_at", {
-        ascending: false,
-      });
+  async createIntegration() {
+    return await supabase.functions.invoke("integrateCRM", {
+      body: this.data,
+    });
   }
 }

@@ -23,4 +23,13 @@ export class BaseModel {
 
     return await supabase.from("notifications").insert(toInsert);
   }
+
+  async getAllNotifications() {
+    return await supabase
+      .from("notifications")
+      .select("*, notifications_types(name)")
+      .order("created_at", {
+        ascending: false,
+      });
+  }
 }

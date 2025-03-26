@@ -41,7 +41,7 @@ const PremiumFeatures = () => {
                 <h3 className="font-medium">Subscription information</h3>
               </div>
               <div className="mt-7 flex flex-col gap-4">
-                {premiumFeatures ? (
+                {premiumFeatures && premiumFeatures.is_active ? (
                   <>
                     <div className="grid grid-cols-6 gap-2">
                       <div className="col-span-6 xs:col-span-5 flex flex-col gap-2">

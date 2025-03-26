@@ -97,6 +97,12 @@ const AppContent = () => {
                   element={<CompaniesPages.MyLeadsPage />}
                 />
               </Route>
+              <Route path="crm">
+                <Route
+                  path="integrations"
+                  element={<CompaniesPages.IntegrationsPage />}
+                />
+              </Route>
               <Route
                 path="membership-premium-features"
                 element={<CompaniesPages.PremiumFeatures />}
