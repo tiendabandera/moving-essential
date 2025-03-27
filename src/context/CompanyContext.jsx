@@ -603,4 +603,38 @@ export class Company extends BaseModel {
       error,
     };
   }
+
+  async getIntegrationById(id) {
+    return await supabase
+      .from("crm")
+      .select("id, created_at, platform, title, is_active")
+      .eq("id", id)
+      .order("created_at", {
+        ascending: false,
+      });
+  }
+
+  async getAllIntegrations() {
+    return await supabase
+      .from("crm")
+      .select("id, created_at, platform, title, is_active")
+      .order("is_active", {
+        ascending: false,
+      })
+      .order("created_at", {
+        ascending: false,
+      });
+  }
+
+  async changeIntegrationStatus(id, isActive, companyId) {
+    await supabase
+      .from("crm")
+      .update({ is_active: false })
+      .eq("company_id", companyId);
+
+    return await supabase
+      .from("crm")
+      .update({ is_active: isActive })
+      .eq("id", id);
+  }
 }

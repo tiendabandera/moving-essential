@@ -2,18 +2,33 @@ import NavbarCompany from "@/components/design/NavbarCompany";
 import SidebarCompany from "@/components/SidebarCompany";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+
+const premiumFeatures = [
+  "/company/leads/phone-pool",
+  "/company/crm/integrations",
+];
 
 const Layout = () => {
   const { profile, userInfo } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     profile();
   }, []);
 
-  /* if (!userInfo) {
-    return <div>Loading company information...</div>;
-  } */
+  // Verificar si el usuario tiene acceso a las funciones premium
+  useEffect(() => {
+    if (
+      userInfo &&
+      !userInfo?.company.has_premium_features &&
+      premiumFeatures.includes(location.pathname)
+    ) {
+      navigate("/company/membership-premium-features");
+    }
+  }, [userInfo]);
 
   return (
     <div className="flex w-full h-full">
@@ -23,7 +38,7 @@ const Layout = () => {
       <div className="w-full xl:ml-80">
         <NavbarCompany />
         <div className="p-6 bg-[#f8f8f8]">
-          <Outlet context={{ userInfo }} />
+          {userInfo && <Outlet context={{ userInfo }} />}
         </div>
       </div>
     </div>

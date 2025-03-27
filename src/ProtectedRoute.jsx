@@ -1,8 +1,8 @@
 import { useAuth } from "./context/AuthContext";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = ({ roles }) => {
-  const { isAuthenticated, isLoading, user, userInfo } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   // const location = useLocation();
 
   // const premiumFeatures = [

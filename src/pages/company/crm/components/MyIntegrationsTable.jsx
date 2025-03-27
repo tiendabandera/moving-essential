@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
 import {
   flexRender,
   getCoreRowModel,
@@ -17,47 +18,58 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import DeleteSelectedRows from "./DeleteSelectedRows";
-import CreatePhonePool from "./CreatePhonePool";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { ArrowUpDown, MoreHorizontal, Trash } from "lucide-react";
+import DeleteSelectedRows from "@/components/DeleteSelectedRows";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, Plus, Trash } from "lucide-react";
-
-import { supabase } from "@/api/auth";
-
 import { useAuth } from "@/context/AuthContext";
-import { Switch } from "./ui/switch";
-import CustomToolTips from "./design/CustomTooltips";
 
-const PhonePoolTable = ({ records, setRecords }) => {
+const platformProperties = {
+  salesforce: {
+    name: "Salesforce",
+    bg: "bg-blue-500 text-slate-50",
+  },
+};
+
+const MyIntegrationsTable = ({ records, setRecords, company }) => {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
   const [open, setOpen] = useState(false);
-  const [createLead, setCreateLead] = useState(false);
-  const [visiblePhones, setVisiblePhones] = useState({});
-  const [views, setViews] = useState({});
-  const [notificationPool, setNotificationPool] = useState(false);
+  const [deleteRows, setDeleteRows] = useState([]);
 
-  const handleViewPhone = async (rowId, initialViews) => {
-    setVisiblePhones((prev) => ({
-      ...prev,
-      [rowId]: !prev[rowId],
-    }));
+  const { createCompanyInstance } = useAuth();
+  const companyInstance = createCompanyInstance({});
 
-    setViews((prev) => ({
-      ...prev,
-      [rowId]: (prev[rowId] ?? initialViews) + 1, // Incrementa el número de vistas
-    }));
+  const handlerChangeStatus = async (id, isActive) => {
+    setRecords((prev) => {
+      return prev.map((record) => {
+        if (record.id === id) {
+          return { ...record, is_active: isActive };
+        }
+        return { ...record, is_active: false };
+      });
+    });
 
-    await supabase.rpc("increment_views", { id_input: rowId });
+    await companyInstance.changeIntegrationStatus(id, isActive, company.id);
   };
 
-  const [deleteRows, setDeleteRows] = useState([]);
-  const { user, userInfo } = useAuth();
+  const handlerDeleteRows = (records) => {
+    setOpen(true);
+    setDeleteRows(records);
+  };
 
   const columns = [
     {
@@ -83,75 +95,60 @@ const PhonePoolTable = ({ records, setRecords }) => {
       enableHiding: false,
     },
     {
-      accessorKey: "first_name",
-      header: "First name",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("first_name")}</div>
-      ),
-    },
-    {
-      accessorKey: "last_name",
-      header: "Last name",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("last_name")}</div>
-      ),
-    },
-    {
-      accessorKey: "phone",
-      header: "Phone",
+      accessorKey: "platform",
+      header: "Platform",
       cell: ({ row }) => {
-        const phone = row.getValue("phone");
-        const rowId = row.original.id; // Asegúrate de que cada fila tiene un ID único
-        const isPhoneVisible = visiblePhones[rowId];
-
-        let phoneFormatted = phone
-          ? phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")
-          : "";
+        const platform = platformProperties[row.getValue("platform")];
 
         return (
-          <div className="w-28">
-            {user.user_metadata.role === "admin" || isPhoneVisible ? (
-              phoneFormatted
-            ) : (
-              <div>
-                <Eye
-                  onClick={() => {
-                    handleViewPhone(rowId, row.getValue("views") || 0);
-                  }}
-                  className={`cursor-pointer ${isPhoneVisible && "hidden"}`}
-                  strokeWidth={1.5}
-                  size={20}
-                />
-              </div>
-            )}
+          <div
+            className={`w-24 text-center capitalize ${platform.bg} px-2 rounded-md font-normal`}
+          >
+            {platform.name}
           </div>
         );
       },
     },
     {
-      accessorKey: "views",
-      header: () => {
+      accessorKey: "title",
+      header: "Integration name",
+      cell: ({ row }) => (
+        <div className="capitalize w-48 md:w-fit">{row.getValue("title")}</div>
+      ),
+    },
+    {
+      accessorKey: "is_active",
+      header: "Status",
+      cell: ({ row }) => {
+        const is_active = row.getValue("is_active");
+
         return (
-          <div className="flex gap-2">
-            <p>Views</p>
-            <CustomToolTips
-              content={`
-                Views: The number of times this lead has been accessed by different users in the Phone Pool.
-              `}
-              size={"size-4"}
-              className={"w-70 mr-5"}
-            />
+          <div
+            className={`w-24 text-center capitalize ${
+              is_active
+                ? "bg-green-500 text-slate-50"
+                : "bg-red-500 text-slate-50"
+            } px-2 rounded-md font-normal`}
+          >
+            {is_active ? "Active" : "Inactive"}
           </div>
         );
-      },
-      cell: ({ row }) => {
-        const rowId = row.original.id;
-        return <div>{views[rowId] ?? row.getValue("views")}</div>;
       },
     },
     {
       accessorKey: "created_at",
-      header: "Created At",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="px-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Created At
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         const createdAt = new Date(row.getValue("created_at")).toLocaleString(
           "en-GB",
@@ -165,14 +162,48 @@ const PhonePoolTable = ({ records, setRecords }) => {
         return <div>{createdAt}</div>;
       },
     },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const record = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(record.id)}
+              >
+                Copy integration ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => handlerChangeStatus(record.id, true)}
+              >
+                Active integration
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handlerChangeStatus(record.id, false)}
+              >
+                Inactive integration
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
   ];
 
   const table = useReactTable({
     data: records,
-    columns:
-      user.user_metadata.role === "admin"
-        ? columns
-        : columns.filter((column) => column.id !== "select"),
+    columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -188,29 +219,6 @@ const PhonePoolTable = ({ records, setRecords }) => {
       rowSelection,
     },
   });
-
-  const handlerDeleteRows = (records) => {
-    setOpen(true);
-    setDeleteRows(records);
-  };
-
-  const handleNotification = async (value) => {
-    setNotificationPool(value);
-    await supabase
-      .from("premium_features")
-      .update({ notification_pool: value })
-      .eq("company_id", userInfo.company.id);
-  };
-
-  useEffect(() => {
-    if (
-      userInfo &&
-      user.user_metadata.role === "company" &&
-      userInfo.company.premium_features
-    ) {
-      setNotificationPool(userInfo.company.premium_features.notification_pool);
-    }
-  }, [userInfo]);
 
   return (
     <div className="w-full">
@@ -234,46 +242,18 @@ const PhonePoolTable = ({ records, setRecords }) => {
         <div className="flex flex-col sm:flex-row py-4 gap-4">
           <div className="md:max-w-sm flex items-center gap-2">
             <Input
-              placeholder="Filter phones..."
-              value={table.getColumn("phone")?.getFilterValue() ?? ""}
+              placeholder="Filter integration name..."
+              value={table.getColumn("title")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table.getColumn("phone")?.setFilterValue(event.target.value)
+                table.getColumn("title")?.setFilterValue(event.target.value)
               }
             />
-            {user.user_metadata.role === "admin" && (
-              <Button
-                className="bg-green-500 hover:bg-green-300 hover:text-green-600"
-                onClick={() => setCreateLead(true)}
-              >
-                <p className="hidden xs:block">Insert row</p>
-                <Plus className="xs:hidden" />
-              </Button>
-            )}
           </div>
-          {user.user_metadata.role === "company" && (
-            <div className="ml-auto flex flex-col items-end gap-2">
-              <CustomToolTips
-                content={`
-                This is an on & off switch for notifications in the phone pool. 
-                When switched 'on', you will receive alerts and updates. 
-                When 'off' all notifications are silenced, ensuring uninterrupted workflow or focus.
-              `}
-                className={"w-70 mr-5"}
-              />
-              <div className="flex flex-col items-center">
-                <Switch
-                  onCheckedChange={handleNotification}
-                  checked={notificationPool}
-                />
-                <span className="text-xs font-semibold">off/on</span>
-              </div>
-            </div>
-          )}
         </div>
       )}
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-100">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -322,17 +302,11 @@ const PhonePoolTable = ({ records, setRecords }) => {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        {user.user_metadata.role === "admin" && (
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-        )}
-        <div
-          className={`${
-            user.user_metadata.role === "company" && "flex-1"
-          } text-sm text-muted-foreground`}
-        >
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        <div className={`text-sm text-muted-foreground`}>
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()} ({table.getFilteredRowModel().rows.length}{" "}
           items)
@@ -358,7 +332,7 @@ const PhonePoolTable = ({ records, setRecords }) => {
       </div>
       {open && (
         <DeleteSelectedRows
-          tableName="phone_pool"
+          tableName="crm"
           isOpen={open}
           onClose={setOpen}
           records={deleteRows}
@@ -366,15 +340,8 @@ const PhonePoolTable = ({ records, setRecords }) => {
           setRowSelection={setRowSelection}
         />
       )}
-      {createLead && (
-        <CreatePhonePool
-          isOpen={createLead}
-          onClose={setCreateLead}
-          setNewRecords={setRecords}
-        />
-      )}
     </div>
   );
 };
 
-export default PhonePoolTable;
+export default MyIntegrationsTable;
