@@ -12,7 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const titles = {
   salesforce: "Salesforce",
@@ -27,6 +27,7 @@ const ConnectPlatform = ({ platform, isOpen, onClose, params }) => {
   const [isSubmitting, startTransition] = useTransition();
   const { createCompanyInstance } = useAuth();
   const { userInfo } = useOutletContext();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -51,7 +52,13 @@ const ConnectPlatform = ({ platform, isOpen, onClose, params }) => {
       });
 
       const res = await companyInstance.createIntegration();
-      console.log(res);
+
+      if (res.error || res.data.error) {
+        onClose();
+        return;
+      }
+
+      navigate(`/company/crm/my-integrations?id=${res.data.data.id}`);
     });
   });
 

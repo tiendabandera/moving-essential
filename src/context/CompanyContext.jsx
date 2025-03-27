@@ -2,8 +2,8 @@ import { supabase } from "../api/auth";
 import { BaseModel } from "./BaseModel";
 
 export class Company extends BaseModel {
-  constructor(data = {}) {
-    super(data);
+  constructor(data = {}, setErrorToast) {
+    super(data, setErrorToast);
   }
 
   async update(companyId, userId, uploadImages) {
@@ -586,8 +586,21 @@ export class Company extends BaseModel {
   /* CRM
   __________________________________________________ */
   async createIntegration() {
-    return await supabase.functions.invoke("integrateCRM", {
+    const { data, error } = await supabase.functions.invoke("integrateCRM", {
       body: this.data,
     });
+
+    if (error || data.error) {
+      //console.log(await error.context.json());
+
+      this.setErrorToast(
+        "An error occurred while integrating the CRM, please validate the credentials."
+      );
+    }
+
+    return {
+      data: JSON.parse(data),
+      error,
+    };
   }
 }

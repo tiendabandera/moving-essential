@@ -5,6 +5,7 @@ import { User } from "./UserContext";
 //import Cookies from "js-cookie";
 import { registerRequest } from "../api/auth";
 import { decodeJWT } from "@/constants";
+import { toast } from "@/hooks/use-toast";
 
 export const AuthContext = createContext();
 
@@ -24,6 +25,7 @@ export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
   const [optionActiveCompany, setOptionActiveCompany] = useState(false); // Opciones del nav de company
   const [uploading, setUploading] = useState([]);
+  const [errorToast, setErrorToast] = useState(null);
 
   /* INSTANCES
   _________________________________________ */
@@ -32,7 +34,7 @@ export const AuthProvider = ({ children }) => {
       console.error("No data provided for Company instance");
       return null;
     }
-    return new Company(data);
+    return new Company(data, setErrorToast);
   };
 
   const createUserInstance = (data) => {
@@ -306,6 +308,16 @@ export const AuthProvider = ({ children }) => {
       return () => clearTimeout(timer);
     }
   }, [errors]);
+
+  useEffect(() => {
+    if (errorToast) {
+      toast({
+        title: "Error",
+        description: errorToast,
+        variant: "destructive",
+      });
+    }
+  }, [errorToast]);
 
   return (
     <AuthContext.Provider

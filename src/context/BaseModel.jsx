@@ -1,8 +1,9 @@
 import { supabase } from "../api/auth";
 
 export class BaseModel {
-  constructor(data = {}) {
+  constructor(data = {}, setErrorToast) {
     this.data = data;
+    this.setErrorToast = setErrorToast;
   }
 
   async createNotification(user_id, type_id, message, link = null) {
