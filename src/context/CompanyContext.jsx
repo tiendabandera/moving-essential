@@ -494,6 +494,11 @@ export class Company extends BaseModel {
       `/company/leads/my-leads?id=${insert.data.id}`
     );
 
+    // Crear contacto en la integracion de CRM
+    await supabase.functions.invoke("createLeadCRM", {
+      body: { ...this.data.data, company_id: this.data.company.id },
+    });
+
     return await supabase.functions.invoke("sendEmailToCompany", {
       body: { ...this.data, emails: [this.data.company.email] },
     });
