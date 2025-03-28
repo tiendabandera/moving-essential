@@ -7,21 +7,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { fields } from "@/constants/crm";
+import { fields, titles } from "@/constants/crm";
 import { useAuth } from "@/context/AuthContext";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
-const titles = {
+/* const titles = {
   salesforce: "Salesforce",
   zoho: "Zoho CRM",
   hubspot: "HubSpot",
   monday: "Monday Sales",
   kommo: "Kommo",
   teamleader: "Teamleader",
-};
+}; */
 
 const ConnectPlatform = ({ platform, isOpen, onClose, params }) => {
   const [isSubmitting, startTransition] = useTransition();

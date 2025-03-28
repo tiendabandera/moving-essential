@@ -162,3 +162,26 @@ export const fields = {
     },
   ],
 };
+
+export const titles = {
+  salesforce: "Salesforce",
+  zoho: "Zoho CRM",
+  hubspot: "HubSpot",
+  monday: "Monday Sales",
+  kommo: "Kommo",
+  teamleader: "Teamleader",
+};
+
+export const tutorials = {
+  salesforce:
+    "https://video.wixstatic.com/video/9e7c89_3f3adb4d7bd44a059259f343a0b2ff8e/1080p/mp4/file.mp4",
+  zoho: "https://video.wixstatic.com/video/9e7c89_106b35abce2e4e30b90b142b00d6fe40/1080p/mp4/file.mp4",
+  hubspot:
+    "https://video.wixstatic.com/video/9e7c89_3a89069420164ca290087f0ce9905d7f/1080p/mp4/file.mp4",
+  monday:
+    "https://video.wixstatic.com/video/9e7c89_f694c5f8b49a47be93aafcb409e76e0c/1080p/mp4/file.mp4",
+  kommo:
+    "https://video.wixstatic.com/video/9e7c89_25d2a95422474fcfae390eca73fd8ae8/1080p/mp4/file.mp4",
+  teamleader:
+    "https://video.wixstatic.com/video/9e7c89_3b727f9830564b97bf10b567700316ec/1080p/mp4/file.mp4",
+};

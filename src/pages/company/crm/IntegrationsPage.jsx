@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ConnectPlatform from "./components/ConnectPlatform";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "react-router-dom";
+import Tutorial from "./components/Tutorial";
 
 const CardSummary = ({ title, img, id, setIsOpen, setPlatform }) => {
   const handleClick = () => {
@@ -76,6 +77,15 @@ const IntegrationsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [platform, setPlatform] = useState(null);
 
+  //Tutorials
+  const [isOpenTutorial, setIsOpenTutorial] = useState(false);
+  const [platformTutorial, setPlatformTutorial] = useState(null);
+
+  const handleOpenTutorial = (platform) => {
+    setIsOpenTutorial(true);
+    setPlatformTutorial(platform);
+  };
+
   useEffect(() => {
     if (paramsObject.code) {
       setIsOpen(true);
@@ -110,12 +120,15 @@ const IntegrationsPage = () => {
               <p>Step by step video tutorials:</p>
             </div>
             <ul className="space-y-2 border-l-1 border-color-1 pl-4">
-              <li>Salesforce</li>
-              <li>Zoho</li>
-              <li>HubSpot</li>
-              <li>Monday Sales</li>
-              <li>Kommo</li>
-              <li>Teamleader</li>
+              {services.map((service) => (
+                <li
+                  key={service.id}
+                  onClick={() => handleOpenTutorial(service.id)}
+                  className="cursor-pointer hover:text-color-1 transition"
+                >
+                  {service.title}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -126,6 +139,13 @@ const IntegrationsPage = () => {
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           params={paramsObject}
+        />
+      )}
+      {isOpenTutorial && (
+        <Tutorial
+          isOpen={isOpenTutorial}
+          onClose={setIsOpenTutorial}
+          platform={platformTutorial}
         />
       )}
     </>
