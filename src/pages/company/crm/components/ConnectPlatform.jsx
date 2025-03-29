@@ -44,6 +44,15 @@ const ConnectPlatform = ({ platform, isOpen, onClose, params }) => {
       }
 
       const { name, ...restValues } = values;
+
+      /* console.log({
+        values: restValues,
+        name,
+        platform,
+        company_id: userInfo.company.id,
+      });
+
+      return; */
       const companyInstance = createCompanyInstance({
         values: restValues,
         name,

@@ -39,6 +39,10 @@ const platformProperties = {
     name: "Salesforce",
     bg: "bg-blue-500 text-slate-50",
   },
+  zoho: {
+    name: "Zoho CRM",
+    bg: "bg-red-500 text-slate-50",
+  },
 };
 
 const MyIntegrationsTable = ({ records, setRecords, company }) => {
