@@ -14,15 +14,6 @@ import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
-/* const titles = {
-  salesforce: "Salesforce",
-  zoho: "Zoho CRM",
-  hubspot: "HubSpot",
-  monday: "Monday Sales",
-  kommo: "Kommo",
-  teamleader: "Teamleader",
-}; */
-
 const ConnectPlatform = ({ platform, isOpen, onClose, params }) => {
   const [isSubmitting, startTransition] = useTransition();
   const { createCompanyInstance } = useAuth();
@@ -39,7 +30,7 @@ const ConnectPlatform = ({ platform, isOpen, onClose, params }) => {
   const onSubmit = handleSubmit((values) => {
     startTransition(async () => {
       if (platform === "teamleader" && !params.code) {
-        console.log("Generar code: ", values);
+        window.location.href = `https://focus.teamleader.eu/oauth2/authorize?client_id=${values.client_id}&response_type=code&redirect_url=https://main.d1rx52hq0vfoml.amplifyapp.com/company/crm/integrations`;
         return;
       }
 

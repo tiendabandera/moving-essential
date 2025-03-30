@@ -91,16 +91,24 @@ export class User extends BaseModel {
       .eq("user_id", this.data.id);
   }
 
-  async unlikeCompany(company_id) {
-    await supabase.rpc("decrement_likes", { company_id_input: company_id });
-    return await supabase.from("likes").delete().eq("company_id", company_id);
+  async unlikeCompany(company) {
+    await supabase.rpc("decrement_likes", { company_id_input: company.id });
+    return await supabase.from("likes").delete().eq("company_id", company.id);
   }
 
-  async likeCompany(company_id) {
-    await supabase.rpc("increment_likes", { company_id_input: company_id });
+  async likeCompany(company) {
+    await this.createNotifications(
+      [company.user_id],
+      2,
+      `${
+        this.data.user_metadata.company_name || this.data.user_metadata.name
+      }, has liked your company.`
+    );
+
+    await supabase.rpc("increment_likes", { company_id_input: company.id });
     return await supabase
       .from("likes")
-      .insert({ company_id: company_id, user_id: this.data.id });
+      .insert({ company_id: company.id, user_id: this.data.id });
   }
 
   /* LEADS ZONE

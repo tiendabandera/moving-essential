@@ -6,7 +6,7 @@ export class BaseModel {
     this.setErrorToast = setErrorToast;
   }
 
-  async createNotification(user_id, type_id, message, link = null) {
+  async createNotification(user_id = [], type_id, message, link = null) {
     return await supabase.from("notifications").insert({
       user_id,
       type_id,

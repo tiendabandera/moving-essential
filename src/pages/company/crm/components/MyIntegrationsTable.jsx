@@ -43,6 +43,14 @@ const platformProperties = {
     name: "Zoho CRM",
     bg: "bg-red-500 text-slate-50",
   },
+  hubspot: {
+    name: "Hubspot",
+    bg: "bg-orange-500 text-slate-50",
+  },
+  monday: {
+    name: "Monday Sales",
+    bg: "bg-teal-400 text-slate-50",
+  },
 };
 
 const MyIntegrationsTable = ({ records, setRecords, company }) => {
@@ -106,7 +114,7 @@ const MyIntegrationsTable = ({ records, setRecords, company }) => {
 
         return (
           <div
-            className={`w-24 text-center capitalize ${platform.bg} px-2 rounded-md font-normal`}
+            className={`w-28 text-center capitalize ${platform.bg} px-2 rounded-md font-normal`}
           >
             {platform.name}
           </div>

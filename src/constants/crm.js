@@ -96,6 +96,16 @@ export const fields = {
       isRequired: true,
       isReadOnly: false,
     },
+    {
+      id: "email_id",
+      name: "email_id",
+      type: "text",
+      placeholder: "Enter email ID",
+      label: "Email ID ",
+      isInput: true,
+      isRequired: false,
+      isReadOnly: false,
+    },
   ],
   kommo: [
     {

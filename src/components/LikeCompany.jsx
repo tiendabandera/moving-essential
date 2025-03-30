@@ -34,12 +34,12 @@ const LikeCompany = ({
         newUserLikes.delete(company.id);
         setTotalLikes((prev) => prev - 1);
 
-        await userInstance.unlikeCompany(company.id);
+        await userInstance.unlikeCompany(company);
       } else {
         newUserLikes.add(company.id);
         setTotalLikes((prev) => prev + 1);
 
-        await userInstance.likeCompany(company.id);
+        await userInstance.likeCompany(company);
       }
 
       setUserLikes(newUserLikes);
