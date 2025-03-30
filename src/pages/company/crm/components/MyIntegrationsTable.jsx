@@ -51,6 +51,14 @@ const platformProperties = {
     name: "Monday Sales",
     bg: "bg-teal-400 text-slate-50",
   },
+  kommo: {
+    name: "Kommo",
+    bg: "bg-indigo-900 text-slate-50",
+  },
+  teamleader: {
+    name: "Teamleader",
+    bg: "bg-teal-500 text-slate-50",
+  },
 };
 
 const MyIntegrationsTable = ({ records, setRecords, company }) => {
