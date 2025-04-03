@@ -6,6 +6,7 @@ import { PhonePoolPage, MyLeadsPage } from "./leads";
 import DashboardRealtorPage from "./DashboardRealtorPage";
 import PremiumFeatures from "./PremiumFeatures";
 import { IntegrationsPage, MyIntegrationsPage } from "./crm";
+import CreateListingPage from "./listings/CreateListingPage";
 
 export default {
   DashboardPage,
@@ -18,4 +19,5 @@ export default {
   PremiumFeatures,
   IntegrationsPage,
   MyIntegrationsPage,
+  CreateListingPage,
 };

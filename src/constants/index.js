@@ -1,34 +1,43 @@
-import { Book, Box, House, MessageCircleMore, Pin, Rocket, UserRound, UserRoundPlus } from "lucide-react";
+import {
+  Book,
+  Box,
+  House,
+  MessageCircleMore,
+  Pin,
+  Rocket,
+  UserRound,
+  UserRoundPlus,
+} from "lucide-react";
 
 export const navigation = {
   profile: [
     {
       id: 1,
-      label: "Profile",      
+      label: "Profile",
       icon: UserRound,
-    }
+    },
   ],
   main: [
     {
       id: 1,
       label: "Services",
       href: "/services",
-      icon: Box,        
+      icon: Box,
       options: [
         {
           id: 0,
-          label: "Residential/Local Moving",        
+          label: "Residential/Local Moving",
           href: "/local-moving/compare",
-          icon: House
+          icon: House,
         },
         {
           id: 1,
           label: "Realtors",
           href: "/realtors/compare",
-          icon: UserRound
-        }
-      ]
-    }, 
+          icon: UserRound,
+        },
+      ],
+    },
     {
       id: 2,
       label: "Blog",
@@ -46,19 +55,22 @@ export const navigation = {
       label: "Tips & Tricks",
       href: "/blog",
       icon: Pin,
-    }
+    },
   ],
-  signup: [{
-    id: "join-us",
-    label: "Join Us!",  
-    href: "/join",    
-    icon: Rocket,
-  }, {
-    id: "register",
-    label: "Register now",  
-    href: "/register",    
-    icon: UserRoundPlus,
-  }]
+  signup: [
+    {
+      id: "join-us",
+      label: "Join Us!",
+      href: "/join",
+      icon: Rocket,
+    },
+    {
+      id: "register",
+      label: "Register now",
+      href: "/register",
+      icon: UserRoundPlus,
+    },
+  ],
 };
 
 export const roles = {
@@ -176,3 +188,8 @@ export function decodeJWT(token) {
   const decodedPayload = JSON.parse(atob(payload));
   return decodedPayload;
 }
+
+export const servicesNames = {
+  local_moving: "local_moving",
+  realtors: "realtors",
+};

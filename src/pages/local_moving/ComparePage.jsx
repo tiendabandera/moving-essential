@@ -213,7 +213,7 @@ const ComparePage = () => {
       </Section>
       <Section classNameParent={"pb-16"}>
         <h3 className="bold-40 lg:bold-64 tracking-tight text-pretty text-gray-900 lg:max-w-xl lg:shrink-0 xl:max-w-2xl">
-          Work with Brokers in South Florida
+          Get Matched with Top Moving Companies in Seconds
         </h3>
         <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
           {features.map((feature) => (

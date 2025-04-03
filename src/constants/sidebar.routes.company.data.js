@@ -9,6 +9,7 @@ import {
   UserRoundSearch,
   BookUser,
   House,
+  MapPinHouse,
 } from "lucide-react";
 
 const path = "company";
@@ -27,6 +28,13 @@ export const dataGeneral = [
     href: `/${path}/dashboard`,
     icon: PanelsTopLeft,
     services: [1, 2],
+  },
+  {
+    id: 8,
+    label: "Listings",
+    href: `/${path}/listings`,
+    icon: MapPinHouse,
+    services: [2],
   },
   {
     id: 2,

@@ -1,5 +1,7 @@
+import { servicesNames } from "@/constants";
 import { supabase } from "../api/auth";
 import { BaseModel } from "./BaseModel";
+import { schemaLocation } from "@/constants/listings";
 
 export class Company extends BaseModel {
   constructor(data = {}, setErrorToast) {
@@ -106,7 +108,10 @@ export class Company extends BaseModel {
     const companyInfo = await supabase
       .from("companies")
       .select(
-        `*, premium_features:premium_features!premium_features_company_id_fkey(*), analytics:analytics!analitycs_company_id_fkey(*)`
+        `*, 
+        premium_features:premium_features!premium_features_company_id_fkey(*), 
+        analytics:analytics!analitycs_company_id_fkey(*)
+        `
       )
       .eq("user_id", this.data.id)
       .limit(1);
@@ -119,6 +124,26 @@ export class Company extends BaseModel {
       .select()
       .eq("company_id", companyInfo.data[0].id)
       .limit(1);
+
+    if (service === servicesNames.realtors) {
+      const properties_fields = Object.keys(schemaLocation).join(",");
+
+      const res = await supabase
+        .from("companies")
+        .select(
+          `properties:properties!properties_company_id_fkey(${properties_fields}), 
+          center:properties_center!properties_center_company_id_fkey(*)`
+        )
+        .eq("user_id", this.data.id)
+        .limit(1);
+
+      if (!res.error) {
+        serviceInfo.data[0].listings = {
+          properties: res.data[0].properties,
+          center: res.data[0].center,
+        };
+      }
+    }
 
     return {
       companyInfo: companyInfo.data[0],
@@ -152,8 +177,6 @@ export class Company extends BaseModel {
       .eq("id", this.data.id)
       .single();
   }
-
-  async getRemainingCompanies() {}
 
   async getAllByBusinessType(offset, businessTypeId, filterParams) {
     const pageSize = 8;
@@ -641,5 +664,71 @@ export class Company extends BaseModel {
       .from("crm")
       .update({ is_active: isActive })
       .eq("id", id);
+  }
+
+  /* LISTINGS
+  __________________________________________________ */
+
+  async createListing(values, uploadImages, deleteRows = []) {
+    const { userInfo } = this.data;
+    const { center, locations } = values;
+
+    if (deleteRows.length > 0) {
+      await supabase.from("properties").delete().in("id", deleteRows);
+    }
+
+    const resCenter = await supabase
+      .from("properties_center")
+      .upsert({ ...center, company_id: userInfo.company.id })
+      .select("id, place_id, zoom")
+      .single();
+
+    if (resCenter.error) {
+      this.setErrorToast("An error occurred, please try again.");
+      return resCenter;
+    }
+
+    for (const location of locations) {
+      //const images = Object.values(location.images);
+
+      const resImages = [];
+      const images = location.images;
+
+      //console.log(images);
+
+      for (let i = 1; i <= 7; i++) {
+        if (!images[`img_${i}`]) continue;
+
+        const image = images[`img_${i}`];
+
+        // Validamos si no actualizo la imagen
+        if (!image || typeof image !== "object") {
+          resImages.push(image);
+        } else {
+          const res = await uploadImages(
+            `${userInfo.company.user_id}/${location.place_id}/img_${i}`,
+            image,
+            "listings"
+          );
+
+          if (res) resImages.push(res);
+        }
+
+        location.images = resImages;
+      }
+    }
+
+    const resLocations = await supabase
+      .from("properties")
+      .upsert(locations, { onConflict: ["id"] })
+      .select();
+
+    if (resLocations.error)
+      this.setErrorToast("An error occurred, please try again.");
+
+    return {
+      center: resCenter,
+      locations: resLocations,
+    };
   }
 }

@@ -108,6 +108,11 @@ const AppContent = () => {
                 />
               </Route>
               <Route
+                path="listings"
+                element={<CompaniesPages.CreateListingPage />}
+              />
+
+              <Route
                 path="membership-premium-features"
                 element={<CompaniesPages.PremiumFeatures />}
               />

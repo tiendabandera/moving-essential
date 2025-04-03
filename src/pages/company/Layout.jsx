@@ -7,6 +7,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 const premiumFeatures = [
   "/company/leads/phone-pool",
   "/company/crm/integrations",
+  "/company/listings",
 ];
 
 const Layout = () => {
@@ -28,7 +29,7 @@ const Layout = () => {
     ) {
       navigate("/company/membership-premium-features");
     }
-  }, [userInfo]);
+  }, [location.pathname]);
 
   return (
     <div className="flex w-full h-full">
