@@ -214,6 +214,10 @@ layer(base);
     --font-code: 'Source Code Pro', monospace;
     --font-grotesk: 'Space Grotesk', sans-serif;
     --font-k2d: 'K2D', serif;
+    --red-color: #dd0808;
+    --blue-color: #0288D1;
+    --yellow-color: #faeb1c;
+    --green-color: #558B2F;
   }
 
   * {

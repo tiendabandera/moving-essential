@@ -6,14 +6,43 @@ import { schemaLocation } from "@/constants/listings";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import GoogleMap from "@/components/GoogleMap";
+
+const listingsTypes = [
+  {
+    title: "Houses for sale",
+    bg: "bg-[#0288D1]",
+  },
+  {
+    title: "Sold houses",
+    bg: "bg-[#dd0808]",
+  },
+  {
+    title: "Open houses",
+    bg: "bg-[#558B2F]",
+  },
+  {
+    title: "Pending houses",
+    bg: "bg-[#faeb1c]",
+  },
+];
 
 const CreateListingPage = () => {
   const { userInfo } = useOutletContext();
   const { createCompanyInstance, uploadImages, setUserInfo } = useAuth();
   const [deleteSelectedRows, setDeleteSelectedRows] = useState([]);
+  const [seePreview, setSeePreview] = useState(false);
+  const [mapCenter, setMapCenter] = useState([]);
+  const [mapLocations, setMapLocations] = useState([]);
 
   const handleDelete = (id) => {
     setDeleteSelectedRows((prevRows) => [...prevRows, id]);
+  };
+
+  const handlePreview = () => {
+    setSeePreview((prev) => !prev);
+    setMapCenter(getValues("center"));
+    setMapLocations(getValues("locations"));
   };
 
   const {
@@ -52,11 +81,6 @@ const CreateListingPage = () => {
       location.company_id = userInfo.company.id;
       location.id = location.id || crypto.randomUUID();
     }
-
-    /* console.log("values:", cleanedData);    
-    return; */
-
-    console.log(deleteSelectedRows);
 
     const companyInstance = createCompanyInstance({ userInfo });
     const response = await companyInstance.createListing(
@@ -137,16 +161,41 @@ const CreateListingPage = () => {
                     zoom={getValues("center.zoom")}
                     isSubmitting={isSubmitting}
                     handleDelete={handleDelete}
+                    handlePreview={handlePreview}
                   />
                 </div>
               </div>
             </div>
           </div>
+          {seePreview && (
+            <div className="mt-10 grid lg:grid-cols-2 xl:grid-cols-3 gap-4">
+              <div className="order-2 lg:order-1 xl:col-span-2">
+                <GoogleMap center={mapCenter} properties={mapLocations} />
+              </div>
+              <div className="order-1 lg:order-2 ">
+                <div className="shadow-xs bg-background rounded-lg p-5 grid grid-cols-2 gap-y-10">
+                  {listingsTypes.map((listingType) => (
+                    <div
+                      key={listingType.title}
+                      className="flex flex-col gap-2 items-center"
+                    >
+                      <div
+                        className={`py-2 px-3 rounded-[50%] ${listingType.bg} w-fit text-white `}
+                      >
+                        <i className="fa fa-icon fa-home"></i>
+                      </div>
+                      <p className="font-medium text-sm">{listingType.title}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="mt-10">
             <Button
               orange
               type="submit"
-              className={"w-fit"}
+              className={"w-full sm:w-fit"}
               disabled={isSubmitting}
             >
               {isSubmitting ? "Submitting..." : "Submit"}

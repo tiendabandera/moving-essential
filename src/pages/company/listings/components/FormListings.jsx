@@ -2,7 +2,15 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import SearchPlaceId from "./SearchPlaceId";
 import { Button } from "@/components/ui/button";
-import { CircleFadingPlus, MapPin, Minus, Plus, Trash } from "lucide-react";
+import {
+  CircleFadingPlus,
+  MapPin,
+  Minus,
+  Plus,
+  Presentation,
+  RotateCcw,
+  Trash,
+} from "lucide-react";
 import CustomIcon from "@/components/design/CustomIcon";
 import CustomToolTips from "@/components/design/CustomTooltips";
 
@@ -178,9 +186,11 @@ const FormListings = ({
   setValue,
   zoom: defaultZoom,
   handleDelete,
+  handlePreview,
 }) => {
   //const [centerOptions, setCenterOptions] = useState([]);
   const [zoom, setZoom] = useState(defaultZoom);
+  const [resetPreview, setResetPreview] = useState(false);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -465,17 +475,52 @@ const FormListings = ({
           ))}
         </div>
       </div>
-      <div className="flex gap-x-2 items-center">
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className="h-8 w-8 shrink-0 rounded-full"
-          onClick={() => append({ ...schemaLocation })}
-        >
-          <Plus />
-        </Button>
-        <span className="text-sm font-medium">Add location</span>
+      <div className="flex justify-between">
+        <div className="flex gap-x-2 items-center">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 shrink-0 rounded-full"
+            onClick={() => append({ ...schemaLocation })}
+          >
+            <Plus />
+          </Button>
+          <span className="text-sm font-medium">Add location</span>
+        </div>
+        {resetPreview ? (
+          <div className="flex gap-x-2 items-center">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 shrink-0 rounded-full"
+              onClick={() => {
+                handlePreview();
+                setResetPreview(false);
+              }}
+            >
+              <RotateCcw />
+            </Button>
+            <span className="text-sm font-medium">Refresh preview</span>
+          </div>
+        ) : (
+          <div className="flex gap-x-2 items-center">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 shrink-0 rounded-full"
+              onClick={() => {
+                handlePreview();
+                setResetPreview(true);
+              }}
+            >
+              <Presentation />
+            </Button>
+            <span className="text-sm font-medium">Preview</span>
+          </div>
+        )}
       </div>
     </div>
   );
