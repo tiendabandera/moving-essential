@@ -8,7 +8,9 @@ const GoogleMap = ({ center, properties }) => {
     const loadGoogleMaps = () => {
       if (!window.google) {
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBG-QcC_qbtjs_tuLJuGU8jpqwXNG3dSS0&libraries=maps,marker,places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${
+          import.meta.env.VITE_GOOGLE_API_KEY || ""
+        }&libraries=maps,marker,places`;
         script.async = true;
         script.onload = initMap;
         document.body.appendChild(script);
