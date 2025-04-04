@@ -5,8 +5,6 @@ const GoogleMap = ({ center, properties }) => {
   const urlSite = location.origin;
 
   useEffect(() => {
-    console.log("API KEY en producción:", import.meta.env.VITE_GOOGLE_API_KEY);
-
     const loadGoogleMaps = () => {
       if (!window.google) {
         const script = document.createElement("script");
