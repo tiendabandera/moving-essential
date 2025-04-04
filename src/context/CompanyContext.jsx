@@ -165,6 +165,11 @@ export class Company extends BaseModel {
     const service =
       this.data.business_type_id === 1 ? "local_moving(*)" : "realtors(*)";
 
+    const extrainfo =
+      this.data.business_type_id === 2
+        ? `, properties:properties!properties_company_id_fkey(*), center:properties_center!properties_center_company_id_fkey(*)`
+        : "";
+
     return await supabase
       .from("companies")
       .select(
@@ -172,7 +177,9 @@ export class Company extends BaseModel {
         service:${service}, 
         cities:cities!companies_city_id_fkey(name, state_id, county_name), 
         cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
-        user_info:user_info!companies_user_id_fkey(user_metadata)`
+        user_info:user_info!companies_user_id_fkey(user_metadata)
+        ${extrainfo}
+        `
       )
       .eq("id", this.data.id)
       .single();

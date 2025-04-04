@@ -46,6 +46,7 @@ import CarouselReview from "@/components/CarouselReview";
 import { homeTypes } from "@/constants";
 import { AnonymousView } from "@/components/AnonymousView";
 import LikeCompany from "@/components/LikeCompany";
+import GoogleMap from "@/components/GoogleMap";
 
 export const GetCosultationButton = ({ phone, submitAnalytics }) => {
   return (
@@ -106,6 +107,25 @@ const InternalPage = () => {
     {
       field: "tiktok_link",
       icon: FaTiktok,
+    },
+  ];
+
+  const listingsTypes = [
+    {
+      title: "Houses for sale",
+      bg: "bg-[#0288D1]",
+    },
+    {
+      title: "Sold houses",
+      bg: "bg-[#dd0808]",
+    },
+    {
+      title: "Open houses",
+      bg: "bg-[#558B2F]",
+    },
+    {
+      title: "Pending houses",
+      bg: "bg-[#faeb1c]",
     },
   ];
 
@@ -209,38 +229,6 @@ const InternalPage = () => {
             </div>
             <div className="flex-auto rounded-r-3xl">
               <div className="w-full h-full grid grid-cols-3 gap-5">
-                {/* {realtor.images.map((image, index) => {
-                  if (index !== 0) {
-                    let classes = "";
-
-                    switch (index) {
-                      case 3:
-                        classes = "rounded-tr-3xl";
-                        break;
-
-                      case 6:
-                        classes = "rounded-br-3xl";
-                        break;
-
-                      default:
-                        break;
-                    }
-
-                    return (
-                      <div
-                        key={index}
-                        className={`w-full h-auto overflow-hidden ${classes}`}
-                      >
-                        <img
-                          key={index}
-                          src={image}
-                          alt="houses"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    );
-                  }
-                })} */}
                 <div className="w-full h-auto overflow-hidden">
                   <img
                     src={realtor.images[1]}
@@ -421,6 +409,33 @@ const InternalPage = () => {
                   submitAnalytics={submitAnalytics}
                 />
               </div>
+              {realtor.has_premium_features && (
+                <div className="flex flex-col">
+                  <Separator className="my-8" />
+                  <h3 className="text-3xl font-semibold">Listings</h3>
+                  <div className="my-8 shadow-xs border border-slate-200 rounded-lg p-5 flex gap-2 justify-between">
+                    {listingsTypes.map((listingType) => (
+                      <div
+                        key={listingType.title}
+                        className="flex flex-col gap-2 items-center"
+                      >
+                        <div
+                          className={`py-2 px-3 rounded-[50%] ${listingType.bg} w-fit text-white `}
+                        >
+                          <i className="fa fa-icon fa-home"></i>
+                        </div>
+                        <p className="font-medium text-sm">
+                          {listingType.title}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <GoogleMap
+                    center={realtor.center}
+                    properties={realtor.properties}
+                  />
+                </div>
+              )}
               <div className="flex flex-col">
                 <Separator className="my-8" />
                 <h3 className="text-3xl font-semibold">Reviews</h3>

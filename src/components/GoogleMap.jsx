@@ -53,8 +53,6 @@ const GoogleMap = ({ center, properties }) => {
         });
 
         properties.forEach((property) => {
-          console.log(property);
-
           const service = new PlacesService(document.createElement("div"));
           const request = {
             placeId: property.place_id,
@@ -97,13 +95,18 @@ const GoogleMap = ({ center, properties }) => {
     };
 
     const buildContent = (property) => {
+      let image = property.images[0] || property.images.img_1;
+
+      //Validar si la imagen no se a subido a Supabase
+      if (image.file) image = URL.createObjectURL(image.file);
+
       const content = document.createElement("div");
       content.classList.add("property");
       content.innerHTML = `
         <div class="icon">
             <i aria-hidden="true" class="fa fa-icon fa-home type-${property.types}" title="${property.types}"></i>
             <span class="fa-sr-only">${property.types}</span>
-            <img src="${property.images.img_1}" alt="${property.type}"/>
+            <img src="${image}" alt="${property.type}"/>
         </div>
         <div class="details">
             <div class="price">${property.price}</div>
@@ -182,6 +185,7 @@ const GoogleMap = ({ center, properties }) => {
 
           .property .icon img {
             display: none;
+            border-radius: 5%;
           }
 
           .property .icon {
