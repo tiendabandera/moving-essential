@@ -1,3 +1,4 @@
+import { formatPrice } from "@/constants";
 import { useEffect, useRef } from "react";
 
 const GoogleMap = ({ center, properties }) => {
@@ -106,12 +107,14 @@ const GoogleMap = ({ center, properties }) => {
       content.classList.add("property");
       content.innerHTML = `
         <div class="icon">
-            <i aria-hidden="true" class="fa fa-icon fa-home type-${property.types}" title="${property.types}"></i>
+            <i aria-hidden="true" class="fa fa-icon fa-home type-${
+              property.types
+            }" title="${property.types}"></i>
             <span class="fa-sr-only">${property.types}</span>
             <img src="${image}" alt="${property.type}"/>
         </div>
         <div class="details">
-            <div class="price">${property.price}</div>
+            <div class="price">$ ${formatPrice(property.price)}</div>
             <div class="address">${property.address}</div>
             <div class="features">
                 <div>
@@ -127,7 +130,9 @@ const GoogleMap = ({ center, properties }) => {
                   <span>${property.size} ft²</span>
                 </div>
             </div>          
-            <button type="button" class="btn-redirect" data-url="${urlSite}/properties/${property.id}">
+            <button type="button" class="btn-redirect" data-url="${urlSite}/properties/${
+        property.id
+      }">
                 See property
             </button>
         </div>
@@ -183,6 +188,10 @@ const GoogleMap = ({ center, properties }) => {
             transition: all 0.3s ease-out;
             width: 0;
             z-index: 1;
+          }
+
+          .property .price {
+            font-weight: bold;
           }
 
           .property .icon img {
