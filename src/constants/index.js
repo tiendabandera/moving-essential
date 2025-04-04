@@ -193,3 +193,16 @@ export const servicesNames = {
   local_moving: "local_moving",
   realtors: "realtors",
 };
+
+export function formatPhone(phone) {
+  if (phone) {
+    const regex = /(\d{3})(\d{3})(\d{4})/;
+    return phone.replace(regex, "$1-$2-$3");
+  }
+
+  return null;
+}
+
+export function formatPrice(price) {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

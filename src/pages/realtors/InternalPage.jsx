@@ -48,10 +48,23 @@ import { AnonymousView } from "@/components/AnonymousView";
 import LikeCompany from "@/components/LikeCompany";
 import GoogleMap from "@/components/GoogleMap";
 
-export const GetCosultationButton = ({ phone, submitAnalytics }) => {
+export const GetCosultationButton = ({ phone, submitAnalytics, info }) => {
   return (
     <div className="w-full flex flex-col gap-2 items-center justify-center py-6 px-10 border border-gray-200 rounded-xl shadow-2xl text-center">
       <h3 className="font-semibold text-3xl">Get a Consultation</h3>
+      {info && (
+        <div className="flex flex-col items-center">
+          <img
+            src={info.images[0]}
+            alt="Realtor profile"
+            className="w-20 h-20 rounded-lg"
+          />
+          <h3 className="mt-3 font-medium text-lg">
+            {info.user_info.user_metadata.name}
+          </h3>
+          <p>{info.company_name}</p>
+        </div>
+      )}
       <Button
         className="w-full bg-color-1 border border-color-1 rounded-md hover:bg-transparent hover:text-color-1"
         onClick={() => {
@@ -199,7 +212,7 @@ const InternalPage = () => {
   return (
     realtor && (
       <div>
-        <div className="mt-[-3px] md:max-container lg:pt-20 lg:padding-container">
+        <div className="mt-[-5px] md:max-container lg:pt-20 lg:padding-container">
           <Carousel className="block lg:hidden border border-gray-100 lg:rounded-3xl">
             <CarouselContent>
               {realtor.images.map((img, index) => (

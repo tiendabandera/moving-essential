@@ -738,4 +738,14 @@ export class Company extends BaseModel {
       locations: resLocations,
     };
   }
+
+  async getListingById() {
+    return await supabase
+      .from("properties")
+      .select(
+        "*, realtor:companies(*, user_info:user_info!companies_user_id_fkey(user_metadata))"
+      )
+      .eq("id", this.data.id)
+      .single();
+  }
 }

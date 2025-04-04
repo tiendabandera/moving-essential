@@ -6,7 +6,7 @@ import { PhonePoolPage, MyLeadsPage } from "./leads";
 import DashboardRealtorPage from "./DashboardRealtorPage";
 import PremiumFeatures from "./PremiumFeatures";
 import { IntegrationsPage, MyIntegrationsPage } from "./crm";
-import CreateListingPage from "./listings/CreateListingPage";
+import { CreateListingPage } from "./listings";
 
 export default {
   DashboardPage,

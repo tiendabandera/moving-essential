@@ -28,6 +28,7 @@ import MembershipPage from "./pages/MembershipPage";
 import useScrollToHash from "./hooks/useScrollToHash";
 import ServicesPage from "./pages/ServicesPage";
 import Footer from "./components/Footer";
+import InternalListingPage from "./pages/company/listings/InternalListingPage";
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -144,6 +145,7 @@ const AppContent = () => {
               element={<RealtorsPages.InternalPage />}
             />
           </Route>
+          <Route path="/properties/:id" element={<InternalListingPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
