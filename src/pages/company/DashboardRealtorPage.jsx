@@ -18,6 +18,7 @@ import Button from "@/components/Button";
 import { toast } from "@/hooks/use-toast";
 import InputUploadImage from "@/components/InputUploadImage";
 import FormRealtor from "@/components/forms/FormRealtor";
+import ResetPassword from "@/components/ResetPassword";
 
 const DashboardRealtorPage = () => {
   const { userInfo } = useOutletContext();
@@ -183,34 +184,45 @@ const DashboardRealtorPage = () => {
     }));
   };
 
+  const socialNetworks = [
+    "facebook_link",
+    "instagram_link",
+    "twitter_link",
+    "linkedin_link",
+    "youtube_link",
+    "tiktok_link",
+  ];
+
   return (
     <div>
       <h2 className="text-2xl mb-4 font-normal">Dashboard</h2>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
         <CardSummary
           icon={User}
-          total="6"
+          total={userInfo?.company.analytics[0]?.contact_button || 0}
           avarage="10"
           title="Contact button"
           tooltipText="Number of people who clicked the contact button."
         />
         <CardSummary
           icon={Laptop2}
-          total="2289"
+          total={userInfo?.company.analytics[0]?.internal_page || 0}
           avarage="5"
           title="Internal page"
           tooltipText="Number of people who clicked on your page."
         />
         <CardSummary
           icon={Smartphone}
-          total="3"
+          total={userInfo?.company.analytics[0]?.phone_number || 0}
           avarage="5"
           title="Phone number"
           tooltipText="Number of people who clicked the phone number button."
         />
         <CardSummary
           icon={Link}
-          total="1"
+          total={socialNetworks
+            .map((network) => userInfo?.company.analytics[0]?.[network] || 0)
+            .reduce((acc, current) => acc + current, 0)}
           avarage="5"
           title="Social media links"
           tooltipText="Number of people who clicked on your social media links."
@@ -290,6 +302,7 @@ const DashboardRealtorPage = () => {
           </Button>
         </div> */}
       </form>
+      <ResetPassword />
     </div>
   );
 };

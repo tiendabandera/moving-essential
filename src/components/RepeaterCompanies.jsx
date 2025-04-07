@@ -154,7 +154,7 @@ const RepeaterCompanies = ({
                   <span className="font-semibold">{record.cities.name}, </span>
                   {record.state} {record.zipcode}
                 </p>
-                {record.has_premium_features && (
+                {record.has_premium_features && record.cities_2 && (
                   <p>
                     <span className="font-semibold">
                       {record.cities_2.name},{" "}

@@ -122,7 +122,7 @@ const CreateListingPage = () => {
   };
 
   useEffect(() => {
-    if (userInfo && userInfo.service.listings) {
+    if (userInfo && userInfo.service.listings.center) {
       const { center, properties } = userInfo.service.listings;
 
       for (const property of properties) {

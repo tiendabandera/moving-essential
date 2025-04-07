@@ -10,6 +10,7 @@ import {
   Instagram,
   Linkedin,
   Youtube,
+  Smartphone,
 } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 
@@ -44,13 +45,24 @@ const DataPage = () => {
           title="Internal page"
           tooltipText="Number of people who clicked on your page."
         />
-        <CardSummary
-          icon={CalendarCheck}
-          total={userInfo?.company.analytics[0]?.get_a_quote || 0}
-          avarage="5"
-          title="Get a quote"
-          tooltipText="Number of people who submitted the quote form."
-        />
+        {userInfo?.company.business_type_id === 1 ? (
+          <CardSummary
+            icon={CalendarCheck}
+            total={userInfo?.company.analytics[0]?.get_a_quote || 0}
+            avarage="5"
+            title="Get a quote"
+            tooltipText="Number of people who submitted the quote form."
+          />
+        ) : (
+          <CardSummary
+            icon={Smartphone}
+            total={userInfo?.company.analytics[0]?.phone_number || 0}
+            avarage="5"
+            title="Phone number"
+            tooltipText="Number of people who clicked the phone number button."
+          />
+        )}
+
         <CardSummary
           icon={Link}
           total={socialNetworks

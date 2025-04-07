@@ -11,6 +11,7 @@ const Button = ({
   white,
   orange,
   disabled,
+  type = "submit",
 }) => {
   const classes = `cursor-pointer button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 ${
     px || "px-7"
@@ -19,7 +20,12 @@ const Button = ({
   const spanClasses = `relative z-10 flex items-center gap-2`;
 
   const renderButton = () => (
-    <button className={classes} onClick={onClick} disabled={disabled}>
+    <button
+      className={classes}
+      onClick={onClick}
+      disabled={disabled}
+      type={type}
+    >
       <span className={spanClasses}>{children}</span>
       {white ? ButtonSvg(white) : ButtonSvg2(orange)}
     </button>

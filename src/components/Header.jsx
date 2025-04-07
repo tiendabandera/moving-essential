@@ -181,7 +181,7 @@ function Header() {
                   user?.user_metadata.profile_picture ||
                   "/assets/img/user-not-found.png"
                 }
-                className="size-7 rounded-full"
+                className="size-7 rounded-full object-cover"
               />
             </div>
             <DropdownMenu open={open} onOpenChange={setOpen}>

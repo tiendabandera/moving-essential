@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { roles } from "./constants/index";
 import { PageTitleManager } from "./components/PageTitle";
@@ -25,7 +25,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 _________________________________________ */
 import { Toaster } from "./components/ui/toaster";
 import MembershipPage from "./pages/MembershipPage";
-import useScrollToHash from "./hooks/useScrollToHash";
+import useScrollBehavior from "./hooks/useScrollBehavior";
 import ServicesPage from "./pages/ServicesPage";
 import Footer from "./components/Footer";
 import InternalListingPage from "./pages/company/listings/InternalListingPage";
@@ -33,8 +33,10 @@ import InternalListingPage from "./pages/company/listings/InternalListingPage";
 const AppContent = () => {
   const { user } = useAuth();
 
-  const location = useLocation();
-  useScrollToHash(location);
+  /* const location = useLocation();
+  useScrollToHash(location); */
+
+  useScrollBehavior();
 
   const showHeader =
     !location.pathname.startsWith("/company/") &&

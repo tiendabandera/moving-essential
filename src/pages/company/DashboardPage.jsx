@@ -20,6 +20,7 @@ import Button from "@/components/Button";
 import { toast } from "@/hooks/use-toast";
 import InputUploadImage from "@/components/InputUploadImage";
 import FormAdditionalZipcode from "@/components/forms/FormAdditionalZipcode";
+import ResetPassword from "@/components/ResetPassword";
 
 const DashboardPage = () => {
   const { userInfo } = useOutletContext();
@@ -298,7 +299,6 @@ const DashboardPage = () => {
                 </div>
               </div>
             )}
-
             <div className="mt-10 md:w-1/2">
               <Button
                 orange
@@ -312,6 +312,7 @@ const DashboardPage = () => {
           </div>
         </div>
       </form>
+      <ResetPassword />
     </div>
   );
 };
