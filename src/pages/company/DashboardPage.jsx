@@ -201,21 +201,21 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
         <CardSummary
           icon={User}
-          total={userInfo?.company.analytics[0].contact_button}
+          total={userInfo?.company.analytics[0]?.contact_button || 0}
           avarage="10"
           title="Contact button"
           tooltipText="Number of people who clicked the contact button."
         />
         <CardSummary
           icon={Laptop2}
-          total={userInfo?.company.analytics[0].internal_page}
+          total={userInfo?.company.analytics[0]?.internal_page || 0}
           avarage="5"
           title="Internal page"
           tooltipText="Number of people who clicked on your page."
         />
         <CardSummary
           icon={CalendarCheck}
-          total={userInfo?.company.analytics[0].get_a_quote}
+          total={userInfo?.company.analytics[0]?.get_a_quote || 0}
           avarage="5"
           title="Get a quote"
           tooltipText="Number of people who submitted the quote form."
@@ -223,7 +223,7 @@ const DashboardPage = () => {
         <CardSummary
           icon={Link}
           total={socialNetworks
-            .map((network) => userInfo?.company.analytics[0][network] || 0)
+            .map((network) => userInfo?.company.analytics[0]?.[network] || 0)
             .reduce((acc, current) => acc + current, 0)}
           avarage="5"
           title="Social media links"

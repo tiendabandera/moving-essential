@@ -42,10 +42,10 @@ const NavbarCompany = () => {
           src={
             userInfo
               ? userInfo.company.images[0]
-              : "https://static.wixstatic.com/media/9e7c89_a67c6c22857547b49315013c429fe272~mv2.png"
+              : "/assets/img/user-not-found.png"
           }
           alt="profile"
-          className="w-8 h-8 rounded-full"
+          className="size-8 object-cover rounded-full"
         />
       </div>
     </nav>
