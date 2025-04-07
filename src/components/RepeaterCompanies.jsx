@@ -216,7 +216,7 @@ const RepeaterCompanies = ({
                       company.submitAnalytics("contact_button", record.id);
                     }}
                   >
-                    Contact
+                    View company
                   </Link>
                 </Button>
               </div>

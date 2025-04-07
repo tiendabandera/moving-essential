@@ -218,7 +218,7 @@ const RepeaterRealtors = ({
                       company.submitAnalytics("contact_button", record.id);
                     }}
                   >
-                    Contact
+                    View realtor
                   </Link>
                 </Button>
               </div>

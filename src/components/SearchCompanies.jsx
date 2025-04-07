@@ -58,6 +58,12 @@ const SearchCompanies = ({ service }) => {
     setValue(option);
     setValueInput(option.label);
     setIsOpen(false);
+
+    //console.log(option);
+
+    nativage(
+      `/${service}?placename=${option.value.name}&county=${option.value.county_name}&state=${option.value.state_id}`
+    );
   };
 
   useEffect(() => {

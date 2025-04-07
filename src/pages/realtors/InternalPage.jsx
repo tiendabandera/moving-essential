@@ -507,7 +507,7 @@ const InternalPage = () => {
                   setIsOpenAnonymous={setIsOpenAnonymous}
                 />
               </div>
-              <div className="w-full flex flex-col items-center relative animate-float">
+              {/* <div className="w-full flex flex-col items-center relative animate-float">
                 <img
                   src="/assets/img/form-review-2.png"
                   alt="form-review"
@@ -525,6 +525,13 @@ const InternalPage = () => {
                     Tell us about your experience
                   </p>
                 </div>
+              </div> */}
+              <div className="w-full h-[200px] xs:h-[85%] animate-float border border-gray-200 rounded-xl shadow-2xl">
+                <img
+                  src={realtor.images[0]}
+                  alt={realtor.company_name}
+                  className="rounded-xl w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>

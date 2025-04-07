@@ -1,7 +1,7 @@
 import { formatPrice } from "@/constants";
 import { useEffect, useRef } from "react";
 
-const GoogleMap = ({ center, properties }) => {
+const GoogleMap = ({ center, properties = [], height = 500 }) => {
   const mapRef = useRef(null);
   const urlSite = location.origin;
 
@@ -55,6 +55,18 @@ const GoogleMap = ({ center, properties }) => {
           mapId: "4504f8b37365c3d0",
         });
 
+        // Si viene de la pagina interna de la propiedad
+        if (center.type) {
+          new AdvancedMarkerElement({
+            map,
+            content: buildContentCenter(center),
+            position: {
+              ...centerLocation,
+            },
+          });
+        }
+
+        // Si hay propiedades, agregar marcadores
         properties.forEach((property) => {
           const service = new PlacesService(document.createElement("div"));
           const request = {
@@ -151,6 +163,20 @@ const GoogleMap = ({ center, properties }) => {
 
       return content;
     };
+
+    function buildContentCenter(data) {
+      const content = document.createElement("div");
+
+      content.classList.add("property");
+      content.innerHTML = `
+          <div class="icon">  
+              <i aria-hidden="true" class="fa fa-icon fa-home type-${data.type}" title="${data.type}"></i>
+              <span class="fa-sr-only">${data.type}</span>                                    
+          </div>                              
+      `;
+
+      return content;
+    }
 
     loadGoogleMaps();
   }, [center, properties]);
@@ -355,7 +381,7 @@ const GoogleMap = ({ center, properties }) => {
         ref={mapRef}
         style={{
           width: "100%",
-          height: "500px",
+          height: `${height}px`,
         }}
         className="rounded-lg"
       />

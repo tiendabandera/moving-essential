@@ -1,3 +1,4 @@
+import GoogleMap from "@/components/GoogleMap";
 import {
   Carousel,
   CarouselContent,
@@ -5,10 +6,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { formatPrice } from "@/constants";
+import { Separator } from "@/components/ui/separator";
+import { formatPrice, homeTypes } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import { GetCosultationButton } from "@/pages/realtors/InternalPage";
-import { MapPinHouse } from "lucide-react";
+import { BadgeDollarSign, BrickWall, Hammer, MapPinHouse } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CiShare1 } from "react-icons/ci";
 import { useNavigate, useParams } from "react-router-dom";
@@ -175,9 +177,73 @@ const InternalListingPage = () => {
                     </span>
                   </div>
                   <MapPinHouse
-                    className="w-7 h-7 cursor-pointe"
+                    className="w-7 h-7 cursor-pointer"
                     strokeWidth={1}
+                    onClick={() => {
+                      window.open(
+                        `https://www.google.com/maps/dir/?api=1&destination=${property.address}`
+                      );
+                    }}
                   />
+                </div>
+              </div>
+              <Separator className="my-5" />
+              <div className="grid grid-cols-3 gap-4 text-lg">
+                <div className="flex flex-col gap-x-2 items-center justify-center xs:flex-row">
+                  <span className="font-semibold">{property.bed}</span>
+                  <p>Beds</p>
+                </div>
+                <div className="flex flex-col gap-x-2 items-center justify-center xs:flex-row border-x-1 border-slate-200">
+                  <span className="font-semibold">{property.bath}</span>
+                  <p>Baths</p>
+                </div>
+                <div className="flex flex-col gap-x-2 items-center justify-center xs:flex-row">
+                  <span className="font-semibold">{property.size}</span>
+                  <p>Sq Ft</p>
+                </div>
+              </div>
+              <Separator className="my-5" />
+              <p className="font-medium text-lg">About This House</p>
+              <p className="text-gray-50">{property.description}</p>
+              <p className="my-8 font-medium text-lg">Homes Details:</p>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-x-5 gap-y-2 md:flex-row items-start">
+                  <BrickWall />
+                  <div className="flex flex-col gap-1 ">
+                    <p className="font-medium text-lg leading-none">
+                      Homes types:
+                    </p>
+                    <p className="text-gray-50 font-light">
+                      {property.home_types
+                        .map((name) => {
+                          const type = homeTypes.find(
+                            (type) => type.value === name
+                          );
+                          return type.label;
+                        })
+                        .join(", ")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="my-5 flex flex-col gap-x-5 gap-y-2 md:flex-row items-start">
+                <BadgeDollarSign />
+                <div className="flex flex-col gap-1 ">
+                  <p className="font-medium text-lg leading-none">
+                    Est. Annual Taxes:
+                  </p>
+                  <p className="text-gray-50 font-light">
+                    ${formatPrice(property.price)}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-x-5 gap-y-2 md:flex-row items-start">
+                <Hammer />
+                <div className="flex flex-col gap-1 ">
+                  <p className="font-medium text-lg leading-none">Year Built</p>
+                  <p className="text-gray-50 font-light">
+                    Built in {property.year_built}
+                  </p>
                 </div>
               </div>
             </div>
@@ -190,6 +256,18 @@ const InternalListingPage = () => {
                 />
               </div>
             </div>
+          </div>
+          <div className="flex flex-col">
+            <Separator className="my-8" />
+            <h3 className="mb-8 text-3xl font-semibold">Map</h3>
+            <GoogleMap
+              center={{
+                place_id: property.place_id,
+                zoom: 17,
+                type: property.types,
+              }}
+              height={650}
+            />
           </div>
         </section>
       </>
