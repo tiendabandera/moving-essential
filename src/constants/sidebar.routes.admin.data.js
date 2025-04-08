@@ -5,26 +5,26 @@ import {
   MessageCircleX,
   PanelsTopLeft,
   UserRoundCheck,
-  UserRoundPlus,
-  UserRoundSearch,
 } from "lucide-react";
 
 const path = "admin";
 
-export const dataGeneral = [
-  {
-    id: 1,
-    label: "Home",
-    href: "/",
-    icon: House,
-  },
-  {
-    id: 2,
-    label: "Dashboard",
-    href: `/${path}/dashboard`,
-    icon: PanelsTopLeft,
-  },
-];
+export const dataGeneral = (currentPath) => {
+  return [
+    {
+      id: 1,
+      label: "Home",
+      href: "/",
+      icon: House,
+    },
+    {
+      id: 2,
+      label: "Dashboard",
+      href: `/${currentPath}/dashboard`,
+      icon: PanelsTopLeft,
+    },
+  ];
+};
 
 export const dataLeads = [
   {

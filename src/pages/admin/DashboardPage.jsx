@@ -2,6 +2,7 @@ import Button from "@/components/Button";
 import CustomIcon from "@/components/design/CustomIcon";
 import Input from "@/components/Input";
 import InputUploadImage from "@/components/InputUploadImage";
+import ResetPassword from "@/components/ResetPassword";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Info } from "lucide-react";
@@ -169,6 +170,7 @@ const DashboardPage = () => {
           <div className="col-span-2 xl:col-span-1"></div>
         </div>
       </form>
+      <ResetPassword />
     </div>
   );
 };

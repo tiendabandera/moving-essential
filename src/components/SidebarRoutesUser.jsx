@@ -7,10 +7,11 @@ import {
   dataReviews,
 } from "@/constants/sidebar.routes.admin.data";
 import SidebarItems from "./SidebarItems";
+import { roles } from "@/constants";
 
 const SidebarRoutesUser = () => {
   const yeard = new Date().getFullYear();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const submitLogout = () => logout();
 
@@ -19,24 +20,28 @@ const SidebarRoutesUser = () => {
       <div>
         <div className="p-2 md:p-6">
           <p className="text-slate-500 mb-2">General</p>
-          {dataGeneral.map((item) => (
+          {dataGeneral(user?.user_metadata.role).map((item) => (
             <SidebarItems key={item.label} {...item} />
           ))}
         </div>
-        <Separator />
-        <div className="p-2 md:p-6">
-          <p className="text-slate-500 mb-2">Leads</p>
-          {dataLeads.map((item) => (
-            <SidebarItems key={item.label} {...item} />
-          ))}
-        </div>
-        <Separator />
-        <div className="p-2 md:p-6">
-          <p className="text-slate-500 mb-2">Reviews</p>
-          {dataReviews.map((item) => (
-            <SidebarItems key={item.label} {...item} />
-          ))}
-        </div>
+        {user?.user_metadata.role === roles.admin && (
+          <>
+            <Separator />
+            <div className="p-2 md:p-6">
+              <p className="text-slate-500 mb-2">Leads</p>
+              {dataLeads.map((item) => (
+                <SidebarItems key={item.label} {...item} />
+              ))}
+            </div>
+            <Separator />
+            <div className="p-2 md:p-6">
+              <p className="text-slate-500 mb-2">Reviews</p>
+              {dataReviews.map((item) => (
+                <SidebarItems key={item.label} {...item} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <div>
         <div className="text-center p-6">

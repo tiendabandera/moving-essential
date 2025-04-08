@@ -2,7 +2,12 @@ import { supabase } from "@/api/auth";
 
 const AuthWithGoogle = ({ title }) => {
   const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/login`,
+      },
+    });
   };
 
   return (

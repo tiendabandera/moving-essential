@@ -71,7 +71,7 @@ const ResetPassword = () => {
 
       toast({
         title: error ? "Error" : "Success",
-        description: error.message || "Password reset successfully",
+        description: error?.message || "Password reset successfully",
         variant: error ? "destructive" : "success",
       });
 
@@ -82,7 +82,7 @@ const ResetPassword = () => {
 
   return (
     <>
-      <div className="my-10">
+      <div className="lg:my-10">
         <Button orange type="button" onClick={() => setIsOpen(true)}>
           <LockKeyhole className="w-4 h-4" /> Reset Password
         </Button>
