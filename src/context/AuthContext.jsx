@@ -3,7 +3,6 @@ import { supabase } from "../api/auth";
 import { Company } from "./CompanyContext";
 import { User } from "./UserContext";
 //import Cookies from "js-cookie";
-import { registerRequest } from "../api/auth";
 import { decodeJWT } from "@/constants";
 import { toast } from "@/hooks/use-toast";
 
@@ -60,19 +59,6 @@ export const AuthProvider = ({ children }) => {
     const resAuth = await user.login();
     setUser(resAuth.data.user);
     setIsAuthenticated(true);
-  };
-
-  const signup = async (user) => {
-    try {
-      const res = await registerRequest(user);
-      setUser(res.data);
-      setIsAuthenticated(true);
-
-      localStorage.setItem("isAuthenticated", true);
-      localStorage.setItem("userInfo", JSON.stringify(res.data));
-    } catch (error) {
-      setError(error.response.data.message);
-    }
   };
 
   const login = async (data) => {
@@ -282,7 +268,7 @@ export const AuthProvider = ({ children }) => {
               profile_picture:
                 decoded.profile_picture ||
                 session.data.session.user.user_metadata.profile_picture,
-              //role: decoded.user_role,
+              role: decoded.user_role,
             },
           });
           setIsAuthenticated(true);
@@ -322,7 +308,6 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        signup,
         signIn,
         login,
         user,

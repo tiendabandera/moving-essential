@@ -169,7 +169,7 @@ const InternalPage = () => {
                   <img
                     src={img}
                     alt=""
-                    className="w-full h-[350px] lg:h-[500px] lg:rounded-3xl xl:h-[600px]"
+                    className="w-full h-[350px] lg:h-[500px] lg:rounded-3xl xl:h-[600px] object-cover"
                   />
                 </CarouselItem>
               ))}
