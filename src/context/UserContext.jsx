@@ -186,4 +186,7 @@ export class User extends BaseModel {
 
     return res;
   }
+
+  /* APPEAL REVIEW ZONE
+  _________________________________________ */
 }

@@ -96,13 +96,6 @@ const InternalPage = () => {
   };
 
   useEffect(() => {
-    const fetchLike = async (user, company_id) => {
-      const userInstance = createUserInstance(user);
-      const { data } = await userInstance.getLikes(company_id);
-
-      setUserLikes(new Set(data.map((like) => like.company_id)));
-    };
-
     const loadCompany = async () => {
       if (!params.id || companyInstanceRef.current) return;
 
@@ -111,8 +104,7 @@ const InternalPage = () => {
         business_type_id: 1,
       });
 
-      companyInstanceRef.current = company; // Almacena la instancia solo una vez
-
+      companyInstanceRef.current = company; // Almacena la instancia de la empresa solo una vez
       const { data, error } = await company.getById();
 
       if (error) {
@@ -121,12 +113,6 @@ const InternalPage = () => {
       }
 
       setCompany(data);
-
-      if (user) {
-        fetchLike(user, params.id);
-        if (data.user_id === user.id) setOwner(true);
-      }
-      //setCompanyInstance(company); // Guardar la instancia de la empresa
 
       const resReviews = await company.getAllReviews();
       const totalReviews = resReviews.data.length;
@@ -146,6 +132,10 @@ const InternalPage = () => {
     loadCompany();
   }, [user, params]);
 
+  useEffect(() => {
+    validateUser();
+  }, [user, company]);
+
   const handleCopyLink = async (query = "") => {
     const urlBase = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     const shareLink = `${urlBase}${query}`;
@@ -156,6 +146,23 @@ const InternalPage = () => {
     } catch (err) {
       console.error("Error copying link: ", err);
     }
+  };
+
+  const validateUser = async () => {
+    if (!user || !company) {
+      setOwner(false);
+      setUserLikes(new Set());
+      return;
+    }
+
+    const userInstance = createUserInstance(user);
+    const { data } = await userInstance.getLikes(company.id);
+
+    setUserLikes(new Set(data.map((like) => like.company_id)));
+
+    if (company.user_id === user.id) setOwner(true);
+
+    return;
   };
 
   return (
@@ -278,7 +285,11 @@ const InternalPage = () => {
                 </div>
                 {reviews.length > 0 && (
                   <div className="mt-5 flex justify-center">
-                    <CarouselReview reviews={reviews} />
+                    <CarouselReview
+                      reviews={reviews}
+                      isOwner={owner}
+                      info={company}
+                    />
                   </div>
                 )}
               </div>

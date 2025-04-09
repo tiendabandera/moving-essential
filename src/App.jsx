@@ -29,6 +29,7 @@ import useScrollBehavior from "./hooks/useScrollBehavior";
 import ServicesPage from "./pages/ServicesPage";
 import Footer from "./components/Footer";
 import InternalListingPage from "./pages/company/listings/InternalListingPage";
+import TestPage from "./pages/TestPage";
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -49,6 +50,7 @@ const AppContent = () => {
       {showHeader && <Header />}
       <main className="main-content">
         <Routes>
+          <Route path="/test" element={<TestPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -62,6 +64,9 @@ const AppContent = () => {
             <Route path="/admin" element={<AdminPages.Layout />}>
               <Route path="dashboard" element={<AdminPages.DashboardPage />} />
               <Route path="phone-pool" element={<AdminPages.PhonePoolPage />} />
+              <Route path="reviews">
+                <Route path="appeals" element={<AdminPages.AppealsPage />} />
+              </Route>
             </Route>
           </Route>
           <Route element={<ProtectedRoute roles={[roles.admin, roles.user]} />}>

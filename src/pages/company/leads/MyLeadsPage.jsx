@@ -1,14 +1,15 @@
 import { useAuth } from "@/context/AuthContext";
 import MyLeadsTable from "./components/MyLeadsTable";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useOutletContext, useSearchParams } from "react-router-dom";
 
 const MyLeadsPage = () => {
+  const { userInfo } = useOutletContext();
   const [searchParams] = useSearchParams();
   const paramsObject = Object.fromEntries(searchParams.entries());
 
   const { createCompanyInstance } = useAuth();
-  const company = createCompanyInstance({});
+  const company = createCompanyInstance(userInfo);
 
   const [leads, setLeads] = useState([]);
 

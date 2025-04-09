@@ -118,7 +118,9 @@ const PhonePoolTable = ({ records, setRecords }) => {
                   onClick={() => {
                     handleViewPhone(rowId, row.getValue("views") || 0);
                   }}
-                  className={`cursor-pointer ${isPhoneVisible && "hidden"}`}
+                  className={`cursor-pointer ${
+                    isPhoneVisible && "hidden"
+                  } text-green-500`}
                   strokeWidth={1.5}
                   size={20}
                 />

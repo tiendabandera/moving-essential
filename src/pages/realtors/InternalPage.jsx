@@ -153,13 +153,6 @@ const InternalPage = () => {
   };
 
   useEffect(() => {
-    const fetchLike = async (user, company_id) => {
-      const userInstance = createUserInstance(user);
-      const { data } = await userInstance.getLikes(company_id);
-
-      setUserLikes(new Set(data.map((like) => like.company_id)));
-    };
-
     const loadRealtor = async () => {
       if (params.id) {
         const realtorInstance = await createCompanyInstance({
@@ -168,16 +161,12 @@ const InternalPage = () => {
         });
 
         realtorInstanceRef.current = realtorInstance; // Almacena la instancia solo una vez
-
         const { data, error } = await realtorInstance.getById();
+
         if (error) navigate("/not-found");
 
-        if (user) {
-          fetchLike(user, params.id);
-          if (data.user_id === user.id) setOwner(true);
-        }
-
         setCompany(data);
+
         const resReviews = await realtorInstance.getAllReviews();
         const totalReviews = resReviews.data.length;
 
@@ -197,6 +186,10 @@ const InternalPage = () => {
     loadRealtor();
   }, [user, params]);
 
+  useEffect(() => {
+    validateUser();
+  }, [user, realtor]);
+
   const handleCopyLink = async (query = "") => {
     const urlBase = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     const shareLink = `${urlBase}${query}`;
@@ -207,6 +200,23 @@ const InternalPage = () => {
     } catch (err) {
       console.error("Error copying link: ", err);
     }
+  };
+
+  const validateUser = async () => {
+    if (!user || !realtor) {
+      setOwner(false);
+      setUserLikes(new Set());
+      return;
+    }
+
+    const userInstance = createUserInstance(user);
+    const { data } = await userInstance.getLikes(realtor.id);
+
+    setUserLikes(new Set(data.map((like) => like.company_id)));
+
+    if (realtor.user_id === user.id) setOwner(true);
+
+    return;
   };
 
   return (
@@ -345,7 +355,6 @@ const InternalPage = () => {
                   </Link>
                 </Button>
               )}
-
               <Separator className="my-8" />
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-x-5 gap-y-2 md:flex-row items-start">
@@ -422,35 +431,36 @@ const InternalPage = () => {
                   submitAnalytics={submitAnalytics}
                 />
               </div>
-              {realtor.has_premium_features && (
-                <div className="flex flex-col">
-                  <Separator className="my-8" />
-                  <h3 className="text-3xl font-semibold">Listings</h3>
-                  <div className="my-8 shadow-xs border border-slate-200 rounded-lg p-5 flex gap-2 justify-between">
-                    {listingsTypes.map((listingType) => (
-                      <div
-                        key={listingType.title}
-                        className="flex flex-col gap-2 items-center"
-                      >
+              {realtor.has_premium_features &&
+                realtor.properties.length > 0 && (
+                  <div className="flex flex-col">
+                    <Separator className="my-8" />
+                    <h3 className="text-3xl font-semibold">Listings</h3>
+                    <div className="my-8 shadow-xs border border-slate-200 rounded-lg p-5 flex gap-2 justify-between">
+                      {listingsTypes.map((listingType) => (
                         <div
-                          className={`py-2 px-3 rounded-[50%] ${listingType.bg} w-fit text-white `}
+                          key={listingType.title}
+                          className="flex flex-col gap-2 items-center"
                         >
-                          <i className="fa fa-icon fa-home"></i>
+                          <div
+                            className={`py-2 px-3 rounded-[50%] ${listingType.bg} w-fit text-white `}
+                          >
+                            <i className="fa fa-icon fa-home"></i>
+                          </div>
+                          <p className="font-medium text-sm">
+                            {listingType.title}
+                          </p>
                         </div>
-                        <p className="font-medium text-sm">
-                          {listingType.title}
-                        </p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <GoogleMap
+                      center={realtor.center}
+                      properties={realtor.properties}
+                    />
+                    <Separator className="my-8" />
                   </div>
-                  <GoogleMap
-                    center={realtor.center}
-                    properties={realtor.properties}
-                  />
-                </div>
-              )}
+                )}
               <div className="flex flex-col">
-                <Separator className="my-8" />
                 <h3 className="text-3xl font-semibold">Reviews</h3>
                 <div className="flex gap-1 items-center">
                   <FaStar className="w-4 h-4" color="#ffe424" />
@@ -462,7 +472,11 @@ const InternalPage = () => {
                 </div>
                 {reviews.length > 0 && (
                   <div className="mt-5 flex justify-center">
-                    <CarouselReview reviews={reviews} />
+                    <CarouselReview
+                      reviews={reviews}
+                      isOwner={owner}
+                      info={realtor}
+                    />
                   </div>
                 )}
               </div>

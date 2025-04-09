@@ -1,6 +1,5 @@
 import SearchCompanies from "@/components/SearchCompanies";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   ChartNoAxesCombined,
   ChevronRight,

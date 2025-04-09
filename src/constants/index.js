@@ -183,6 +183,19 @@ export const homeTypes = [
   { value: "all", label: "All" },
 ];
 
+export const reportingTypes = [
+  { label: "I just don't like it", value: "dislike" },
+  { label: "It's spam", value: "spam" },
+  { label: "Nudity or sexual activity", value: "nudity-or-sexual-activity" },
+  { label: "Bullying or harassment", value: "bullying-or-harassment" },
+  { label: "False information", value: "false-information" },
+  { label: "Scam or fraud", value: "scam-or-fraud" },
+  {
+    label: "Violence or dangerous organizations",
+    value: "violence-or-dangerous-orgs",
+  },
+];
+
 export function decodeJWT(token) {
   const [header, payload, signature] = token.split(".");
   /* const decodedPayload = JSON.parse(atob(payload));
