@@ -6,7 +6,8 @@ const ProtectedRoute = ({ roles }) => {
 
   if (isLoading) return <p>Cargando...</p>;
 
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAuthenticated)
+    return <Navigate to={`/login?redirect=${window.location.href}`} replace />;
 
   if (roles && !roles.includes(user.user_metadata.role))
     return <Navigate to="/authorization" replace />;
