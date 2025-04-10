@@ -66,6 +66,10 @@ const AppContent = () => {
               <Route path="phone-pool" element={<AdminPages.PhonePoolPage />} />
               <Route path="reviews">
                 <Route path="appeals" element={<AdminPages.AppealsPage />} />
+                <Route
+                  path="deleted"
+                  element={<AdminPages.ReviewsDeletedPage />}
+                />
               </Route>
             </Route>
           </Route>

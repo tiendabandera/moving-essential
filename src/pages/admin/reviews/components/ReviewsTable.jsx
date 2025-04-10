@@ -1,14 +1,9 @@
+import { ArchiveRestore, ChevronDown, Eye } from "lucide-react";
 import { useState } from "react";
 
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -24,27 +19,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { reportingTypes } from "@/constants";
-import { ChevronDown, Eye, Trash } from "lucide-react";
-import DetailsReview from "./DetailsReview";
-import DeleteSelectedRows from "@/components/DeleteSelectedRows";
-import { Input } from "@/components/ui/input";
 
-const AppealsTable = ({ records, setRecords }) => {
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import DetailsReview from "./DetailsReview";
+import RestoreReviews from "./RestoreReview";
+
+const ReviewsTable = ({ records, setRecords }) => {
+  /* TABLE CONFIGURATION
+  _______________________________________________ */
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const [openDeleteRows, setOpenDeleteRows] = useState(false);
-
-  const [filter, setFilter] = useState("review_id");
+  /* OPTIONS
+  _______________________________________________ */
+  const [filter, setFilter] = useState("id");
   const [seeDetails, setSeeDetails] = useState(false);
   const [details, setDetails] = useState({});
-
-  const [deleteRows, setDeleteRows] = useState([]);
+  const [openRestoreRows, setOpenRestoreRows] = useState(false);
+  const [restoreRows, setRestoreRows] = useState([]);
 
   const columns = [
     {
@@ -70,37 +71,67 @@ const AppealsTable = ({ records, setRecords }) => {
       enableHiding: false,
     },
     {
-      accessorKey: "review_id",
-      header: "Review ID",
+      accessorKey: "id",
+      header: "ID",
       filterFn: (row, columnId, filterValue) => {
         return Number(row.getValue(columnId)) === Number(filterValue);
       },
+      cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+    },
+    {
+      accessorKey: "company",
+      header: "Company/Realtor",
+      cell: ({ row }) => {
+        const { business_type_id, user_info } = row.getValue("company");
+
+        const name =
+          business_type_id === 1
+            ? user_info.user_metadata.company_name
+            : user_info.user_metadata.name;
+
+        return <div className="capitalize">{name}</div>;
+      },
+    },
+    {
+      accessorKey: "origin",
+      header: "Origin",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("review_id")}</div>
+        <div className="truncate">{row.getValue("origin")}</div>
       ),
     },
     {
-      accessorKey: "type",
-      header: "Type",
-      cell: ({ row }) => {
-        const type = reportingTypes.find(
-          (type) => type.value === row.getValue("type")
-        );
-
-        return (
-          <div
-            className={`w-40 md:w-fit text-center capitalize px-2 rounded-md font-normal ${type.bg} text-slate-50`}
-          >
-            {type.label}
-          </div>
-        );
-      },
+      accessorKey: "destination",
+      header: "Destination",
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("destination")}</div>
+      ),
+    },
+    {
+      accessorKey: "quoted_price",
+      header: "Quoted price",
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("quoted_price")}</div>
+      ),
+    },
+    {
+      accessorKey: "actual_price",
+      header: "Actual price",
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("actual_price")}</div>
+      ),
     },
     {
       accessorKey: "message",
       header: "Message",
       cell: ({ row }) => (
         <div className="truncate w-48 lg:w-96">{row.getValue("message")}</div>
+      ),
+    },
+    {
+      accessorKey: "rating",
+      header: "Rating",
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("rating")}</div>
       ),
     },
     {
@@ -131,7 +162,9 @@ const AppealsTable = ({ records, setRecords }) => {
             size={20}
             strokeWidth={1.5}
             onClick={() => {
-              setDetails(record);
+              setDetails({
+                review: record,
+              });
               setSeeDetails(true);
             }}
           />
@@ -160,9 +193,9 @@ const AppealsTable = ({ records, setRecords }) => {
     },
   });
 
-  const handlerDeleteRows = (records) => {
-    setOpenDeleteRows(true);
-    setDeleteRows(records);
+  const handlerRestoreRows = (records) => {
+    setOpenRestoreRows(true);
+    setRestoreRows(records);
   };
 
   return (
@@ -172,15 +205,15 @@ const AppealsTable = ({ records, setRecords }) => {
           <Button
             variant="outline"
             onClick={() => {
-              handlerDeleteRows(
+              handlerRestoreRows(
                 table
                   .getFilteredSelectedRowModel()
                   .rows.map((row) => row.original.id)
               );
             }}
           >
-            <Trash className="h-4 w-4" />
-            Delete {table.getFilteredSelectedRowModel().rows.length} selected
+            <ArchiveRestore className="h-4 w-4" />
+            Restore {table.getFilteredSelectedRowModel().rows.length} selected
           </Button>
         </div>
       ) : (
@@ -194,13 +227,13 @@ const AppealsTable = ({ records, setRecords }) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
                 <DropdownMenuCheckboxItem
-                  checked={filter === "review_id"}
+                  checked={filter === "id"}
                   onCheckedChange={() => {
-                    setFilter("review_id");
+                    setFilter("id");
                     table.setColumnFilters([]);
                   }}
                 >
-                  Review ID
+                  ID
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   checked={filter === "message"}
@@ -213,7 +246,6 @@ const AppealsTable = ({ records, setRecords }) => {
                 </DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
             <Input
               placeholder="Enter a value for the filter..."
               type={filter === "review_id" ? "number" : "text"}
@@ -313,12 +345,12 @@ const AppealsTable = ({ records, setRecords }) => {
           setNewRecords={setRecords}
         />
       )}
-      {openDeleteRows && (
-        <DeleteSelectedRows
-          tableName="appeal_reviews"
+      {openRestoreRows && (
+        <RestoreReviews
+          tableName="reviews"
           isOpen={open}
-          onClose={setOpenDeleteRows}
-          records={deleteRows}
+          onClose={setOpenRestoreRows}
+          records={restoreRows}
           setNewRecords={setRecords}
           setRowSelection={setRowSelection}
         />
@@ -327,4 +359,4 @@ const AppealsTable = ({ records, setRecords }) => {
   );
 };
 
-export default AppealsTable;
+export default ReviewsTable;

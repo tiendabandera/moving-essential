@@ -167,7 +167,7 @@ const InternalPage = () => {
 
         setCompany(data);
 
-        const resReviews = await realtorInstance.getAllReviews();
+        const resReviews = await realtorInstance.getCompanyReviews();
         const totalReviews = resReviews.data.length;
 
         if (totalReviews > 0) {

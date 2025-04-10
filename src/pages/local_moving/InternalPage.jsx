@@ -116,7 +116,7 @@ const InternalPage = () => {
 
       setCompany(data);
 
-      const resReviews = await company.getAllReviews();
+      const resReviews = await company.getCompanyReviews();
       const totalReviews = resReviews.data.length;
 
       if (totalReviews > 0) {

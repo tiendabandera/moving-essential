@@ -215,13 +215,7 @@ const FormReview = ({
     }
 
     if (data.length > 0) {
-      reset({
-        origin: "",
-        destination: "",
-        quoted_price: "",
-        actual_price: "",
-        message: "",
-      });
+      reset();
 
       toast({
         title: "Success",

@@ -194,7 +194,6 @@ export class Company extends BaseModel {
         service:${service}, 
         cities:cities!companies_city_id_fkey(name, state_id, county_name), 
         cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
-        reviews:reviews!reviews_company_id_fkey(*), 
         user_info:user_info!companies_user_id_fkey(user_metadata)`;
 
     let query = supabase
@@ -381,7 +380,6 @@ export class Company extends BaseModel {
         service:${service}, 
         cities:cities!companies_city_id_fkey(name, state_id, county_name), 
         cities_2:cities!companies_city_2_id_fkey(name, state_id, county_name), 
-        reviews:reviews!reviews_company_id_fkey(*), 
         user_info:user_info!companies_user_id_fkey(user_metadata)`;
 
     // Obtenemos las empresas con premium features
@@ -464,7 +462,7 @@ export class Company extends BaseModel {
   /* REVIEWS ZONE
   __________________________________________________ */
 
-  async getAllReviews() {
+  async getCompanyReviews() {
     const { data } = await supabase
       .from("reviews")
       .select(
@@ -481,6 +479,15 @@ export class Company extends BaseModel {
       data,
       totalRating,
     };
+  }
+
+  async getDeletedReviews() {
+    return supabase
+      .from("reviews")
+      .select(
+        "*, company:companies(business_type_id, user_info(user_metadata)), user_info(user_metadata)"
+      )
+      .is("was_deleted", true);
   }
 
   async createReview() {

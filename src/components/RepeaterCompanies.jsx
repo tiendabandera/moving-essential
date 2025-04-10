@@ -192,7 +192,7 @@ const RepeaterCompanies = ({
                       navigate(`/local-moving/${record.id}#form-reviews`);
                     }}
                   />
-                  <p>{record.reviews.length}</p>
+                  <p>{record.review_count}</p>
                 </div>
               </div>
               <div className="w-full flex flex-col gap-1">

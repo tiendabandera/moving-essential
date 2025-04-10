@@ -18,6 +18,7 @@ import TextArea from "../TextArea";
 import { Button } from "../ui/button";
 import { supabase } from "@/api/auth";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
 
 /* COMPONENTS
 _________________________________________ */
@@ -81,6 +82,7 @@ const ApplealReview = ({ isOpen, onClose, review }) => {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, startTransition] = useTransition();
+  const { user } = useAuth();
 
   const steps = [
     {
@@ -120,8 +122,19 @@ const ApplealReview = ({ isOpen, onClose, review }) => {
               message: values.message,
               link: `${window.location.origin}/admin/reviews/appeals?id=${res.data.id}`,
             },
-            emails: ["info@movingessential.com"],
+            emails: ["libardo@banderaonline.org"], //info@movingessential.com
             templateId: 35,
+          },
+        });
+
+        // Send email to company
+        await supabase.functions.invoke("sendEmailToCompany", {
+          body: {
+            data: {
+              appeal_id: res.data.id,
+            },
+            emails: [user.email],
+            templateId: 36,
           },
         });
       }

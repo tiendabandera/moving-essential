@@ -6,9 +6,8 @@ import { LoaderCircle } from "lucide-react";
 import { supabase } from "@/api/auth";
 import { toast } from "@/hooks/use-toast";
 
-const DeleteSelectedRows = ({
+const RestoreReviews = ({
   tableName,
-  fieldName = "id",
   records,
   setNewRecords,
   isOpen,
@@ -17,19 +16,19 @@ const DeleteSelectedRows = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleDelete = async () => {
+  const handleRestore = async () => {
     setIsLoading(true);
 
     const response = await supabase
       .from(tableName)
-      .delete()
-      .in(fieldName, records);
+      .update({ was_deleted: false })
+      .in("id", records);
 
     const { error } = response;
 
     toast({
       title: error ? "Error" : "Success",
-      description: error ? error.message : "Records deleted successfully",
+      description: error ? error.message : "Records restored successfully",
       variant: error ? "destructive" : "success",
     });
 
@@ -65,11 +64,11 @@ const DeleteSelectedRows = ({
             Cancel
           </AlertDialogPrimitive.Cancel>
           <Button
-            variant="destructive"
+            className="bg-color-1 border border-color-1 rounded-lg hover:bg-transparent hover:text-color-1"
             disabled={isLoading}
-            onClick={handleDelete}
+            onClick={handleRestore}
           >
-            Confirm {isLoading && <LoaderCircle className="animate-spin" />}
+            {isLoading && <LoaderCircle className="animate-spin" />} Confirm
           </Button>
         </div>
       </AlertDialogPrimitive.Content>
@@ -77,40 +76,4 @@ const DeleteSelectedRows = ({
   );
 };
 
-export default DeleteSelectedRows;
-
-/* import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-
-const DeleteSelectedRows = ({ records, isOpen, onClose }) => {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger>Open</AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-};
-
-export default DeleteSelectedRows; */
+export default RestoreReviews;
