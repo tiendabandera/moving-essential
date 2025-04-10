@@ -44,20 +44,20 @@ export const dataLeads = [
 export const dataReviews = [
   {
     id: 5,
-    label: "Appealed",
-    href: `/${path}/leads/phone-pool`,
+    label: "Appeals",
+    href: `/${path}/reviews/appeals`,
     icon: MessageCircleQuestion,
   },
   {
     id: 6,
     label: "Deleted",
-    href: `/${path}/leads/create`,
+    href: `/${path}/reviews/deleted`,
     icon: MessageCircleX,
   },
-  {
+  /* {
     id: 6,
     label: "Deleted appealed",
     href: `/${path}/leads/create`,
     icon: History,
-  },
+  }, */
 ];

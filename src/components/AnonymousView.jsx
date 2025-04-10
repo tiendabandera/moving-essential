@@ -6,9 +6,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export const AnonymousView = ({ isOpen, onClose }) => {
+export const AnonymousView = ({ isOpen, onClose, link = null }) => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    const encodedRedirect = btoa(link || window.location.href);
+    navigate(`/login?redirect=${encodeURIComponent(encodedRedirect)}`);
+  };
+
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={onClose}>
@@ -26,11 +33,12 @@ export const AnonymousView = ({ isOpen, onClose }) => {
               </p>
               <p className="text-gray-50 font-light">Login or Sign up</p>
               <div className="flex gap-4 mt-6">
-                <Link to="/login">
-                  <Button className="bg-color-1 border border-color-1 rounded-lg hover:bg-transparent hover:text-color-1">
-                    Login
-                  </Button>
-                </Link>
+                <Button
+                  className="bg-color-1 border border-color-1 rounded-lg hover:bg-transparent hover:text-color-1"
+                  onClick={handleLogin}
+                >
+                  Login
+                </Button>
                 <Link to="/register">
                   <Button className="bg-color-1 border border-color-1 rounded-lg hover:bg-transparent hover:text-color-1">
                     Sign up

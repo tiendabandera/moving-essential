@@ -6,9 +6,13 @@ import { useEffect, useRef, useState } from "react";
 import { Loader2, Star } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
-//import { AnonymousView } from "../AnonymousView";
 
-const FormReview = ({ className, company, setIsOpenAnonymous }) => {
+const FormReview = ({
+  className,
+  company,
+  setIsOpenAnonymous,
+  setLinkAnonymous,
+}) => {
   const classes = `w-full relative flex flex-col gap-6 items-center justify-center p-10 border border-gray-200 rounded-xl shadow-2xl ${
     className || ""
   }`;
@@ -165,6 +169,7 @@ const FormReview = ({ className, company, setIsOpenAnonymous }) => {
   const onSubmit = handleSubmit(async (values) => {
     if (!user) {
       setIsOpenAnonymous(true);
+      setLinkAnonymous(`${window.location.href}#form-reviews`);
       return;
     }
 
@@ -418,9 +423,6 @@ const FormReview = ({ className, company, setIsOpenAnonymous }) => {
           </div>
         </div>
       </form>
-      {/* {isOpenAnonymous && (
-        <AnonymousView isOpen={isOpenAnonymous} onClose={setIsOpenAnonymous} />
-      )} */}
     </div>
   );
 };

@@ -189,4 +189,23 @@ export class User extends BaseModel {
 
   /* APPEAL REVIEW ZONE
   _________________________________________ */
+
+  async getAppealReviews() {
+    return await supabase
+      .from("appeal_reviews")
+      .select("*, review:reviews!inner(*)")
+      .order("created_at", {
+        ascending: false,
+      });
+  }
+
+  async getAppealReviewsByField(field, value) {
+    return await supabase
+      .from("appeal_reviews")
+      .select("*, review:reviews!inner(*)")
+      .order("created_at", {
+        ascending: false,
+      })
+      .eq(field, value);
+  }
 }

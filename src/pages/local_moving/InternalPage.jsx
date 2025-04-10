@@ -46,6 +46,8 @@ const InternalPage = () => {
   const params = useParams();
   const { createCompanyInstance, user, createUserInstance } = useAuth();
   const [isOpenAnonymous, setIsOpenAnonymous] = useState(null);
+  const [linkAnonymous, setLinkAnonymous] = useState(null);
+
   const [userLikes, setUserLikes] = useState(new Set());
 
   const [company, setCompany] = useState(null);
@@ -329,6 +331,7 @@ const InternalPage = () => {
                 <FormReview
                   company={company}
                   setIsOpenAnonymous={setIsOpenAnonymous}
+                  setLinkAnonymous={setLinkAnonymous}
                 />
               </div>
               {/* <div className="w-full flex flex-col items-center relative animate-float">
@@ -373,6 +376,7 @@ const InternalPage = () => {
           <AnonymousView
             isOpen={isOpenAnonymous}
             onClose={setIsOpenAnonymous}
+            link={linkAnonymous}
           />
         )}
       </div>

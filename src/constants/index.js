@@ -184,15 +184,24 @@ export const homeTypes = [
 ];
 
 export const reportingTypes = [
-  { label: "I just don't like it", value: "dislike" },
-  { label: "It's spam", value: "spam" },
-  { label: "Nudity or sexual activity", value: "nudity-or-sexual-activity" },
-  { label: "Bullying or harassment", value: "bullying-or-harassment" },
-  { label: "False information", value: "false-information" },
-  { label: "Scam or fraud", value: "scam-or-fraud" },
+  { label: "I just don't like it", value: "dislike", bg: "bg-red-800" },
+  { label: "It's spam", value: "spam", bg: "bg-blue-400" },
+  {
+    label: "Nudity or sexual activity",
+    value: "nudity-or-sexual-activity",
+    bg: "bg-green-400",
+  },
+  {
+    label: "Bullying or harassment",
+    value: "bullying-or-harassment",
+    bg: "bg-yellow-400",
+  },
+  { label: "False information", value: "false-information", bg: "bg-red-500" },
+  { label: "Scam or fraud", value: "scam-or-fraud", bg: "bg-sky-400" },
   {
     label: "Violence or dangerous organizations",
     value: "violence-or-dangerous-orgs",
+    bg: "bg-fuchsia-500",
   },
 ];
 

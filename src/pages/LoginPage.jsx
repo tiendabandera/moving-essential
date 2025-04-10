@@ -2,7 +2,6 @@ import FormLogin from "../components/forms/FormLogin";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const {
@@ -10,14 +9,31 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const { login, isAuthenticated, errors: loginErrors, user } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    //if (isAuthenticated) navigate(`/${user.user_metadata.role}/dashboard`);
-    if (isAuthenticated)
-      window.location.href = `/${user.user_metadata.role}/dashboard`;
-  }, [isAuthenticated, navigate, user]);
+    if (isAuthenticated) {
+      const params = new URLSearchParams(window.location.search);
+      const encodedRedirect = params.get("redirect");
+
+      // Si existe, tratamos de decodificarlo con Base64
+      if (encodedRedirect) {
+        try {
+          const redirectUrl = atob(encodedRedirect);
+          // Si la URL decodificada es válida, redirigimos a ella
+          window.location.href = redirectUrl;
+        } catch (error) {
+          console.error("Error al decodificar redirect:", error);
+          // En caso de error, redirigimos al dashboard por defecto según el rol
+          window.location.href = `/${user.user_metadata.role}/dashboard`;
+        }
+      } else {
+        // Si no viene redirect, redireccionamos al dashboard según rol
+        window.location.href = `/${user.user_metadata.role}/dashboard`;
+      }
+    }
+  }, [isAuthenticated, user]);
 
   const onSubmit = handleSubmit(async (values) => {
     login(values);
