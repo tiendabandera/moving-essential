@@ -10,17 +10,4 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    sourcemap: false, // ❌ no generar source maps
-    minify: "terser", // usa terser para mejor ofuscación
-    terserOptions: {
-      compress: {
-        drop_console: true, // eliminar console.logs
-        drop_debugger: true,
-      },
-      format: {
-        comments: false, // eliminar comentarios
-      },
-    },
-  },
 });
