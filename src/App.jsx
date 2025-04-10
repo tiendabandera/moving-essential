@@ -30,6 +30,7 @@ import ServicesPage from "./pages/ServicesPage";
 import Footer from "./components/Footer";
 import InternalListingPage from "./pages/company/listings/InternalListingPage";
 import TestPage from "./pages/TestPage";
+import MaintenancePage from "./pages/MaintenancePage";
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -44,7 +45,7 @@ const AppContent = () => {
     !location.pathname.startsWith("/user/") &&
     !location.pathname.startsWith("/admin/");
 
-  return (
+  /* return (
     <div className="app-container">
       <PageTitleManager />
       {showHeader && <Header />}
@@ -84,7 +85,6 @@ const AppContent = () => {
             <Route path="/company" element={<CompaniesPages.Layout />}>
               <Route
                 path="dashboard"
-                //element={<CompaniesPages.DashboardPage />}
                 element={
                   user && user.user_metadata.realtor_name ? (
                     <CompaniesPages.DashboardRealtorPage />
@@ -160,6 +160,14 @@ const AppContent = () => {
         </Routes>
       </main>
       {showHeader && <Footer />}
+    </div>
+  ); */
+
+  return (
+    <div>
+      <Routes>
+        <Route path="*" element={<MaintenancePage />} />
+      </Routes>
     </div>
   );
 };
