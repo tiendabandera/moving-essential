@@ -122,7 +122,7 @@ const ApplealReview = ({ isOpen, onClose, review }) => {
               message: values.message,
               link: `${window.location.origin}/admin/reviews/appeals?id=${res.data.id}`,
             },
-            emails: ["libardo@banderaonline.org"], //info@movingessential.com
+            emails: ["info@movingessential.com"],
             templateId: 35,
           },
         });

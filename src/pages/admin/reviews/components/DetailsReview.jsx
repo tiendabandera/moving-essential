@@ -22,18 +22,36 @@ const DetailsReview = ({ record, isOpen, onClose, setNewRecords }) => {
   const handleDeleteReview = () => {
     startTransition(async () => {
       const { error } = await supabase
-        .from("appeal_reviews")
-        .delete()
-        .eq("id", rest.id);
+        .from("reviews")
+        .update({ was_deleted: true })
+        .eq("id", review.id);
 
       if (!error) {
-        const { error: errorReview } = await supabase
-          .from("reviews")
-          .update({ was_deleted: true })
-          .eq("id", review.id);
+        const { error: errorAppeal } = await supabase
+          .from("appeal_reviews")
+          .delete()
+          .eq("id", rest.id);
 
-        if (!errorReview) {
+        if (!errorAppeal) {
           setNewRecords((pre) => pre.filter((item) => item.id !== rest.id));
+
+          // Email to company
+          const company = await supabase
+            .from("companies")
+            .select()
+            .eq("id", review.company_id)
+            .single();
+
+          await supabase.functions.invoke("sendEmailToCompany", {
+            body: {
+              data: {
+                appeal_id: rest.id,
+                message: "Your review has been successfully deleted",
+              },
+              emails: [company.data.email],
+              templateId: 37,
+            },
+          });
 
           return handlerReturn();
         }

@@ -252,13 +252,24 @@ function Header() {
                       </DropdownMenuSubContent>
                     </DropdownMenuPortal>
                   </DropdownMenuSub>
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onSelect={() =>
+                      window.open("https://blog.movingessential.com/", "_blank")
+                    }
+                  >
                     Blog
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    onSelect={() => navigate("/faqs")}
+                    className="cursor-pointer"
+                  >
                     FAQs
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    onSelect={() => navigate("/tips")}
+                    className="cursor-pointer"
+                  >
                     Tips & Tricks
                   </DropdownMenuItem>
                 </DropdownMenuGroup>

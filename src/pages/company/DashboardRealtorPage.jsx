@@ -279,7 +279,7 @@ const DashboardRealtorPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mt-10 md:w-1/2">
+            <div className="mt-8 md:w-1/2">
               <Button
                 orange
                 type="submit"
@@ -291,16 +291,6 @@ const DashboardRealtorPage = () => {
             </div>
           </div>
         </div>
-        {/* <div className="mt-10">
-          <Button
-            orange
-            type="submit"
-            className={"w-full 2xl:w-1/6 xl:w-1/6"}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </Button>
-        </div> */}
       </form>
       <ResetPassword />
     </div>
