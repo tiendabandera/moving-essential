@@ -38,7 +38,7 @@ const fields = [
   },
 ];
 
-const ResetPassword = () => {
+const ResetPassword = ({ className }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, startTransition] = useTransition();
 
@@ -82,8 +82,15 @@ const ResetPassword = () => {
 
   return (
     <>
-      <div className="lg:my-10">
-        <Button orange type="button" onClick={() => setIsOpen(true)}>
+      <div
+        className={`flex justify-end my-6 w-full md:w-1/2 lg:w-fit ${className}`}
+      >
+        <Button
+          className={"w-full"}
+          orange
+          type="button"
+          onClick={() => setIsOpen(true)}
+        >
           <LockKeyhole className="w-4 h-4" /> Reset Password
         </Button>
       </div>

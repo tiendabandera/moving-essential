@@ -299,7 +299,7 @@ const DashboardPage = () => {
                 </div>
               </div>
             )}
-            <div className="mt-10 md:w-1/2">
+            <div className="mt-8 md:w-1/2">
               <Button
                 orange
                 type="submit"
@@ -312,7 +312,7 @@ const DashboardPage = () => {
           </div>
         </div>
       </form>
-      <ResetPassword />
+      <ResetPassword className={"xl:-mt-10"} />
     </div>
   );
 };

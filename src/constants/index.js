@@ -41,7 +41,7 @@ export const navigation = {
     {
       id: 2,
       label: "Blog",
-      href: "https://www.movingessential.com/blog",
+      href: "https://blog.movingessential.com",
       icon: Book,
     },
     {
@@ -205,6 +205,51 @@ export const reportingTypes = [
   },
 ];
 
+export const servicesNames = {
+  local_moving: "local_moving",
+  realtors: "realtors",
+};
+
+export const faqs = [
+  {
+    title: "What services do moving companies typically offer?",
+    description:
+      "Moving companies offer a range of services, including packing, loading, transporting, unloading, and unpacking belongings during a move. Some also provide additional services like storage, specialty item handling, and furniture disassembly/reassembly.",
+  },
+  {
+    title: "How do I choose the right moving company for my needs?",
+    description:
+      "Start by researching local moving companies, reading reviews, and asking for recommendations. Obtain multiple quotes to compare pricing. Ensure the company is licensed, insured, and has a good track record. Choose a company that specializes in the type of move you need (e.g., local, long-distance, residential, or commercial).",
+  },
+  {
+    title: "What factors influence the cost of a move?",
+    description:
+      "The cost of a move is influenced by factors like distance, the volume and weight of your belongings, the time of year, the need for packing services, and any additional services you require. Be sure to get a detailed estimate from the moving company.",
+  },
+  {
+    title: "How far in advance should I book a moving company?",
+    description:
+      "You can edit the title from the Settings tab in the app. If you don’t want to display the title, simply disable the Title under “Info to Display”.",
+  },
+  {
+    title: "Should I tip the moving crew, and if so, how much is appropriate?",
+    description:
+      "Tipping is a common practice. A standard guideline is to tip 5-10% of the total moving cost, divided among the crew members. However, tipping is discretionary, and you can adjust it based on the quality of service provided.",
+  },
+  {
+    title: "Do I need to purchase moving insurance?",
+    description:
+      "Many moving companies offer basic liability coverage, but it may not cover the full value of your belongings. Consider purchasing additional insurance for added protection. Review the insurance options with the moving company.",
+  },
+  {
+    title: "How should I prepare for moving day?",
+    description:
+      "Create a moving checklist, pack items securely, label boxes, and disassemble furniture if necessary.",
+  },
+];
+
+/* FUNCTIONS
+_______________________________ */
 export function decodeJWT(token) {
   const [header, payload, signature] = token.split(".");
   /* const decodedPayload = JSON.parse(atob(payload));
@@ -220,11 +265,6 @@ export function decodeJWT(token) {
   const decodedPayload = JSON.parse(atob(padded));
   return decodedPayload;
 }
-
-export const servicesNames = {
-  local_moving: "local_moving",
-  realtors: "realtors",
-};
 
 export function formatPhone(phone) {
   if (phone) {

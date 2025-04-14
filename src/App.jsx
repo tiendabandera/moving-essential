@@ -30,7 +30,9 @@ import ServicesPage from "./pages/ServicesPage";
 import Footer from "./components/Footer";
 import InternalListingPage from "./pages/company/listings/InternalListingPage";
 import TestPage from "./pages/TestPage";
-import MaintenancePage from "./pages/MaintenancePage";
+import FAQsPage from "./pages/FAQsPage";
+import TipsPage from "./pages/TipsPage";
+import ContactPage from "./pages/ContactPage";
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -45,7 +47,7 @@ const AppContent = () => {
     !location.pathname.startsWith("/user/") &&
     !location.pathname.startsWith("/admin/");
 
-  /* return (
+  return (
     <div className="app-container">
       <PageTitleManager />
       {showHeader && <Header />}
@@ -54,6 +56,9 @@ const AppContent = () => {
           <Route path="/test" element={<TestPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/faqs" element={<FAQsPage />} />
+          <Route path="/tips" element={<TipsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/join" element={<JoinPages.JoinMain />}>
@@ -160,14 +165,6 @@ const AppContent = () => {
         </Routes>
       </main>
       {showHeader && <Footer />}
-    </div>
-  ); */
-
-  return (
-    <div>
-      <Routes>
-        <Route path="*" element={<MaintenancePage />} />
-      </Routes>
     </div>
   );
 };

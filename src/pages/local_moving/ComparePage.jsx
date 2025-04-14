@@ -136,7 +136,7 @@ const ComparePage = () => {
                     <h4 className="text-xl font-semibold text-gray-900">
                       Find Movers with Proven Expertise
                     </h4>
-                    <p className="text-pretty !text-sm font-light text-gray-950/75 sm:max-w-md sm:text-xl/8 lg:max-w-none">
+                    <p className="text-pretty text-sm font-light text-gray-950/75 sm:max-w-md  lg:max-w-none">
                       Our network includes experienced moving professionals who
                       specialize in a wide range of moves, from small apartments
                       to larger homes. They are experts in efficient packing,
