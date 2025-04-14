@@ -23,7 +23,7 @@ const Footer = () => {
     <footer className="bg-gray-100 flex flex-col items-center gap-5 py-8 px-5 lg:px-7 lg:items-start">
       <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between w-full">
         <div className="flex flex-col items-center gap-2 lg:items-start">
-          <div className="flex flex-col items-center lg:flex-row gap-x-2">
+          <div className="flex flex-col items-center lg:flex-row gap-2">
             <Link className="" to="/">
               <img
                 src="/assets/img/logo.png"
@@ -98,17 +98,15 @@ const Footer = () => {
         </div>
       </div>
       <Separator className="bg-gray-200" />
-      <div>
-        <span className="text-sm font-semibold">
-          Website Created by{" "}
-          <Link
-            to="https://www.tiendabandera.com/"
-            className="underline text-color-1 font-light"
-          >
-            tiendabandera.com
-          </Link>
-        </span>
-      </div>
+      <span className="text-sm font-semibold">
+        Website Created by{" "}
+        <Link
+          to="https://www.tiendabandera.com/"
+          className="underline text-color-1 font-light"
+        >
+          tiendabandera.com
+        </Link>
+      </span>
     </footer>
   );
 };

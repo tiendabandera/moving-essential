@@ -10,14 +10,22 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { Menu, Search } from "lucide-react";
 import SidebarRoutesCompany from "../SidebarRoutesCompany";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const NavbarCompany = () => {
   const { user, userInfo } = useAuth();
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   return (
     <nav className="flex items-center px-1 gap-x-4 md:px-6 justify-between w-full bg-background border-b h-20">
       <div className="block xl:hidden">
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger className="flex items-center">
             <Menu strokeWidth={2} className="w-6 h-6" />
           </SheetTrigger>

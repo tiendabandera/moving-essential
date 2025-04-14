@@ -167,7 +167,10 @@ export class User extends BaseModel {
           // Cambiar el link del boton de la plantilla del email en brevo
           await supabase.functions.invoke("sendEmailToCompany", {
             body: {
-              data: { fullName: record.company.company_name },
+              data: {
+                fullName: record.company.company_name,
+                link: `${window.location.origin}/company/leads/phone-pool?id=${res.data.id}`,
+              },
               emails: [record.company.email],
               templateId: 25,
             },

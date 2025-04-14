@@ -47,13 +47,13 @@ export const navigation = {
     {
       id: 3,
       label: "FAQs",
-      href: "/blog",
+      href: "/faqs",
       icon: MessageCircleMore,
     },
     {
       id: 4,
       label: "Tips & Tricks",
-      href: "/blog",
+      href: "/tips",
       icon: Pin,
     },
   ],
