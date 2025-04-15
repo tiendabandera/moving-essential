@@ -3,10 +3,19 @@ import { Button } from "./ui/button";
 
 const AuthWithGoogle = ({ title }) => {
   const handleGoogleLogin = async () => {
+    let redirectUrl = null;
+    const params = new URLSearchParams(window.location.search);
+    const encodedRedirect = params.get("redirect");
+
+    if (encodedRedirect) {
+      const decode = atob(encodedRedirect);
+      redirectUrl = `${window.location.origin}${decode}`;
+    }
+
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/login`,
+        redirectTo: redirectUrl || `${window.location.origin}/login`,
       },
     });
   };
