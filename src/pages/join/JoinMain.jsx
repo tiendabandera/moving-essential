@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { House, UserRound } from "lucide-react";
-import { Link, Outlet, useNavigate, useOutlet } from "react-router-dom";
+import { Outlet, useNavigate, useOutlet } from "react-router-dom";
 import TypeWriterEffect from "@/components/design/TypeWriterEffect";
 import Section from "@/components/Section";
 
