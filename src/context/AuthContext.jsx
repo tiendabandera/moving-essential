@@ -52,7 +52,8 @@ export const AuthProvider = ({ children }) => {
     const res = await user.create();
 
     if (res.error) {
-      setError([res.error]);
+      //setError([res.error]);
+      setErrorToast(res.error);
       return;
     }
 
