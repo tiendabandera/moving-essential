@@ -1,16 +1,20 @@
 import FormLogin from "../components/forms/FormLogin";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
+import Section from "@/components/Section";
+import { DoubleBorder } from "@/components/design/Frames";
 
 const LoginPage = () => {
+  const [isSubmitting, startTransition] = useTransition();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const { login, isAuthenticated, errors: loginErrors, user } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -35,30 +39,45 @@ const LoginPage = () => {
     }
   }, [isAuthenticated, user]);
 
-  const onSubmit = handleSubmit(async (values) => {
-    login(values);
+  const onSubmit = handleSubmit((values) => {
+    startTransition(() => login(values));
   });
 
   return (
-    <div className="flex w-full h-screen">
-      <div className="w-full flex items-center justify-center lg:w-1/2">
-        <form onSubmit={onSubmit} className="w-11/12 max-w-[700px]">
-          <FormLogin
-            register={register}
-            errors={errors}
-            loginErrors={loginErrors}
-          />
-        </form>
-      </div>
-      <div className="hidden lg:flex h-full w-1/2 items-center justify-center bg-gray-200">
-        <div className="w-3/5">
+    <Section>
+      <div className="w-full flex flex-col md:flex-row items-center justify-center gap-10 h-fit">
+        <div className="w-full">
+          <DoubleBorder>
+            <form onSubmit={onSubmit}>
+              <FormLogin
+                register={register}
+                errors={errors}
+                isSubmitting={isSubmitting}
+              />
+            </form>
+          </DoubleBorder>
+        </div>
+        <div className="hidden md:flex w-full flex-col items-center relative animate-float">
           <img
-            src="https://static.wixstatic.com/media/02498f_f941359eb14b4e439d5cbedafd5fdddb~mv2.png"
-            alt=""
+            src="/assets/img/form-review-2.png"
+            alt="form-review"
+            className="object-cover"
           />
+          <div className="flex items-center bg-white py-1 px-2 -mt-20 gap-2 rounded-lg shadow-2xl ring-1 ring-gray-100">
+            <div className="size-15 flex items-center">
+              <img
+                src="/assets/img/cohete.png"
+                alt="Tell us about your experience"
+                className="bg-gray-100 rounded-lg object-cover"
+              />
+            </div>
+            <p className="text-xs font-medium w-auto">
+              Sign in and enjoy what we have for you.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </Section>
   );
 };
 

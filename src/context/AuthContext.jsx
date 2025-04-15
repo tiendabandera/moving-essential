@@ -66,7 +66,8 @@ export const AuthProvider = ({ children }) => {
       const user = new User(data);
       const res = await user.login();
       if (res.error) {
-        setError([res.error.message]);
+        //setError([res.error.message]);
+        setErrorToast(res.error.message);
         return;
       }
 
@@ -302,6 +303,7 @@ export const AuthProvider = ({ children }) => {
         description: errorToast,
         variant: "destructive",
       });
+      setErrorToast(null);
     }
   }, [errorToast]);
 
