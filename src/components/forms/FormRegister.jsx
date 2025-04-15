@@ -76,6 +76,7 @@ export default function FormRegister({ register, errors, isSubmitting }) {
       </div>
       <div className="mt-8 w-full flex flex-col gap-2">
         <Button
+          type="submit"
           disabled={isSubmitting}
           className="w-full bg-color-1 border border-color-1 rounded-lg hover:bg-transparent hover:text-color-1"
         >

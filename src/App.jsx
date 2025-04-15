@@ -82,6 +82,10 @@ const AppContent = () => {
           <Route element={<ProtectedRoute roles={[roles.admin, roles.user]} />}>
             <Route path="/user" element={<UserPages.Layout />}>
               <Route path="dashboard" element={<UserPages.DashboardPage />} />
+              <Route
+                path="interactions"
+                element={<UserPages.InteractionsPage />}
+              />
             </Route>
           </Route>
           <Route

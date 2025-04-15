@@ -8,6 +8,7 @@ import {
 } from "@/constants/sidebar.routes.admin.data";
 import SidebarItems from "./SidebarItems";
 import { roles } from "@/constants";
+import { Heart } from "lucide-react";
 
 const SidebarRoutesUser = () => {
   const yeard = new Date().getFullYear();
@@ -23,6 +24,17 @@ const SidebarRoutesUser = () => {
           {dataGeneral(user?.user_metadata.role).map((item) => (
             <SidebarItems key={item.label} {...item} />
           ))}
+          {user?.user_metadata.role === roles.user && (
+            <SidebarItems
+              key={"interactions"}
+              {...{
+                id: 4,
+                label: "Interactions",
+                href: `/user/interactions`,
+                icon: Heart,
+              }}
+            />
+          )}
         </div>
         {user?.user_metadata.role === roles.admin && (
           <>
