@@ -68,7 +68,7 @@ function Header() {
 
   return (
     <>
-      <div className="pt-[4.75rem] lg:pt-[4.53rem] overflow-hidden">
+      <div className="pt-[4.75rem] lg:pt-[4.53rem] overflow-hidden bg-color-1">
         <div
           className={`fixed top-0 left-0 w-full z-50 border-b border-color-1 bg-color-1 transition-all duration-300 ${
             openNavigation
