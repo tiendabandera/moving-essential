@@ -28,6 +28,7 @@ const RepeaterCompanies = ({
   const effectRan = useRef(false); // Realizar una sola consulta a la base de datos
   const [selectedCompany, setSelectedCompany] = useState(null); // Abrir pop up de share
   const [filterParams, setFilterParams] = useState({}); // Almacena el filtro actual
+  const [anonymousLink, setAnonymousLink] = useState(null);
 
   const company = createCompanyInstance({});
 
@@ -100,6 +101,18 @@ const RepeaterCompanies = ({
     const newOffset = offset + pageSize; // Calcula el nuevo punto de inicio
     setOffset(newOffset);
     fetchRecords(newOffset, filterParams);
+  };
+
+  const writeReview = (id) => {
+    const link = `/local-moving/${id}#form-reviews`;
+    if (!user) {
+      setAnonymousLink(link);
+      setIsOpenAnonymous(true);
+      return;
+    }
+
+    navigate(link);
+    return;
   };
 
   useEffect(() => {
@@ -189,7 +202,8 @@ const RepeaterCompanies = ({
                     className="w-6 h-6 text-blue-600"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/local-moving/${record.id}#form-reviews`);
+                      writeReview(record.id);
+                      //navigate(`/local-moving/${record.id}#form-reviews`);
                     }}
                   />
                   <p>{record.review_count}</p>
@@ -239,7 +253,11 @@ const RepeaterCompanies = ({
         />
       )}
       {isOpenAnonymous && (
-        <AnonymousView isOpen={isOpenAnonymous} onClose={setIsOpenAnonymous} />
+        <AnonymousView
+          isOpen={isOpenAnonymous}
+          onClose={setIsOpenAnonymous}
+          link={anonymousLink}
+        />
       )}
     </div>
   );

@@ -19,9 +19,6 @@ const JoinMain = () => {
                 <h1 className="bold-52 lg:bold-88 text-transparent bg-clip-text bg-gradient-to-r from-color-1 to-orange-300 text-pretty tracking-tight">
                   Join the services that Moving Essential
                 </h1>
-                {/* <h2 className="bold-52 lg:bold-88 text-transparent bg-clip-text bg-gradient-to-r from-color-1 to-orange-300">
-                  Moving Services
-                </h2> */}
                 <TypeWriterEffect
                   className="bold-52 lg:bold-88"
                   text={"Offers for you!"}
