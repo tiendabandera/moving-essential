@@ -334,25 +334,6 @@ const InternalPage = () => {
                   setLinkAnonymous={setLinkAnonymous}
                 />
               </div>
-              {/* <div className="w-full flex flex-col items-center relative animate-float">
-                <img
-                  src="/assets/img/form-review-2.png"
-                  alt="form-review"
-                  className="object-cover"
-                />
-                <div className="flex items-center bg-white py-1 px-2 -mt-20 gap-2 rounded-lg shadow-2xl ring-1 ring-gray-100">
-                  <div className="size-15 flex items-center">
-                    <img
-                      src="/assets/img/cohete.png"
-                      alt="Tell us about your experience"
-                      className="bg-gray-100 rounded-lg object-cover"
-                    />
-                  </div>
-                  <p className="text-xs font-medium w-auto">
-                    Tell us about your experience
-                  </p>
-                </div>
-              </div> */}
               <div className="w-full h-[200px] lg:h-1/2 animate-float border border-gray-200 rounded-xl shadow-2xl">
                 <img
                   src={company.images[0]}
