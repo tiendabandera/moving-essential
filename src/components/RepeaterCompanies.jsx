@@ -147,7 +147,7 @@ const RepeaterCompanies = ({
                 <img
                   src={record.images[0]}
                   alt=""
-                  className="w-full h-60 object-cover rounded-2xl"
+                  className="w-full h-40 object-cover rounded-2xl"
                 />
                 <div className="absolute top-2 right-2 rounded-lg p-1 border border-gray-10 bg-white shadow-lg">
                   <SquareArrowOutUpRight
