@@ -12,6 +12,7 @@ import InputUploadImage from "@/components/InputUploadImage";
 import BentoCard from "@/components/design/BentoCard";
 import { LogoCluster } from "@/components/design/LogoCluster";
 import { LogoTimeline } from "@/components/design/LogoTimeline";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const steps = [
   {
@@ -41,7 +42,7 @@ const JoinCompanyPage = () => {
   const navigate = useNavigate();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  //const [previews, setPreviews] = useState([]);
+  const [terms, setTerms] = useState(false);
 
   const {
     handleSubmit,
@@ -93,6 +94,15 @@ const JoinCompanyPage = () => {
   } = useAuth();
 
   const onSubmit = handleSubmit(async (values) => {
+    if (!terms) {
+      toast({
+        title: "Terms and Conditions",
+        description: "Please accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true); // Deshabilitar el botón
     try {
       await signupCompany(values);
@@ -121,6 +131,10 @@ const JoinCompanyPage = () => {
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const onChangeTerms = () => {
+    setTerms(!terms);
   };
 
   return (
@@ -369,7 +383,33 @@ const JoinCompanyPage = () => {
               </div>
             </div>
           </div>
-          <div className="mt-10 flex flex-col gap-4">
+          <div className="mt-10 flex flex-col gap-8">
+            <div className="items-top flex space-x-2">
+              <Checkbox
+                id="terms"
+                name="terms"
+                checked={terms}
+                onCheckedChange={onChangeTerms}
+              />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 "
+                >
+                  I agree to receive the newsletter and commercial messages from
+                  Moving Essential LLC.
+                </label>
+                <p className="text-xs text-muted-foreground lg:max-w-2xl">
+                  We use Brevo as a Marketing platform. By clicking the
+                  &apos;Join Moving Essential Today!&apos; button, you consent
+                  to the information provided being transferred to Brevo for
+                  processing under Brevo&apos;s terms and conditions; you accept
+                  Movingessential&apos;s data processing policy and agree to
+                  receive Movingessential&apos;s newsletter and commercial
+                  messages.
+                </p>
+              </div>
+            </div>
             <Button
               orange
               type="submit"

@@ -87,58 +87,6 @@ function Header() {
                 alt="Moving Essential"
               />
             </Link>
-            {/* <nav
-              className={`${
-                openNavigation ? "flex flex-col items-center pt-8" : "hidden"
-              } fixed top-[4.53rem] left-0 right-0 bottom-0 bg-gray-100 sm:hidden`}
-            >
-              <div className="w-full relative z-2 flex flex-col items-center justify-center px-8 gap-6 font-medium">
-                <div className="w-full flex flex-col items-center justify-center gap-4">
-                  <Link className="w-full py-2">
-                    <div className="flex gap-4 items-center">
-                      <CircleUser className="size-6" strokeWidth={1.5} />
-                      <p>Profile</p>
-                    </div>
-                  </Link>
-                </div>
-                <Separator className="bg-gray-400" />
-                <div className="w-full flex flex-col items-center justify-center gap-2">
-                  <Link className="w-full py-2">Services</Link>
-                  <Link className="w-full py-2">Blog</Link>
-                  <Link className="w-full py-2">FAQs</Link>
-                  <Link className="w-full py-2">Tips & Tricks</Link>
-                </div>
-                <Separator className="bg-gray-400" />
-                <div className="w-full flex flex-col items-center justify-center gap-4 pt-4">
-                  {isAuthenticated ? (
-                    <Button
-                      className="w-full text-center text-red-600 p-4 rounded-lg ring-1 ring-red-600 bg-transparent"
-                      onClick={() => {
-                        toggleNavigation();
-                        submitLogout();
-                      }}
-                    >
-                      Sign out
-                    </Button>
-                  ) : (
-                    <div className="w-full flex flex-col gap-2">
-                      <Link
-                        className="w-full text-center p-2 rounded-lg ring-1 ring-black"
-                        to={"/login"}
-                      >
-                        Login
-                      </Link>
-                      <Link
-                        className="w-full text-center p-2 rounded-lg ring-1 ring-black"
-                        to={"/register"}
-                      >
-                        Sign up
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </nav> */}
             <div className="ml-auto">
               {isAuthenticated && user.user_metadata.role === "company" && (
                 <Notifications user={user} />

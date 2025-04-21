@@ -4,10 +4,11 @@ import { DoubleBorder } from "@/components/design/Frames";
 import FormJoinRealtors from "@/components/forms/FormJoinRealtors";
 import InputUploadImage from "@/components/InputUploadImage";
 import Section from "@/components/Section";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { CircleCheckBig, Image, UserRound } from "lucide-react";
-import { useEffect, useId, useTransition } from "react";
+import { useEffect, useId, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -159,6 +160,7 @@ const JoinRealtorsPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isSubmitting, startTransition] = useTransition();
+  const [terms, setTerms] = useState(false);
 
   const {
     handleSubmit,
@@ -208,6 +210,10 @@ const JoinRealtorsPage = () => {
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const onChangeTerms = () => {
+    setTerms(!terms);
   };
 
   const {
@@ -417,7 +423,33 @@ const JoinRealtorsPage = () => {
               </div>
             </div>
           </div>
-          <div className="mt-10 flex flex-col gap-4">
+          <div className="mt-10 flex flex-col gap-8">
+            <div className="items-top flex space-x-2">
+              <Checkbox
+                id="terms"
+                name="terms"
+                checked={terms}
+                onCheckedChange={onChangeTerms}
+              />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 "
+                >
+                  I agree to receive the newsletter and commercial messages from
+                  Moving Essential LLC.
+                </label>
+                <p className="text-xs text-muted-foreground lg:max-w-2xl">
+                  We use Brevo as a Marketing platform. By clicking the
+                  &apos;Join Moving Essential Today!&apos; button, you consent
+                  to the information provided being transferred to Brevo for
+                  processing under Brevo&apos;s terms and conditions; you accept
+                  Movingessential&apos;s data processing policy and agree to
+                  receive Movingessential&apos;s newsletter and commercial
+                  messages.
+                </p>
+              </div>
+            </div>
             <Button
               orange
               type="submit"
