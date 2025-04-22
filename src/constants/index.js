@@ -66,7 +66,7 @@ export const navigation = {
     },
     {
       id: "register",
-      label: "Register now",
+      label: "Sign Up",
       href: "/register",
       icon: UserRoundPlus,
     },
