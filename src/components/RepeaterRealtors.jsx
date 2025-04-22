@@ -129,11 +129,11 @@ const RepeaterRealtors = ({
         />
       )}
       <Section customPadding className={className}>
-        <div className="grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-col-1 sm:grid-cols-2  md:grid-cols-3 xl:grid-cols-4 gap-4">
           {records.map((record, index) => (
             <div
               key={index}
-              className="flex flex-col gap-3 items-center justify-center p-6 cursor-pointer shadow-2xs border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
+              className="flex flex-col gap-3 items-center justify-center p-6 2xl:p-10 cursor-pointer shadow-2xs border border-gray-10 shadow-gray-300 rounded-2xl hover:shadow-lg hover:shadow-gray-400 transition"
               onClick={() => {
                 navigate(`/realtors/${record.id}`);
               }}
@@ -142,7 +142,7 @@ const RepeaterRealtors = ({
                 <img
                   src={record.images[0]}
                   alt=""
-                  className="w-full h-70 object-cover rounded-2xl"
+                  className="w-full h-60 xs:h-80 md:h-64 object-cover rounded-2xl"
                 />
                 <div className="absolute top-2 right-2 rounded-lg p-1 border border-gray-10 bg-white shadow-lg">
                   <SquareArrowOutUpRight
@@ -160,7 +160,7 @@ const RepeaterRealtors = ({
                   {record.user_info.user_metadata.realtor_name}
                 </h3>
                 <p className="text-base">{record.company_name}</p>
-                <div className="flex gap-3 items-center">
+                <div className="flex flex-col xs:flex-row gap-x-3 items-center">
                   <GraduationCap strokeWidth={2} className="w-5 h-5" />
                   <p className="text-base">{record.service.title_work}</p>
                 </div>
