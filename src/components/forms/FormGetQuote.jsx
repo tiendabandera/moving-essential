@@ -120,7 +120,7 @@ const FormGetQuote = ({ className, company }) => {
             />
           </div>
         </div>
-        <div className="w-full">
+        <div className="w-full flex flex-col gap-4">
           <Button
             className="w-full bg-color-1 border border-color-1 rounded-md hover:bg-transparent hover:text-color-1"
             type="submit"
@@ -128,6 +128,14 @@ const FormGetQuote = ({ className, company }) => {
           >
             {isSubmitting && <Loader2 className="animate-spin" />}
             Submit
+          </Button>
+
+          <Button
+            className="w-full bg-green-500 border border-green-500 rounded-md hover:bg-transparent hover:text-green-500"
+            type="button"
+            onClick={() => window.open(`tel:${company.phone}`)}
+          >
+            Phone number
           </Button>
         </div>
       </div>

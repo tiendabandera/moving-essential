@@ -171,23 +171,29 @@ const InternalPage = () => {
     company && (
       <div>
         <div className="mt-[-3px] max-container lg:pt-20 lg:padding-container">
-          <Carousel className="border border-gray-100 lg:rounded-3xl">
+          <Carousel className="relative border border-gray-100 lg:rounded-3xl">
             <CarouselContent>
               {company.images.map((img, index) => (
                 <CarouselItem key={index}>
                   <img
                     src={img}
                     alt=""
-                    className="w-full h-[350px] lg:h-[500px] lg:rounded-3xl xl:h-[600px] object-cover"
+                    className="w-full h-[250px] md:h-[350px] lg:h-[500px] lg:rounded-3xl xl:h-[600px] object-cover"
                   />
                 </CarouselItem>
               ))}
             </CarouselContent>
             {company.images.length > 1 && (
-              <div className="hidden xl:flex">
-                <CarouselPrevious />
-                <CarouselNext />
-              </div>
+              <>
+                <div className="absolute w-[70%] sm:w-[80%] xl:w-[100%] mx-auto top-1/2 left-2 right-4 flex items-center justify-between xl:hidden">
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </div>
+                <div className="hidden xl:flex">
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </div>
+              </>
             )}
           </Carousel>
         </div>

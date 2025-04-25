@@ -47,6 +47,7 @@ import { homeTypes } from "@/constants";
 import { AnonymousView } from "@/components/AnonymousView";
 import LikeCompany from "@/components/LikeCompany";
 import GoogleMap from "@/components/GoogleMap";
+import ModalImageGallery from "@/components/design/ModalImageGallery";
 
 export const GetCosultationButton = ({ phone, submitAnalytics, info }) => {
   return (
@@ -88,6 +89,8 @@ const InternalPage = () => {
 
   const [realtor, setCompany] = useState(null);
   const [open, setOpen] = useState(false);
+  const [openGallery, setOpenGallery] = useState(false);
+  const [positionImg, setPositionImg] = useState(0);
   const [copied, setCopied] = useState(false);
   const [owner, setOwner] = useState(false);
   const [reviews, setReviews] = useState([]);
@@ -219,24 +222,29 @@ const InternalPage = () => {
     return;
   };
 
+  const handleOpenGallery = (position) => {
+    setOpenGallery(true);
+    setPositionImg(position);
+  };
+
   return (
     realtor && (
       <div>
         <div className="mt-[-5px] md:max-container lg:pt-20 lg:padding-container">
-          <Carousel className="block lg:hidden border border-gray-100 lg:rounded-3xl">
+          <Carousel className="relative block lg:hidden border border-gray-100 lg:rounded-3xl">
             <CarouselContent>
               {realtor.images.map((img, index) => (
                 <CarouselItem key={index}>
                   <img
                     src={img}
                     alt=""
-                    className="w-full h-[350px] lg:h-[500px] lg:rounded-3xl xl:h-[600px]"
+                    className="w-full h-[350px] xs:h-[500px] md:h-[600px] lg:rounded-3xl xl:h-[600px]"
                   />
                 </CarouselItem>
               ))}
             </CarouselContent>
             {realtor.images.length > 1 && (
-              <div className="hidden xl:flex">
+              <div className="absolute w-[70%] sm:w-[80%] mx-auto top-1/2 left-2 right-4 flex items-center justify-between lg:hidden">
                 <CarouselPrevious />
                 <CarouselNext />
               </div>
@@ -247,7 +255,8 @@ const InternalPage = () => {
               <img
                 src={realtor.images[0]}
                 alt="Realtor"
-                className="w-full h-full object-cover rounded-l-3xl"
+                className="cursor-pointer w-full h-full object-cover rounded-l-3xl"
+                onClick={() => handleOpenGallery(0)}
               />
             </div>
             <div className="flex-auto rounded-r-3xl">
@@ -256,42 +265,48 @@ const InternalPage = () => {
                   <img
                     src={realtor.images[1]}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="cursor-pointer w-full h-full object-cover"
+                    onClick={() => handleOpenGallery(1)}
                   />
                 </div>
                 <div className="w-full h-auto overflow-hidden">
                   <img
                     src={realtor.images[2]}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => handleOpenGallery(2)}
                   />
                 </div>
                 <div className="w-full h-auto overflow-hidden rounded-tr-3xl">
                   <img
                     src={realtor.images[3]}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => handleOpenGallery(3)}
                   />
                 </div>
                 <div className="w-full h-auto overflow-hidden">
                   <img
                     src={realtor.images[4]}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => handleOpenGallery(4)}
                   />
                 </div>
                 <div className="w-full h-auto overflow-hidden">
                   <img
                     src={realtor.images[5]}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => handleOpenGallery(5)}
                   />
                 </div>
                 <div className="w-full h-auto overflow-hidden rounded-br-3xl">
                   <img
                     src={realtor.images[6]}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => handleOpenGallery(6)}
                   />
                 </div>
               </div>
@@ -544,6 +559,14 @@ const InternalPage = () => {
           <AnonymousView
             isOpen={isOpenAnonymous}
             onClose={setIsOpenAnonymous}
+          />
+        )}
+        {openGallery && (
+          <ModalImageGallery
+            isOpen={openGallery}
+            onClose={setOpenGallery}
+            images={realtor.images}
+            position={positionImg}
           />
         )}
       </div>
