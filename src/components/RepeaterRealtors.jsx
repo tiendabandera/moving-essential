@@ -199,7 +199,7 @@ const RepeaterRealtors = ({
               </div>
               <div className="w-full flex flex-col gap-1">
                 <Button
-                  className="w-full bg-color-1 border border-color-1 rounded-full hover:bg-transparent hover:text-color-1"
+                  className="w-full bg-green-500 border border-green-500 rounded-full hover:bg-transparent hover:text-green-500"
                   onClick={(e) => {
                     e.stopPropagation();
                     window.location.href = `tel:${record.phone}`;

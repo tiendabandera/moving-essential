@@ -279,6 +279,13 @@ const InternalPage = () => {
                 >
                   Get a quote
                 </Button>
+                <Button
+                  className="mt-5 w-full bg-green-500 border border-green-500 rounded-md hover:bg-transparent hover:text-green-500"
+                  type="button"
+                  onClick={() => window.open(`tel:${company.phone}`)}
+                >
+                  Phone number
+                </Button>
               </div>
               <div className="flex flex-col">
                 <Separator className="my-8" />

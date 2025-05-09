@@ -67,7 +67,7 @@ export const GetCosultationButton = ({ phone, submitAnalytics, info }) => {
         </div>
       )}
       <Button
-        className="w-full bg-color-1 border border-color-1 rounded-md hover:bg-transparent hover:text-color-1"
+        className="w-full bg-green-500 border border-green-500 rounded-md hover:bg-transparent hover:text-green-500"
         onClick={() => {
           if (submitAnalytics) submitAnalytics("phone_number", true);
           window.open(`tel:${phone}`);

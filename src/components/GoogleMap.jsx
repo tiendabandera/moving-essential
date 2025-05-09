@@ -1,9 +1,10 @@
 import { formatPrice } from "@/constants";
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 
 const GoogleMap = ({ center, properties = [], height = 500 }) => {
   const mapRef = useRef(null);
   const urlSite = location.origin;
+  const propertiesMarkers = useRef([]);
 
   useEffect(() => {
     const loadGoogleMaps = () => {
@@ -75,42 +76,57 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
           };
 
           service.getDetails(request, (place, status) => {
-            const AdvancedMarker = new AdvancedMarkerElement({
-              map,
-              content: buildContent(property),
-              position: {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+              const position = {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
-              },
-            });
+              };
 
-            /* AdvancedMarker.addListener("click", () => {
-              toggleHighlight(AdvancedMarker, property);
-            }); */
-            let lastClickTime = 0;
-            AdvancedMarker.addListener("click", () => {
-              const now = Date.now();
-              if (now - lastClickTime < 300) return; // Evita la doble ejecución en menos de 300ms
-              lastClickTime = now;
-              toggleHighlight(AdvancedMarker, property);
-            });
+              const AdvancedMarker = new AdvancedMarkerElement({
+                map,
+                content: buildContent(property),
+                position,
+              });
+
+              let lastClickTime = 0;
+              AdvancedMarker.addListener("click", () => {
+                const now = Date.now();
+                if (now - lastClickTime < 300) return; // Evita la doble ejecución en menos de 300ms
+                lastClickTime = now;
+                toggleHighlight(map, AdvancedMarker, position, property);
+              });
+            }
           });
         });
       }
     };
 
-    const toggleHighlight = (marker) => {
-      if (marker.content.classList.contains("highlight")) {
-        marker.content.classList.remove("highlight");
+    const toggleHighlight = (map, marker, position, property) => {
+      if (marker.content.classList.contains("open")) {
+        console.log("Eliminar el marcador", property.id);
+
+        // Si el marcador ya estaba abierto, cerrarlo
+        propertiesMarkers.current = propertiesMarkers.current.filter(
+          (id) => id !== property.id
+        );
+
+        marker.content.classList.remove("open");
         marker.zIndex = null;
       } else {
-        marker.content.classList.add("highlight");
+        marker.content.classList.add("open");
         marker.zIndex = 1;
+
+        // Si el marcador esta cerrado, abrirlo
+        propertiesMarkers.current.push(property.id);
+
+        // Mover el mapa al marcador
+        map.panTo(position);
       }
     };
 
     const buildContent = (property) => {
       let image = property.images[0] || property.images.img_1;
+      const urlProperty = `${urlSite}/properties/${property.id}`;
 
       //Validar si la imagen no se a subido a Supabase
       if (image.file) image = URL.createObjectURL(image.file);
@@ -118,17 +134,19 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
       const content = document.createElement("div");
       content.classList.add("property");
       content.innerHTML = `
-        <div class="icon">
+        <div class="container">
+          <div class="icon">
             <i aria-hidden="true" class="fa fa-icon fa-home type-${
               property.types
             }" title="${property.types}"></i>
-            <span class="fa-sr-only">${property.types}</span>
+            <span class="fa-sr-only">${property.types}</span>    
+          </div>    
+          <div class="details">
             <img src="${image}" alt="${property.type}"/>
-        </div>
-        <div class="details">
-            <div class="price">$ ${formatPrice(property.price)}</div>
-            <div class="address">${property.address}</div>
-            <div class="features">
+            <div class="content">
+              <div class="price">$ ${formatPrice(property.price)}</div>
+              <div class="address">${property.address}</div>
+              <div class="features">
                 <div>
                   <i aria-hidden="true" class="fa fa-bed fa-lg bed" title="bedroom"></i>
                   <span>${property.bed}</span>
@@ -140,26 +158,35 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
                 <div>
                   <i aria-hidden="true" class="fa fa-ruler fa-lg size" title="size"></i>
                   <span>${property.size} ft²</span>
-                </div>
-            </div>          
-            <button type="button" class="btn-redirect" data-url="${urlSite}/properties/${
-        property.id
-      }">
+                </div>              
+              </div>
+              <button type="button" class="btn-redirect">
                 See property
-            </button>
-        </div>
+              </button>
+            </div>
+          </div>
+        </div>     
       `;
-      // Evitar la propagación del evento click en el enlace
-      content
-        .querySelector(".btn-redirect")
-        .addEventListener("click", (event) => {
-          event.stopPropagation();
 
-          const url = event.target.getAttribute("data-url");
-          if (url) {
-            window.open(url, "_blank");
-          }
-        });
+      const btnRedirect = content.querySelector(".btn-redirect");
+      const container = content.querySelector(".container");
+
+      container.addEventListener("click", () => {
+        //console.log(propertiesMarkers.current);
+        if (propertiesMarkers.current.includes(property.id)) {
+          window.open(urlProperty, "_blank");
+        }
+      });
+
+      btnRedirect.addEventListener("click", (event) => {
+        event.stopPropagation();
+        window.open(urlProperty, "_blank");
+      });
+
+      btnRedirect.addEventListener("touchstart", (event) => {
+        event.stopPropagation();
+        window.open(urlProperty, "_blank");
+      });
 
       return content;
     };
@@ -184,12 +211,26 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
   return (
     <>
       <style>
-        {`          
-          .property {
+        {`                       
+          .property .container{      
+            display: flex;
+            align-items: center;
+            color: #263238;
+            gap: 15px;
+            justify-content: center;
+            padding: 4px; 
+            z-index: 3;   
+          } 
+            
+          /* .property:hover{      
+            background-color: #efca8f;  
+          }  */
+            
+          .property .icon {
             align-items: center;
             background-color: #FFFFFF;
             border-radius: 50%;
-            color: #263238;
+            color: #FFFFFF;
             display: flex;
             font-size: 14px;
             gap: 15px;
@@ -199,9 +240,11 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
             position: relative;
             transition: all 0.3s ease-out;
             width: 30px;
+            z-index: 10;
           }
 
-          .property::after {
+          .property .icon::after {
+            display: flex;
             border-left: 9px solid transparent;
             border-right: 9px solid transparent;
             border-top: 9px solid #FFFFFF;
@@ -213,38 +256,37 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
             transform: translate(-50%, 0);
             transition: all 0.3s ease-out;
             width: 0;
-            z-index: 1;
-          }
+            z-index: 10;                        
+          }                       
 
-          .property .price {
-            font-weight: bold;
-          }
-
-          .property .icon img {
-            display: none;
-            border-radius: 5%;
-          }
-
-          .property .icon {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            color: #FFFFFF;
-          }
-
-          .property .icon svg {
-            height: 18px;
-            width: auto;
-          }
+          /* Details */
 
           .property .details {
             display: none;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #FFFFFF; 
+            gap: 10px;
+            align-items: center;            
+          }
+
+          .property .details img {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+          }
+
+          .property .details .content {
+            max-width: 180px;                       
+            display: flex;
             flex-direction: column;
-            flex: 1;
-            max-width: 200px;
             height: auto;
-            justify-content: space-between;
             z-index: 2;
+          }
+
+          .property .price {
+            font-size: 15px;
+            font-weight: bold;
           }
 
           .property .address {
@@ -260,6 +302,8 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
             flex-direction: row;
             gap: 10px;
             margin-bottom: 10px;
+            font-weight: bold;
+
           }
 
           .property .features > div {
@@ -271,50 +315,7 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
             font-size: 10px;
             gap: 5px;
             padding: 5px;
-          }                  
-
-          .property .btn-redirect {
-            position: relative;
-            color: #ea6020;
-            background: #F5F5F5;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 10px;
-            padding: 5px;
-            text-align: center;
-          }
-
-          .property.highlight {
-            background-color: #FFFFFF;
-            border-radius: 8px;
-            box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
-            height: auto;
-            padding: 8px 15px;
-            width: auto;
-          }
-
-          .property.highlight::after {
-            border-top: 9px solid #FFFFFF;
-          }
-
-          .property.highlight .details {
-            display: flex;
-          }
-
-          .property.highlight .icon svg {
-            display: none;
-          }
-
-          .property.highlight .icon {
-            width: 100px;
-            height: 100px;
-          }
-
-          .property.highlight .icon img {
-            display: flex;
-            width: 90%;
-            height: 90%;
-          }
+          } 
 
           .property .bed {
             color: #FFA000;
@@ -328,53 +329,79 @@ const GoogleMap = ({ center, properties = [], height = 500 }) => {
             color: #388E3C;
           }
 
-          .property.highlight:has(.type-houses-for-sales) .icon {
-            color: var(--blue-color);
+          .property .btn-redirect {
+            color: #FFFFFF;
+            background: #ea6020;
+            border-radius: 5px;
+            border: 1px solid #ea6020;
+            font-size: 10px;
+            padding: 5px;
+            text-align: center;
+            z-index: 2;
           }
 
-          .property:not(.highlight):has(.type-houses-for-sales) {
+          .property .btn-redirect:hover {
+            color: #ea6020;
+            background: #fff;
+            border-radius: 5px;
+            border: 1px solid #ea6020;            
+          }
+
+          /* houses-for-sales */
+          .property .icon:has(.type-houses-for-sales) {
             background-color: var(--blue-color);
           }
 
-          .property:not(.highlight):has(.type-houses-for-sales)::after {
+          .property .icon:has(.type-houses-for-sales)::after {
             border-top: 9px solid var(--blue-color);
           }
 
-          .property.highlight:has(.type-pending-houses) .icon {
-            color: var(--yellow-color);
-          }
-
-          .property:not(.highlight):has(.type-pending-houses) {
+          /* pending-houses */
+          .property .icon:has(.type-pending-houses) {
             background-color: var(--yellow-color);
           }
 
-          .property:not(.highlight):has(.type-pending-houses)::after {
+          .property .icon:has(.type-pending-houses)::after {
             border-top: 9px solid var(--yellow-color);
           }
 
-          .property.highlight:has(.type-sold-houses) .icon {
-            color: var(--red-color);
-          }
-
-          .property:not(.highlight):has(.type-sold-houses) {
+          /* sold-houses */
+          .property .icon:has(.type-sold-houses) {
             background-color: var(--red-color);
           }
 
-          .property:not(.highlight):has(.type-sold-houses)::after {
+          .property .icon:has(.type-sold-houses)::after {
             border-top: 9px solid var(--red-color);
           }
 
-          .property.highlight:has(.type-open-houses) .icon {
-            color: var(--green-color);
-          }
-
-          .property:not(.highlight):has(.type-open-houses) {
+          /* open-houses */
+          .property .icon:has(.type-open-houses) {
             background-color: var(--green-color);
           }
 
-          .property:not(.highlight):has(.type-open-houses)::after {
+          .property .icon:has(.type-open-houses)::after {
             border-top: 9px solid var(--green-color);
           }
+
+          /* Open */
+          .property.open .icon {
+            display: none;
+          }
+
+          .property.open .details {
+            display: flex;
+          }
+
+
+          /* Media Queries */
+          @media screen and (max-width: 400px) {
+            .property .details img {
+              width: 90px;
+              height: 90px;
+              border-radius: 10px;
+            }
+          }
+
         `}
       </style>
       <div
