@@ -273,7 +273,23 @@ const FormReview = ({
         user: user.user_metadata,
       });
 
-      await companyIntance.createReview();
+      const { error } = await companyIntance.createReview();
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "You already have a review on this company",
+          variant: "destructive",
+        });
+
+        return;
+      }
+
+      toast({
+        title: "Success",
+        description: "Review created successfully, reload the page to view it.",
+        variant: "success",
+      });
     };
 
     const hashIndex = location.hash.indexOf("?");
