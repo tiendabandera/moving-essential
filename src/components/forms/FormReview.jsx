@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Loader2, Star } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const FormReview = ({
   className,
@@ -17,6 +18,8 @@ const FormReview = ({
     className || ""
   }`;
 
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   //const [isOpenAnonymous, setIsOpenAnonymous] = useState(null);
   //const [rating, setRating] = useState(0);
@@ -40,6 +43,7 @@ const FormReview = ({
 
   const originRef = useRef(null); // Ref para el input de origen
   const destinationRef = useRef(null); // Ref para el input de destino
+  const hasExecuted = useRef(false);
 
   const { getZipcodes, getZipcodesByCity, createCompanyInstance, user } =
     useAuth();
@@ -168,8 +172,12 @@ const FormReview = ({
 
   const onSubmit = handleSubmit(async (values) => {
     if (!user) {
+      // Convertir values en parámetros de URL
+      const params = new URLSearchParams(values);
       setIsOpenAnonymous(true);
-      setLinkAnonymous(`${window.location.href}#form-reviews`);
+      setLinkAnonymous(
+        `${window.location.href}#form-reviews?${params.toString()}`
+      );
       return;
     }
 
@@ -255,6 +263,38 @@ const FormReview = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [originValue, destinationValue]);
 
+  useEffect(() => {
+    if (hasExecuted.current) return;
+
+    const createReview = async (values, company, user) => {
+      const companyIntance = createCompanyInstance({
+        ...values,
+        company: company,
+        user: user.user_metadata,
+      });
+
+      await companyIntance.createReview();
+    };
+
+    const hashIndex = location.hash.indexOf("?");
+    if (hashIndex !== -1) {
+      const paramsString = location.hash.substring(hashIndex + 1);
+      const params = new URLSearchParams(paramsString);
+
+      // Obtener los parámetros
+      const values = Object.fromEntries(params.entries());
+
+      if (user.user_metadata.role === "user")
+        createReview(values, company, user);
+
+      // Eliminar los parámetros manteniendo el hash
+      const cleanHash = location.hash.substring(0, hashIndex);
+      navigate(`${location.pathname}${cleanHash}`, { replace: true });
+
+      hasExecuted.current = true;
+    }
+  }, [location, navigate]);
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -277,6 +317,7 @@ const FormReview = ({
                     errors={errors}
                     onChange={searchZipcode}
                     onFocus={() => setIsOpenOrigin(true)}
+                    autoComplete={"off"}
                   />
                   {isOpenOrigin && (
                     <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
@@ -321,6 +362,7 @@ const FormReview = ({
                     errors={errors}
                     onChange={searchZipcode}
                     onFocus={() => setIsOpenDestination(true)}
+                    autoComplete={"off"}
                   />
                   {isOpenDestination && (
                     <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">

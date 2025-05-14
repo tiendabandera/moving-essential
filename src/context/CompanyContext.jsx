@@ -469,7 +469,8 @@ export class Company extends BaseModel {
         "*, company:companies(business_type_id), user_info(user_metadata)"
       )
       .eq("company_id", this.data.id)
-      .is("was_deleted", false);
+      .is("was_deleted", false)
+      .order("created_at", { ascending: false });
 
     const { data: totalRating } = await supabase.rpc("get_total_rating", {
       company_id_param: this.data.id,

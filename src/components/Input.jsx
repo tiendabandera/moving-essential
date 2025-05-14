@@ -15,6 +15,7 @@ const Input = ({
   validations,
   onFocus,
   isSubmitting,
+  autoComplete = "on",
 }) => {
   const classes = `flex h-9 w-full rounded-md border border-slate-200 
   px-3 py-1 text-base shadow-xs transition-colors 
@@ -62,6 +63,7 @@ const Input = ({
       <input
         id={id}
         name={name} // Identificador del campo
+        autoComplete={autoComplete}
         type={type ?? "text"}
         placeholder={placeholder ?? ""}
         className={classes}
