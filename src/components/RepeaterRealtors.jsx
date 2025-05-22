@@ -26,7 +26,7 @@ const RepeaterRealtors = ({
   const pageSize = 8; // Cantidad de registros por carga
   const [records, setRecords] = useState([]); // Lista de registros
   const [offset, setOffset] = useState(0); // Controla desde dónde obtener los registros
-  const [offsetFeatures, setOffsetFeatures] = useState(0); // Controla desde dónde obtener los registros restantes
+  //const [offsetFeatures, setOffsetFeatures] = useState(0); // Controla desde dónde obtener los registros restantes
 
   const [hasMore, setHasMore] = useState(false); // Verifica si hay más registros
   const effectRan = useRef(false);
@@ -46,20 +46,14 @@ const RepeaterRealtors = ({
       Object.keys(filterQueryParams).length > 0 &&
       Object.keys(params).length === 0
     ) {
-      const { data, error, newOffsetFeatures } =
-        await company.getAllByBusinessTypeQueryParams(
-          newOffset,
-          2,
-          filterQueryParams,
-          offsetFeatures
-        );
+      const { data, error } = await company.getAllByBusinessTypeQueryParams(
+        newOffset,
+        2,
+        filterQueryParams
+      );
 
       response.data = data;
       response.error = error;
-
-      if (newOffsetFeatures > 0) {
-        setOffsetFeatures(newOffsetFeatures);
-      }
     } else {
       const { data, error } = await company.getAllByBusinessType(
         newOffset,
@@ -168,7 +162,7 @@ const RepeaterRealtors = ({
                   <span className="font-semibold">{record.cities.name}, </span>
                   {record.state} {record.zipcode}
                 </p>
-                {record.has_premium_features && record.cities_2 && (
+                {record.has_premium_features && record.cities_2?.name && (
                   <p>
                     <span className="font-semibold">
                       {record.cities_2.name},{" "}
