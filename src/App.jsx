@@ -67,6 +67,8 @@ const AppContent = () => {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/landing">
             <Route path="user" element={<LandingsPages.UserPage />} />
+            <Route path="company" element={<LandingsPages.CompanyPage />} />
+            {/* <Route path="realtors" element={<LandingsPages.RealtorsPage />} /> */}
           </Route>
           <Route path="/join" element={<JoinPages.JoinMain />}>
             <Route path="company" element={<JoinPages.JoinCompanyPage />} />

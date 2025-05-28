@@ -136,6 +136,7 @@ export default {
         pattern: "url('/src/assets/img/pattern-3.png')",
         "pattern-2": "url('/src/assets/img/pattern-bg.png')",
         "pattern-4": "url('/src/assets/img/pattern-4.png')",
+        "pattern-5": "url('/src/assets/img/pattern-5.png')",
         "feature-bg": "url('/src/assets/img/feature-bg.png')",
       },
       borderRadius: {
