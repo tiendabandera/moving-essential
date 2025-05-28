@@ -1,7 +1,9 @@
+/* HOOKS
+_________________________________________ */
+import useScrollBehavior from "./hooks/useScrollBehavior";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { roles } from "./constants/index";
-import { PageTitleManager } from "./components/PageTitle";
 
 /* PAGES
 _________________________________________ */
@@ -15,24 +17,26 @@ import UserPages from "./pages/user/index";
 import CompaniesPages from "./pages/company/index";
 import LocalMovingPages from "./pages/local_moving/index";
 import RealtorsPages from "./pages/realtors/index";
+import LandingsPages from "./pages/landing/index";
 
 import ProtectedRoute from "./ProtectedRoute";
-import Header from "./components/Header";
 import NotAuthorizationPage from "./pages/NotAuthorizationPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
-/* TOASTER
-_________________________________________ */
-import { Toaster } from "./components/ui/toaster";
-import MembershipPage from "./pages/MembershipPage";
-import useScrollBehavior from "./hooks/useScrollBehavior";
 import ServicesPage from "./pages/ServicesPage";
-import Footer from "./components/Footer";
 import InternalListingPage from "./pages/company/listings/InternalListingPage";
 import TestPage from "./pages/TestPage";
 import FAQsPage from "./pages/FAQsPage";
 import TipsPage from "./pages/TipsPage";
 import ContactPage from "./pages/ContactPage";
+import MembershipPage from "./pages/MembershipPage";
+
+/* COMPONENTS
+_________________________________________ */
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { Toaster } from "./components/ui/toaster";
+import { PageTitleManager } from "./components/PageTitle";
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -61,6 +65,9 @@ const AppContent = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/landing">
+            <Route path="user" element={<LandingsPages.UserPage />} />
+          </Route>
           <Route path="/join" element={<JoinPages.JoinMain />}>
             <Route path="company" element={<JoinPages.JoinCompanyPage />} />
             <Route path="realtors" element={<JoinPages.JoinRealtorsPage />} />

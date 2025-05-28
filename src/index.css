@@ -211,6 +211,11 @@ layer(base);
   @apply max-container relative flex w-full flex-col justify-between gap-15 overflow-hidden bg-green-90 bg-pattern bg-cover bg-center bg-no-repeat px-6 py-12 text-black lg:flex-row sm:gap-12 sm:py-24 lg:px-20 xl:max-h-[698px] xl:rounded-3xl;
 }
 
+@utility get-app-landing {
+  /* Get App */
+  @apply max-container relative flex w-full flex-col justify-between gap-15 overflow-hidden bg-green-90 bg-pattern-4 bg-cover bg-center bg-no-repeat px-6 py-12 text-black lg:flex-row sm:gap-12 sm:py-24 lg:px-20 xl:max-h-[698px] xl:rounded-3xl;
+}
+
 @utility app-container {
   @apply flex flex-col min-h-screen
 }
