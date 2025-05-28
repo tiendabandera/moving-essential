@@ -35,12 +35,12 @@ const CompanyPage = () => {
   ];
 
   return (
-    <div className="padding-container w-full flex flex-col gap-24 my-24">
+    <div className="padding-container-2 w-full flex flex-col gap-24 my-24">
       {/* Section 1 */}
       <section className="flex-center w-full flex-col">
         <div className="get-app-landing flex-col xl:flex-row items-center py-0 px-6 sm:px-10 md:px-12 pt-20 xl:pt-0 gap-10">
-          <div className="flex items-center xl:items-start flex-1 flex-col gap-12">
-            <h2 className="text-center xl:text-left bold-40 lg:bold-52 xl:max-w-[632px]">
+          <div className="flex items-center xl:items-start flex-col gap-12">
+            <h2 className="text-center xl:text-left bold-40 xl:bold-52 lg:max-w-[632px]">
               Get Your Moving Company in Front of More Clients.{" "}
               <span className="text-white">
                 Be the first choice in your area with zero ad spend
@@ -134,7 +134,7 @@ const CompanyPage = () => {
         <img
           src="/assets/img/landing-company-3.png"
           alt=""
-          className="hidden md:block w-full h-[530px]"
+          className="hidden lg:block w-full lg:h-[500px]"
         />
         <div className="get-app-landing items-center lg:items-start py-10 flex flex-col gap-4 lg:h-[510px] mt-auto">
           <h2 className="bold-32 lg:bold-52 text-white">Who Can Join?</h2>

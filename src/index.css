@@ -98,8 +98,16 @@ layer(base);
   @apply mx-auto max-w-[1440px];
 }
 
+@utility max-container-2 {
+  @apply mx-auto max-w-[1540px];
+}
+
 @utility padding-container {
   @apply px-6 lg:px-20 2xl:px-0;
+}
+
+@utility padding-container-2 {
+  @apply px-6 lg:px-14 2xl:px-0;
 }
 
 @utility flex-center {
@@ -213,12 +221,12 @@ layer(base);
 
 @utility get-app-landing {
   /* Get App */
-  @apply max-container relative flex w-full flex-col justify-between gap-15 overflow-hidden bg-green-90 bg-pattern-4 bg-cover bg-center bg-no-repeat px-6 py-12 text-black lg:flex-row sm:gap-12 sm:py-24 lg:px-20 xl:max-h-[698px] xl:rounded-3xl;
+  @apply max-container relative flex w-full flex-col justify-between gap-15 overflow-hidden bg-green-90 bg-pattern-3 bg-cover bg-center bg-no-repeat px-6 py-12 text-black lg:flex-row sm:gap-12 sm:py-24 lg:px-20 xl:max-h-[698px] rounded-3xl;
 }
 
 @utility get-app-landing-2 {
   /* Get App */
-  @apply max-container relative flex w-full flex-col justify-between gap-15 overflow-hidden bg-green-90 bg-pattern-5 bg-cover bg-center bg-no-repeat px-6 py-12 text-black lg:flex-row sm:gap-12 sm:py-24 lg:px-20 xl:max-h-[698px] xl:rounded-3xl;
+  @apply max-container relative flex w-full flex-col justify-between gap-15 overflow-hidden bg-green-90 bg-pattern-5 bg-cover bg-center bg-no-repeat px-6 py-12 text-black lg:flex-row sm:gap-12 sm:py-24 lg:px-20 xl:max-h-[698px] rounded-3xl;
 }
 
 @utility app-container {

@@ -37,46 +37,42 @@ const UserPage = () => {
   ];
 
   return (
-    <div className="padding-container w-full flex flex-col gap-24">
+    <div className="padding-container-2 w-full flex flex-col gap-24">
       {/* Section 1 */}
-      <section className="mt-24 flex-center w-full flex-col">
-        <div className="get-app-landing flex-row px-10 sm:px-28 md:px-12">
-          <div className="z-20 flex w-full flex-1 flex-col items-start justify-center gap-12">
-            <h2 className="text-center md:text-left bold-40 lg:bold-64 xl:max-w-2xl">
+      <section className="mt-10 md:mt-24 flex-center w-full flex-col">
+        <div className="get-app-landing flex-col md:flex-row items-center p-6 sm:px-28 md:px-12">
+          <div className="flex flex-col gap-12">
+            <h2 className="text-center font-bold text-4xl md:text-5xl xl:text-6xl md:text-left xl:max-w-xl text-pretty leading-tight">
               Compare Top Moving Services & Realtors{" "}
               <span className="text-white">All in One Place</span>
             </h2>
-            <div className="flex w-full flex-col gap-3 whitespace-nowrap xl:w-1/4">
-              <Button
-                className="bg-purple-500 text-color-1 h-12 border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
-                onClick={() => navigate("/")}
-              >
-                See more
-              </Button>
-            </div>
+            <Button
+              className="lg:w-[50%] bg-purple-500 text-color-1 border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
+              onClick={() => navigate("/")}
+            >
+              See more
+            </Button>
           </div>
-          <div className="hidden md:flex flex-1 items-center h-[400px] lg:h-[500px]">
-            <img
-              src="/assets/img/landing-user-1-1.png"
-              alt="Landing User"
-              className="object-cover size-full"
-            />
-          </div>
+          <img
+            src="/assets/img/landing-user-1-1.png"
+            className="hidden md:block md:w-1/2"
+            alt=""
+          />
         </div>
       </section>
       {/* Section 2 */}
-      <section className="relative max-container  w-full py-20 flex flex-center flex-col gap-10">
+      <section className="relative max-container w-full py-20 flex flex-center flex-col gap-10">
         <img
           src="/assets/img/border.png"
           alt=""
-          className="absolute w-16 md:w-28 left-0 top-0"
+          className="absolute w-16 lg:w-28 left-0 top-0"
         />
         <img
           src="/assets/img/border-2.png"
           alt=""
-          className="absolute w-28 md:w-52 right-0 bottom-0"
+          className="absolute w-28 lg:w-52 right-0 bottom-0"
         />
-        <h2 className="bold-32 lg:bold-52 xl:max-w-6xl text-center">
+        <h2 className="bold-32 md:bold-52 sm:max-w-2xl lg:max-w-3xl xl:max-w-6xl text-center">
           Save time and money by instantly comparing prices, and verified
           ratings.
         </h2>
@@ -85,13 +81,13 @@ const UserPage = () => {
         </p>
         <div className="flex flex-col sm:flex-row flex-center gap-4 sm:gap-10">
           <Button
-            className="bg-purple-500 text-color-1 h-12 border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
+            className="bg-purple-500 text-color-1 h-12 border border-purple-500 rounded-2xl hover:bg-transparent hover:text-purple-500"
             onClick={() => navigate("/local-moving/compare")}
           >
             Search Moving Companies
           </Button>
           <Button
-            className="bg-purple-500 text-color-1 h-12 border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
+            className="bg-purple-500 text-color-1 h-12 border border-purple-500 rounded-2xl hover:bg-transparent hover:text-purple-500"
             onClick={() => navigate("/realtors/compare")}
           >
             Search Realtors
@@ -111,12 +107,12 @@ const UserPage = () => {
         <img
           src="/assets/img/border.png"
           alt=""
-          className="absolute w-16 md:w-28 right-0 top-0"
+          className="absolute w-16 lg:w-28 right-0 top-0"
         />
         <img
           src="/assets/img/border-2.png"
           alt=""
-          className="absolute w-28 md:w-52 left-0 bottom-0 rotate-180"
+          className="absolute w-28 lg:w-52 left-0 bottom-0 rotate-180"
         />
         <div className="w-full flex flex-col gap-4">
           <h2 className="bold-32 lg:bold-52">User benefits</h2>
@@ -134,8 +130,8 @@ const UserPage = () => {
       </section>
       {/* Section 5 */}
       <section className="flex-center w-full flex-col pb-[100px]">
-        <div className="get-app-landing items-center md:flex-row px-10 lg:px-32">
-          <div className="z-20 flex w-full flex-1 flex-col items-start justify-center gap-12">
+        <div className="get-app-landing flex-row items-center py-10 sm:px-28 md:px-12">
+          <div className="w-full flex flex-col gap-12">
             <h2 className="bold-32 lg:bold-52 xl:max-w-2xl text-white">
               Frequently Asked Questions
             </h2>
@@ -182,13 +178,11 @@ const UserPage = () => {
               </AccordionItem>
             </Accordion>
           </div>
-          <div className="hidden md:flex flex-1 items-center h-[400px] lg:h-[600px]">
-            <img
-              src="/assets/img/landing-user-3.png"
-              alt="Landing User"
-              className="object-cover size-full"
-            />
-          </div>
+          <img
+            src="/assets/img/landing-user-3.png"
+            className="hidden md:block md:w-2/5"
+            alt=""
+          />
         </div>
       </section>
     </div>
