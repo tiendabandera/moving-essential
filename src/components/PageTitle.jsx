@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const PageTitleManager = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const titles = {
@@ -24,6 +25,18 @@ export const PageTitleManager = () => {
     const title = titles[location.pathname] || "Moving Essential";
     document.title = title;
   }, [location]);
+
+  useEffect(() => {
+    // Eliminar la barra final solo si no es la raíz y no tiene query o hash
+    if (
+      location.pathname.length > 1 &&
+      location.pathname.endsWith("/") &&
+      !location.search &&
+      !location.hash
+    ) {
+      navigate(location.pathname.slice(0, -1), { replace: true });
+    }
+  }, [location, navigate]);
 
   return null; // Este componente no renderiza nada
 };
