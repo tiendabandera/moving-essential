@@ -20,8 +20,8 @@ export const PageTitleManager = () => {
       "/company/data": "Data - Moving Essential",
       "/company/notifications": "Notifications - Moving Essential",
       "/landing/user": "Landing Users - Moving Essential",
-      "/landing/movers": "Landing Movers  - Moving Essential",
-      "/landing/realtors": "Landing Realtors  - Moving Essential",
+      "/landing/company": "Landing Movers  - Moving Essential",
+      "/landing/realtor": "Landing Realtors  - Moving Essential",
     };
 
     const title = titles[location.pathname] || "Moving Essential";

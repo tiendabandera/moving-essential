@@ -1,15 +1,22 @@
 import Button from "@/components/Button";
 import { useNavigate } from "react-router-dom";
 import FAQs from "./components/FAQs";
+import { motion } from "framer-motion";
 
-const FeatureCard = ({ title, image }) => {
+const FeatureCard = ({ title, image, index }) => {
   return (
-    <div className="flex flex-col p-2 rounded-xl items-center justify-center shadow-md ring-1 ring-black/5">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, delay: index * 0.3 }}
+      className="flex flex-col p-2 rounded-xl items-center justify-center shadow-md ring-1 ring-black/5"
+    >
       <img src={image} alt="Feature" className="size-32 sm:size-40" />
       <h3 className="font-semibold text-sm sm:text-base lg:text-lg max-w-44 text-center">
         {title}
       </h3>
-    </div>
+    </motion.div>
   );
 };
 
@@ -142,6 +149,7 @@ const UserPage = () => {
               key={index}
               image={feature.image}
               title={feature.title}
+              index={index}
             />
           ))}
         </div>
