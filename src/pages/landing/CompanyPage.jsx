@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import { Circle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import FAQs from "./components/FAQs";
 
 const FeatureCard = ({ title, image }) => {
   return (
@@ -12,6 +13,60 @@ const FeatureCard = ({ title, image }) => {
     </div>
   );
 };
+
+const faqs = [
+  {
+    question: "Is there a premium option available?",
+    answer:
+      "Yes. While it’s free to list your business, we also offer a premium upgrade for companies that want more exposure and exclusive features.",
+  },
+  {
+    question: "What features come with a premium profile?",
+    answer:
+      "Premium members get access to real-time leads, enhanced profile visibility in multiple zip codes, CRM integrations, and the ability to appeal reviews.",
+  },
+  {
+    question: "What’s the cost to upgrade to premium?",
+    answer:
+      "Our premium package is competitively priced and month-to-month with no long-term contracts. Contact us to view the most up-to-date pricing.",
+  },
+  {
+    question: "Do I need a website to join?",
+    answer:
+      "No website? No problem. We only require your business license and insurance. Your Moving Essential profile acts as a landing page to showcase your services.",
+  },
+  {
+    question: "How do I view and manage leads?",
+    answer:
+      "You’ll receive lead notifications via email, and you can track and manage all leads directly through your dashboard.",
+  },
+  {
+    question: "Can I edit my profile whenever I need to?",
+    answer:
+      "Yes. You can update your company information, photos, service areas, and more at any time — no approval needed.",
+  },
+  {
+    question:
+      "Can I list my company if I operate in multiple cities or states?",
+    answer:
+      "Absolutely. You can be visible in multiple locations to expand your reach and capture more leads.",
+  },
+  {
+    question: "How are leads matched to my company?",
+    answer:
+      "We use location, availability, and service offerings to match your business with users actively searching in your area.",
+  },
+  {
+    question: "Do I pay any commission on leads I receive?",
+    answer:
+      "No. All leads are 100% free — even with a basic listing. We never take a cut from your jobs.",
+  },
+  {
+    question: "How long does it take to get listed?",
+    answer:
+      "Once you submit your information, we typically review and approve your profile within 1–2 business days.",
+  },
+];
 
 const CompanyPage = () => {
   const navigate = useNavigate();
@@ -35,37 +90,33 @@ const CompanyPage = () => {
   ];
 
   return (
-    <div className="padding-container-2 w-full flex flex-col gap-24 my-24">
+    <div className="padding-container w-full flex flex-col gap-24 my-10 md:my-24">
       {/* Section 1 */}
-      <section className="flex-center w-full flex-col">
-        <div className="get-app-landing flex-col xl:flex-row items-center py-0 px-6 sm:px-10 md:px-12 pt-20 xl:pt-0 gap-10">
-          <div className="flex items-center xl:items-start flex-col gap-12">
-            <h2 className="text-center xl:text-left bold-40 xl:bold-52 lg:max-w-[632px]">
+      <section className="flex flex-col w-full">
+        <div className="get-app-landing flex-col xl:flex-row items-center p-10 sm:px-20 sm:py-20 md:pb-0 xl:pt-10">
+          <div className="pb-0 xl:pb-10 flex flex-col items-center xl:items-start gap-12">
+            <h2 className="text-center font-bold text-4xl md:text-5xl xl:text-left md:max-w-xl text-pretty leading-tight">
               Get Your Moving Company in Front of More Clients.{" "}
               <span className="text-white">
                 Be the first choice in your area with zero ad spend
               </span>
             </h2>
-            <div className="flex w-full flex-col gap-3 sm:w-1/2">
-              <Button
-                className="bg-purple-500 text-color-1 h-12 border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
-                onClick={() => navigate("/join/company")}
-              >
-                Create your free profile
-              </Button>
-            </div>
+            <Button
+              className="lg:w-[50%] bg-purple-500 text-color-1 border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
+              onClick={() => navigate("/join/company")}
+            >
+              Create your free profile
+            </Button>
           </div>
-          <div className="flex md:h-[500px] xl:h-[610px] mt-auto">
-            <img
-              src="/assets/img/landing-company-1.png"
-              alt="Landing User"
-              className="object-cover size-full mt-auto"
-            />
-          </div>
+          <img
+            src="/assets/img/landing-company-1.png"
+            className="hidden md:block w-[70%] xl:w-1/2 mt-auto"
+            alt=""
+          />
         </div>
       </section>
       {/* Section 2 */}
-      <section className="relative max-container w-full py-20 flex flex-center flex-col gap-10">
+      <section className="relative max-container w-full py-20 flex items-center flex-col gap-10">
         <img
           src="/assets/img/border.png"
           alt=""
@@ -99,65 +150,104 @@ const CompanyPage = () => {
         </Button>
       </section>
       {/* Section 3 */}
-      <section className="max-container w-full grid xl:grid-cols-2 gap-10 items-center">
-        <div className="get-app-landing-2 items-center lg:items-start py-10 flex flex-col lg:gap-10 lg:h-[455px] mt-auto">
-          <h2 className="bold-32 lg:bold-52 text-color-1">Who Can Join?</h2>
-          <ul className="text-white text-lg space-y-4">
-            <li className="flex items-center gap-2">
-              <Circle className="text-color-1 size-4 fill-current" />
-              Local or interstate moving companies
-            </li>
-            <li className="flex items-center gap-2">
-              <Circle className="text-color-1 size-4 fill-current" />
-              Licensed and insured businesses only
-            </li>
-            <li className="flex items-center gap-2">
-              <Circle className="text-color-1 size-4 fill-current" />
-              Serving residential or commercial clients welcome
-            </li>
-          </ul>
-          <Button
-            className="md:w-1/2 bg-white !text-black h-12 border border-white rounded-2xl hover:bg-transparent hover:!text-white"
-            onClick={() => navigate("/join/company")}
-          >
-            More information
-          </Button>
+      <section className="max-container flex items-center w-full gap-5">
+        <div className="get-app-landing-2 flex-row p-8 xl:p-10 !items-center justify-center mt-auto lg:items-start h-[370px] xl:h-[450px]">
+          <div className="w-full flex flex-col gap-5">
+            <h2 className="bold-32 lg:bold-52 text-color-1">Who Can Join?</h2>
+            <ul className="text-white text-lg space-y-4">
+              <li className="flex items-center gap-2">
+                <Circle className="text-color-1 size-2 fill-current" />
+                Local or interstate moving companies
+              </li>
+              <li className="flex items-center gap-2">
+                <Circle className="text-color-1 size-2 fill-current" />
+                Licensed and insured businesses only
+              </li>
+              <li className="flex items-center gap-2">
+                <Circle className="text-color-1 size-2 fill-current" />
+                Serving residential or commercial clients welcome
+              </li>
+            </ul>
+            <Button
+              className="lg:w-1/2 bg-white !text-black border border-white rounded-2xl hover:bg-transparent hover:!text-white"
+              onClick={() => navigate("/join/company")}
+            >
+              More information
+            </Button>
+          </div>
+          <img
+            src="/assets/img/landing-company-2.png"
+            className="hidden md:block lg:hidden w-[50%]"
+            alt=""
+          />
         </div>
         <img
           src="/assets/img/landing-company-2.png"
+          className="hidden lg:block w-[50%] lg:h-[390px] xl:w-1/2 mt-auto xl:h-[480px]"
           alt=""
-          className="hidden md:block w-full h-[490px] object-contain"
         />
       </section>
       {/* Section 4 */}
-      <section className="max-container w-full grid lg:grid-cols-2 gap-10 items-center">
+      <section className="max-container flex items-center w-full gap-5">
         <img
           src="/assets/img/landing-company-3.png"
+          className="hidden mt-auto w-[50%] lg:block lg:h-[430px] xl:w-1/2 xl:h-[480px]"
           alt=""
-          className="hidden lg:block w-full lg:h-[500px]"
         />
-        <div className="get-app-landing items-center lg:items-start py-10 flex flex-col gap-4 lg:h-[510px] mt-auto">
-          <h2 className="bold-32 lg:bold-52 text-white">Who Can Join?</h2>
-          <ul className="text-white text-lg space-y-4">
-            <li className="flex items-center gap-2">
-              <Circle className="text-black size-4 fill-current" />
-              Register for free
-            </li>
-            <li className="flex items-center gap-2">
-              <Circle className="text-black size-4 fill-current" />
-              Set up your profile with service areas and specialties
-            </li>
-            <li className="flex items-center gap-2">
-              <Circle className="text-black size-4 fill-current" />
-              Connect with people looking for a new home
-            </li>
-          </ul>
-          <Button
-            className="md:w-1/2 bg-white !text-black h-12 border border-white rounded-2xl hover:bg-transparent hover:!text-white"
-            onClick={() => navigate("/join/company")}
-          >
-            More information
-          </Button>
+        <div className="get-app-landing flex-row p-8 xl:p-10 !items-center justify-center mt-auto lg:items-start h-[400px] xl:h-[450px]">
+          <div className="w-full flex flex-col gap-5">
+            <h2 className="bold-32 lg:bold-52 text-white">How does it work?</h2>
+            <ul className="text-white text-lg space-y-4">
+              <li className="flex items-center gap-2">
+                <Circle className="text-black size-2 fill-current" />
+                Register for free
+              </li>
+              <li className="flex items-center gap-2">
+                <Circle className="text-black size-2 fill-current" />
+                Set up your profile with service areas and specialties
+              </li>
+              <li className="flex items-center gap-2">
+                <Circle className="text-black size-2 fill-current" />
+                Connect with people looking for a new home
+              </li>
+            </ul>
+            <Button
+              className="lg:w-1/2 bg-purple-500 text-white border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
+              onClick={() => navigate("/join/company")}
+            >
+              Register for free now
+            </Button>
+          </div>
+          <img
+            src="/assets/img/landing-company-3.png"
+            className="hidden md:block lg:hidden w-[50%]"
+            alt=""
+          />
+        </div>
+      </section>
+      {/* Section 5 */}
+      <section className="w-full flex flex-col">
+        <div className="get-app-landing-3 h-[450px] flex-col items-center justify-center p-10 sm:px-20 sm:py-20 md:pb-0 xl:pt-10">
+          <div className="w-full flex flex-col items-center gap-10">
+            <h2 className="bold-32 lg:bold-52">Join our Network</h2>
+            <Button
+              className="lg:w-[20%] bg-color-1 text-white border border-color-1 rounded-2xl hover:bg-transparent hover:text-color-1"
+              onClick={() => navigate("/join/company")}
+            >
+              I Own a Moving Company
+            </Button>
+          </div>
+        </div>
+      </section>
+      {/* Section 6 */}
+      <section className="flex-center w-full flex-col pb-[100px]">
+        <div className="get-app-landing flex-col xl:flex-row items-center max-h-none !py-10 sm:px-28 md:px-12">
+          <FAQs title="FAQs for Movers" options={faqs} />
+          <img
+            src="/assets/img/landing-company-4.png"
+            className="hidden lg:block md:w-3/5 lg:w-1/2"
+            alt=""
+          />
         </div>
       </section>
     </div>
