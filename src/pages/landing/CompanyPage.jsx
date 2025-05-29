@@ -1,8 +1,9 @@
-import Button from "@/components/Button";
 import { Circle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import FAQs from "./components/FAQs";
 import { motion } from "framer-motion";
+
+import Button from "@/components/Button";
+import FAQs from "./components/FAQs";
 
 const FeatureCard = ({ title, image, index }) => {
   return (
