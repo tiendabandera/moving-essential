@@ -153,6 +153,12 @@ const UserPage = () => {
             />
           ))}
         </div>
+        <Button
+          className="bg-purple-500 text-white h-12 border border-purple-500 rounded-2xl hover:bg-transparent hover:text-purple-500"
+          onClick={() => navigate("/")}
+        >
+          See more
+        </Button>
       </section>
       {/* Section 5 */}
       <section className="flex-center w-full flex-col pb-[100px]">
