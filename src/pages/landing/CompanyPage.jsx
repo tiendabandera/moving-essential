@@ -236,7 +236,7 @@ const CompanyPage = () => {
       </section>
       {/* Section 5 */}
       <section className="w-full flex flex-col">
-        <div className="get-app-landing-3 h-[450px] flex-col items-center justify-center p-10 sm:px-20 sm:py-20 md:pb-0 xl:pt-10">
+        <div className="get-app-landing-3 lg:h-[300px] flex-col items-center justify-center p-0">
           <div className="w-full flex flex-col items-center gap-10">
             <h2 className="bold-32 lg:bold-52">Join our Network</h2>
             <Button

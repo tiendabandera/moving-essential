@@ -123,7 +123,7 @@ const RealtorPage = () => {
         </h2>
         <h2 className="text-2xl md:text-3xl font-bold sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl text-center">
           List your profile for free and appear in their searches at the exact
-          moment they`re ready to take action.
+          moment they’re ready to take action.
         </h2>
       </section>
       {/* Section 3 */}
