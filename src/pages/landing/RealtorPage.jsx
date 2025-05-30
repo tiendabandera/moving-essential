@@ -13,7 +13,7 @@ const FeatureCard = ({ title, image, index }) => {
       transition={{ duration: 0.5, delay: index * 0.3 }}
       className="flex flex-col p-2 rounded-xl items-center justify-center shadow-md ring-1 ring-black/5"
     >
-      <img src={image} alt="Feature" className="size-32 sm:size-40" />
+      <img src={image} alt="Feature" className="size-32 lg:size-40" />
       <h3 className="font-semibold text-sm sm:text-base lg:text-lg max-w-44 text-center">
         {title}
       </h3>
@@ -80,14 +80,14 @@ const RealtorPage = () => {
     <div className="padding-container w-full flex flex-col gap-24 my-10 md:my-24">
       {/* Section 1 */}
       <section className="flex-center w-full flex-col">
-        <div className="get-app-landing flex-col lg:flex-row items-center p-6 sm:py-20 sm:px-28 md:px-18">
-          <div className="flex flex-col items-center lg:items-start gap-12">
-            <h2 className="text-center font-bold text-4xl md:text-5xl xl:text-6xl lg:text-left xl:max-w-2xl text-pretty leading-tight">
-              Connect with Homebuyers{" "}
+        <div className="get-app-landing flex-col items-center justify-center p-10 xl:px-0 md:flex-row">
+          <div className="flex flex-col items-center gap-5 lg:gap-8">
+            <h2 className="text-center title-landing leading-tight">
+              Connect with Homebuyers <br />
               <span className="text-white">Who Are Ready to Find You</span>
             </h2>
             <Button
-              className="md:w-[50%] bg-purple-500 text-color-1 border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
+              className="w-full lg:w-[60%] bg-purple-500 text-color-1 border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
               onClick={() => navigate("/join/realtors")}
             >
               Create your free profile
@@ -95,7 +95,7 @@ const RealtorPage = () => {
           </div>
           <img
             src="/assets/img/landing-realtor-1.png"
-            className="hidden md:block md:w-1/2"
+            className="hidden md:block md:w-[50%]"
             alt=""
           />
         </div>
@@ -147,7 +147,7 @@ const RealtorPage = () => {
           className="absolute w-28 md:w-52 left-0 bottom-0 rotate-180"
         />
         <div className="w-full flex flex-col gap-4">
-          <h2 className="bold-32 lg:bold-52">
+          <h2 className="title-landing">
             Benefits of being part of Moving Essential
           </h2>
           <div className="w-1/2 h-[4px] bg-linear-to-r from-color-1 to-white" />
@@ -171,10 +171,12 @@ const RealtorPage = () => {
       </section>
       {/* Section 5 */}
       <section className="max-container flex items-center w-full gap-5">
-        <div className="get-app-landing-2 flex-row p-8 xl:p-10 !items-center justify-center mt-auto lg:items-start h-[410px] max-h-[500px] xl:h-[450px]">
-          <div className="w-full flex flex-col gap-5">
-            <h2 className="bold-32 lg:bold-52 text-color-1">Who Can Join?</h2>
-            <ul className="text-white text-lg space-y-4">
+        <div className="get-app-landing-2 flex-row p-8 xl:p-10 !items-center justify-center mt-auto lg:items-start lg:h-[305px] xl:h-[405px]">
+          <div className="w-full flex flex-col gap-5 xl:gap-10">
+            <h2 className="title-landing text-color-1 leading-none">
+              Who Can Join?
+            </h2>
+            <ul className="text-white text-md lg:text-lg space-y-2 xl:space-y-4">
               <li className="flex items-center gap-2">
                 <Circle className="text-color-1 size-2 fill-current" />
                 Licensend real estate agents or broker associates.
@@ -203,7 +205,7 @@ const RealtorPage = () => {
         </div>
         <img
           src="/assets/img/landing-realtor-3.png"
-          className="hidden lg:block w-1/2 mt-auto lg:h-[450px] xl:h-[500px]"
+          className="hidden mt-auto lg:block w-1/2 lg:h-[340px] xl:h-[450px]"
           alt=""
         />
       </section>
@@ -211,13 +213,15 @@ const RealtorPage = () => {
       <section className="max-container flex items-center w-full gap-5">
         <img
           src="/assets/img/landing-realtor-4.png"
-          className="hidden mt-auto w-[50%] lg:block xl:w-1/2 lg:h-[490px]"
+          className="hidden mt-auto lg:block w-1/2 lg:h-[340px] xl:h-[445px]"
           alt=""
         />
-        <div className="get-app-landing mb-4 flex-row p-8 xl:p-10 !items-center justify-center mt-auto lg:items-start h-[430px]">
-          <div className="w-full flex flex-col gap-5">
-            <h2 className="bold-32 lg:bold-52 text-white">How does it work?</h2>
-            <ul className="text-white text-lg space-y-4">
+        <div className="get-app-landing flex-row p-8 xl:p-10 !items-center justify-center mt-auto lg:items-start lg:h-[305px] xl:h-[405px]">
+          <div className="w-full flex flex-col gap-5 xl:gap-10">
+            <h2 className="title-landing text-white leading-none">
+              Who Can Join?
+            </h2>
+            <ul className="text-white text-md lg:text-lg space-y-2 xl:space-y-4">
               <li className="flex items-center gap-2">
                 <Circle className="text-black size-2 fill-current" />
                 Sign up for free - it takes less than 2 minutes.
@@ -233,10 +237,10 @@ const RealtorPage = () => {
               </li>
             </ul>
             <Button
-              className="lg:w-1/2 bg-purple-500 text-white border border-purple-500 rounded-2xl hover:bg-purple-100 hover:text-purple-500"
+              className="lg:w-1/2 bg-white !text-black border border-white rounded-2xl hover:bg-transparent hover:!text-white"
               onClick={() => navigate("/join/realtors")}
             >
-              Register Free Today
+              More information
             </Button>
           </div>
           <img
@@ -261,12 +265,22 @@ const RealtorPage = () => {
         </div>
       </section>
       {/* Section 8 */}
-      <section className="flex-center w-full flex-col">
+      {/* <section className="flex-center w-full flex-col">
         <div className="get-app-landing flex-row items-center max-h-none !py-10 sm:px-28 md:px-12">
           <FAQs title="FAQs for Movers" options={faqs} />
           <img
             src="/assets/img/landing-realtor-5.png"
             className="hidden lg:block md:w-3/5 lg:w-2/5"
+            alt=""
+          />
+        </div>
+      </section> */}
+      <section className="flex-center w-full flex-col">
+        <div className="get-app-landing max-h-none flex-row items-center py-10 md:p-10">
+          <FAQs title="FAQs for Realtors" options={faqs} />
+          <img
+            src="/assets/img/landing-realtor-5.png"
+            className="hidden md:block md:w-[40%]"
             alt=""
           />
         </div>

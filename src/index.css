@@ -199,6 +199,10 @@ layer(base);
   @apply text-[16px] font-[700];
 }
 
+@utility title-landing{
+  @apply font-bold text-[30px] md:text-[24px] lg:text-[32px] xl:text-[38px] text-pretty;
+}
+
 @utility hero-map {
   /* Hero */
   @apply absolute right-0 top-0 h-screen w-screen bg-pattern-2 bg-cover bg-center md:-right-28 xl:-top-60 opacity-80 md:opacity-100;
