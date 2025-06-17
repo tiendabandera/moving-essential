@@ -57,7 +57,7 @@ const AppContent = () => {
 
   useEffect(() => {
     fbq("track", "PageView");
-    console.log("📡 PageView disparado en:", location.pathname);
+    //console.log("📡 PageView disparado en:", location.pathname);
   }, [location.pathname]); // Se dispara cada vez que cambia la URL
 
   return (
