@@ -1,7 +1,7 @@
 /* HOOKS
 _________________________________________ */
 import useScrollBehavior from "./hooks/useScrollBehavior";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { roles } from "./constants/index";
 
@@ -37,12 +37,12 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Toaster } from "./components/ui/toaster";
 import { PageTitleManager } from "./components/PageTitle";
+import { useEffect } from "react";
+import { fbq, initFacebookPixel } from "./utils/facebookPixel";
 
 const AppContent = () => {
   const { user } = useAuth();
-
-  /* const location = useLocation();
-  useScrollToHash(location); */
+  const location = useLocation();
 
   useScrollBehavior();
 
@@ -50,6 +50,15 @@ const AppContent = () => {
     !location.pathname.startsWith("/company/") &&
     !location.pathname.startsWith("/user/") &&
     !location.pathname.startsWith("/admin/");
+
+  useEffect(() => {
+    initFacebookPixel("411070631613487"); // Reemplaza con tu ID real
+  }, []);
+
+  useEffect(() => {
+    fbq("track", "PageView");
+    console.log("📡 PageView disparado en:", location.pathname);
+  }, [location.pathname]); // Se dispara cada vez que cambia la URL
 
   return (
     <div className="app-container">
